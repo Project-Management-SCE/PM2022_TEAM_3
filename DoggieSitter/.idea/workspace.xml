@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c7c9a0d7-883d-4606-a6a0-1688f0a79c3d" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="27Q0ewHJwarhXpa0Dpu5pd1r6Sz" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/accounts/static/accounts" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Nadav\Desktop\כללי נדב\סמי\שנה ג'\סימסטר ב'\ניהול פרוייקט תוכנה\פרוייקט\DoggieSitter\accounts\static\accounts" />
+      <recent name="C:\Users\Nadav\Desktop\כללי נדב\סמי\שנה ג'\סימסטר ב'\ניהול פרוייקט תוכנה\פרוייקט\DoggieSitter\home" />
+      <recent name="C:\Users\Nadav\Desktop\כללי נדב\סמי\שנה ג'\סימסטר ב'\ניהול פרוייקט תוכנה\פרוייקט\DoggieSitter\Dogisiter" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Nadav\Desktop\כללי נדב\סמי\שנה ג'\סימסטר ב'\ניהול פרוייקט תוכנה\פרוייקט\DoggieSitter\accounts\templates" />
+      <recent name="C:\Users\Nadav\Desktop\כללי נדב\סמי\שנה ג'\סימסטר ב'\ניהול פרוייקט תוכנה\פרוייקט\DoggieSitter\accounts\static\accounts" />
+      <recent name="C:\Users\Nadav\Desktop\כללי נדב\סמי\שנה ג'\סימסטר ב'\ניהול פרוייקט תוכנה\פרוייקט\DoggieSitter\home" />
+      <recent name="C:\Users\Nadav\Desktop\כללי נדב\סמי\שנה ג'\סימסטר ב'\ניהול פרוייקט תוכנה\פרוייקט\DoggieSitter\Dogisiter" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="forms" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DoggieSitter" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/accounts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/accounts/forms.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.forms" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c7c9a0d7-883d-4606-a6a0-1688f0a79c3d" name="Default Changelist" comment="" />
+      <created>1649237100516</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1649237100516</updated>
+    </task>
+    <servers />
+  </component>
+</project>
