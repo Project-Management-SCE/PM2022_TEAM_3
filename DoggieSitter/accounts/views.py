@@ -3,12 +3,14 @@
 from .forms import ExtendedUserCreationForm, AccountsProfileForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from .models import Accounts
 
 
 def SignUpView(request):
     if request.method == 'POST':
         form = ExtendedUserCreationForm(request.POST)
         profile_form = AccountsProfileForm(request.POST)
+        accounts = Accounts.o
         if form.is_valid() and profile_form.is_valid():
             user = form.save()
             profile = profile_form.save(commit=False)

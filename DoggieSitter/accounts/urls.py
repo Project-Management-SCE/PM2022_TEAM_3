@@ -8,4 +8,5 @@ urlpatterns = [
     path("signup/", views.SignUpView, name="signup"),
     path('about', TemplateView.as_view(template_name='about.html'), name='about'),
     path('gallery', TemplateView.as_view(template_name='gallery.html'), name='gallery'),
+    path('user_info', TemplateView.as_view(template_name='user_info.html'), name='user_info'),
 ]

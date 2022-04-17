@@ -1,0 +1,37 @@
+<!-- templates/registration/signup.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Users info{% endblock %}
+
+{% block content %}
+
+<center>
+<h2>Our users</h2>
+
+<a  href="{% url 'home' %}">Back to home</a><br><br>
+    <form method="POST" name="clicked" action="{% url 'user_info' %}">
+        {% csrf_token %}
+            {% for us in acc %}
+            <p>
+                  {% if us.is_doggiesitter %}
+                    {% if us.approved %}
+                        Approved doggiesitters:
+                    {% else %}
+                        Doggiesitters that haven't approved yet:
+                    {% endif %}
+                  {% else %}
+                    Dog owners:
+                  {% endif %}
+
+                  First Name: {{ user.accounts.first_name }}<br>
+                  Last Name: {{ user.accounts.last_name }}<br>
+                  Mail: {{ user.accounts.email }}<br>
+                  Phone Number: {{ user.accounts.phone_number }}<br>
+                  Date of Birth: {{ user.accounts.date_of_birth }}
+
+             </p>
+            {% endfor %}
+    </form>
+</center>
+{% endblock %}
