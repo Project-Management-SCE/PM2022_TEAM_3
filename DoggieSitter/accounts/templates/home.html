@@ -95,7 +95,6 @@
 
 </html>
 <body id="bg" style="background-image: url('{% static '/accounts/kim.jpg' %}')">
-
 {% if user.is_authenticated %}
   {% if user.is_superuser %}          <!--  admin - logged in -->
     <div class="topnav">
@@ -139,7 +138,7 @@
           <a href="#news">Map</a>
           <a href="{% url 'gallery' %}">Gallery</a>
           <a href="#news">Post new schedule</a>
-          <a href="#contact">Contact</a>
+          <a href="{% url 'contact' %}">Contact</a>
           <a href="{% url 'about' %}">About</a>
           <a href="{% url 'logout' %}">Log Out</a>
         </div>
@@ -154,7 +153,7 @@
         <a href="#news">Map</a>
         <a href="{% url 'gallery' %}">Gallery</a>
         <a href="#news">Take a dog</a>
-        <a href="#contact">Contact</a>
+        <a href="{% url 'contact' %}' %}">Contact</a>
         <a href="{% url 'about' %}' %}">About</a>
         <a href="{% url 'logout' %}' %}">Log Out</a>
      <h2> Which dog would you like to walk with today? </h2>
