@@ -115,37 +115,36 @@
 
   {% else %}                        <!--  account - logged in -->
 
-  {% endif %}
-  {% if not user.accounts.approved %}
-    {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
-      <div class="topnav">
-        <a class="active" href="#home">Home</a>
-        <a href="#news">Map</a>
-        <a href="{% url 'gallery' %}">Gallery</a>
-        <a href="#news">Take a dog</a>
-        <a href="#contact">Contact</a>
-        <a href="{% url 'about' %}">About</a>
-        <a href="{% url 'logout' %}">Log Out</a>
-      </div>
-
-        <h2><span style="background-color:white; opacity: .7; border:3px solid #ccc; font:26px/26px Georgia, Garamond, Serif;">
-          <br><br><br><br>Thank you for your goodwill to join our DoggieSitters family <br>
-          We need to verify you in our system before you can start working with us. We promise that it will not take so long time. <br>
-          Thank you for your patience.
-        </span></h2>
-    {% else %}                                    <!--  dog owner -->
-      {% if not user.is_superuser %}
+    {% if not user.accounts.approved %}
+      {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
         <div class="topnav">
           <a class="active" href="#home">Home</a>
           <a href="#news">Map</a>
           <a href="{% url 'gallery' %}">Gallery</a>
-          <a href="#news">Post new schedule</a>
+          <a href="#news">Take a dog</a>
           <a href="#contact">Contact</a>
           <a href="{% url 'about' %}">About</a>
           <a href="{% url 'logout' %}">Log Out</a>
         </div>
-      {% endif %}
 
+          <h2><span style="background-color:white; opacity: .7; border:3px solid #ccc; font:26px/26px Georgia, Garamond, Serif;">
+            <br><br><br><br>Thank you for your goodwill to join our DoggieSitters family <br>
+            We need to verify you in our system before you can start working with us. We promise that it will not take so long time. <br>
+            Thank you for your patience.
+          </span></h2>
+
+      {% else %}                                    <!--  dog owner -->
+        {% if not user.is_superuser %}
+          <div class="topnav">
+            <a class="active" href="#home">Home</a>
+            <a href="#news">Map</a>
+            <a href="{% url 'gallery' %}">Gallery</a>
+            <a href="#news">Post new schedule</a>
+            <a href="#contact">Contact</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'logout' %}">Log Out</a>
+          </div>
+        {% endif %}
     {% endif %}
 
   {% else %}
@@ -176,6 +175,7 @@
       Last Name: {{ user.last_name }}<br>
       Mail: {{ user.email }}<br>
     {% endif %}
+  {% endif %}
   </span>
 {% else %}
     <div class="main">
