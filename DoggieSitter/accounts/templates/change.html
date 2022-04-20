@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1>Changing personal information</h1>
+<button onclick="location.href = '{% url 'home' %}'">Go back</button>
+<div>
+    <label for="info">What information you would like to change?  </label>
+    <select name="info" id="info">
+              <option value="fname">First name</option>
+              <option value="lanme">Last Name</option>
+              <option value="email">Email Address</option>
+              <option value="phone">Phone Number</option>
+    </select>
+</div>
+<div >
+            <form method="post">
+    Enter new information
+            <input type="text" name="fname"/>
+        </form>
+</div>
+<button onclick="location.href = '{% url 'change' %}'">Click</button>
+</body>
+</html>
