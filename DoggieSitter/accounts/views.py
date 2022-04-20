@@ -1,8 +1,10 @@
 # accounts/views.py
+from django.contrib.auth.models import User
 
 from .forms import ExtendedUserCreationForm, AccountsProfileForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from .models import Accounts
 
 
 def SignUpView(request):
@@ -27,3 +29,10 @@ def SignUpView(request):
         profile_form = AccountsProfileForm()
     context = {'form': form, 'profile_form': profile_form, 'error': ""}
     return render(request, 'registration/signup.html', context)
+
+def GetAccounts(request):
+    acc = Accounts.objects.all()
+    usr = User.objects.all()
+    # for i in acc:
+    #     print(i.last_name)
+    return render(request, 'user_info.html', {'acc': acc, 'usr': usr})
