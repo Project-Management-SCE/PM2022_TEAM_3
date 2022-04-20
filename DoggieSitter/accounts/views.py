@@ -33,6 +33,4 @@ def SignUpView(request):
 def GetAccounts(request):
     acc = Accounts.objects.all()
     usr = User.objects.all()
-    # for i in acc:
-    #     print(i.last_name)
     return render(request, 'user_info.html', {'acc': acc, 'usr': usr})

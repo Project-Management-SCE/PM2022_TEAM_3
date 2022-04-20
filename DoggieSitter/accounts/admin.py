@@ -3,9 +3,6 @@ from .models import Accounts
 from django.contrib.auth.models import User
 
 
-# admin.site.register(Accounts)
-
-
 @admin.action(description='Grant admin permissions')
 def make_new_admin(modeladmin, request, queryset):
     user = User.objects.get(username=list(queryset)[0])

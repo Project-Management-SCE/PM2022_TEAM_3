@@ -9,4 +9,5 @@ urlpatterns = [
     path('about', TemplateView.as_view(template_name='about.html'), name='about'),
     path('gallery', TemplateView.as_view(template_name='gallery.html'), name='gallery'),
     path("user_info/", views.GetAccounts, name="user_info"),
+    path('about', TemplateView.as_view(template_name='about.html'), name='contact'),
 ]
