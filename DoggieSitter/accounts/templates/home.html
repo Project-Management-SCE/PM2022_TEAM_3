@@ -142,7 +142,7 @@
             <a href="#news">Post new schedule</a>
           <a href="{% url 'about' %}">Contact</a>
             <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'change' %}">change</a>
+            <a href="{% url 'changeinfo' user.id %}">change</a>
             <a href="{% url 'logout' %}">Log Out</a>
           </div>
         {% endif %}
