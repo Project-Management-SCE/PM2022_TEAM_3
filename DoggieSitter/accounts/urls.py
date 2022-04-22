@@ -11,5 +11,6 @@ urlpatterns = [
     path("user_info/", views.GetAccounts, name="user_info"),
     path('about', TemplateView.as_view(template_name='about.html'), name='contact'),
     path('Change', TemplateView.as_view(template_name='change.html'), name='change'),
+    path('change/<user_id>', views.changeAccount.as_view(), name='changeinfo'),
 
 ]
