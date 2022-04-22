@@ -6,9 +6,9 @@ from datetime import date
 
 class Accounts(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
-    last_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
-    email = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
+    first_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False, null=True)
+    last_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False, null=True)
+    email = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False, null=True)
     id = models.CharField(max_length=9,
                           validators=[MinLengthValidator(9)],
                           blank=False,
