@@ -1,11 +1,20 @@
 # accounts/views.py
 from django.contrib.auth.models import User
 
-from .forms import ExtendedUserCreationForm, AccountsProfileForm
+from .forms import ExtendedUserCreationForm, AccountsProfileForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from .models import Accounts
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
+from django.urls import reverse_lazy
 
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('password_success')
+
+def password_success(request):
+    return render(request, 'password_success.html', {})
 
 def SignUpView(request):
     if request.method == 'POST':
@@ -36,3 +45,4 @@ def GetAccounts(request):
     # for i in acc:
     #     print(i.last_name)
     return render(request, 'user_info.html', {'acc': acc, 'usr': usr})
+
