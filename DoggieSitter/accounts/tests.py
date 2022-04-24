@@ -5,6 +5,8 @@ import re
 
 
 class BasicTests(TestCase):
+    def test_hello(self):
+        print('hello world')
     def test_firstname(self):
         print('test1')
         acc = models.Accounts()
