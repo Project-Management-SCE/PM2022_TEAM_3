@@ -6,7 +6,8 @@ import re
 
 class BasicTests(TestCase):
     def test_hello(self):
-        print('hello world')
+        print('hello world1')
+        print('hello world2')
     def test_firstname(self):
         print('test1')
         acc = models.Accounts()
