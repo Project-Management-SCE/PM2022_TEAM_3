@@ -143,6 +143,7 @@ html {
             <a href="{% url 'password' %}">change password</a>
             <a href="#news">Post new schedule</a>
             <a class="active" href="{% url 'about' %}">About & Contact</a>
+            <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
             <a href="{% url 'logout' %}">Log Out</a>
           </div>
         {% endif %}

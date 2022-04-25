@@ -168,11 +168,13 @@
                 <button type="submit">Delete User</button>
             </form>
 
-            <form method="POST" action="approve_doggiesitter">
-                {% csrf_token %}
-                <input type="hidden" name="selected_id" value={{u}}><br><br>
-                <button type="submit">Approve Doggiesitter</button>
-            </form>
+            {% if u.is_doggiesitter %}
+                <form method="POST" action="approve_doggiesitter">
+                    {% csrf_token %}
+                    <input type="hidden" name="selected_id" value={{u}}><br><br>
+                    <button type="submit">Approve Doggiesitter</button>
+                </form>
+            {% endif %}
         {% endfor %}
     {% endif %}
 
