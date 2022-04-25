@@ -1,11 +1,19 @@
 # accounts/views.py
 from django.contrib.auth.models import User
-
 from .forms import ExtendedUserCreationForm, AccountsProfileForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from .models import Accounts
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm
+from django.urls import reverse_lazy
 
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('password_success')
+
+def password_success(request):
+    return render(request, 'password_success.html', {})
 
 def SignUpView(request):
     if request.method == 'POST':
@@ -34,3 +42,13 @@ def GetAccounts(request):
     acc = Accounts.objects.all()
     usr = User.objects.all()
     return render(request, 'user_info.html', {'acc': acc, 'usr': usr})
+
+def SearchUserByID(request):
+    if request.method == 'POST':
+        us = Accounts.objects.filter(id=request.POST.get("search_id"))
+        if(len(us) == 0):
+            return render(request, 'search_result.html', {'us': 'empty'})
+        return render(request, 'search_result.html', {'us': us})
+    return render(request, 'admin_actions.html')
+
+

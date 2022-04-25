@@ -30,6 +30,7 @@ class Accounts(models.Model):
     )
     is_doggiesitter = models.BooleanField()
     approved = models.BooleanField(default=False, blank=True, null=True)
+    is_admin = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
