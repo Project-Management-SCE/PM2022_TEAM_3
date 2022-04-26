@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}successful action{% endblock %}
+{% block title %}pass changed{% endblock %}
 
 {% block content %}
 <!DOCTYPE html>
@@ -87,32 +87,12 @@
 </head>
 <body id="bg" style="background-image: url('{% static '/accounts/kim.jpg' %}')">
 
-{% if user.is_authenticated %}
-  {% if user.is_superuser %}          <!--  admin - logged in -->
-    <div class="topnav">
-      <a href="{% url 'home' %}">Home</a>
-      <a href="#news">Map</a>
-      <a href="{% url 'gallery' %}">Gallery</a>
-      <a href="{% url 'change_password' user.username %}">change password</a>
-      <a href="{% url 'user_info' %}">User Info</a>
-      <a href="{% url 'about' %}">About & Contact</a>
-      <a href="http://127.0.0.1:8000/admin/">View dashboard</a>
-      <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'logout' %}">Log Out</a>
-    </div>
-    {% endif %}
-{% endif %}
+
+
 <center>
 
-
-<h1><span style="background-color:white;">{{ result }}</span></h1><br>
-
-  {% if user.is_superuser %}
-    <h2><a href="{% url 'user_info' %}">View changes on user information table</a></h2>
-  {% else %}
-    <h2>You're don't admin anymore, <a href="{% url 'home' %}">back home</a></h2>
-  {% endif %}
-
+<h1><span style="background-color:white;">{{ result_pass }}</span></h1><br>
+  <h3><span style="color:blue">Please <a href="{% url 'home' %}">login </a> with your new password.</span></h3>
 
 
 </center>

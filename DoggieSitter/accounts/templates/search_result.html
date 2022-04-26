@@ -94,6 +94,7 @@
       <a href="#news">Map</a>
       <a href="{% url 'password' %}">change password</a>
       <a href="{% url 'gallery' %}">Gallery</a>
+        <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
@@ -168,11 +169,13 @@
                 <button type="submit">Delete User</button>
             </form>
 
-            <form method="POST" action="approve_doggiesitter">
-                {% csrf_token %}
-                <input type="hidden" name="selected_id" value={{u}}><br><br>
-                <button type="submit">Approve Doggiesitter</button>
-            </form>
+            {% if u.is_doggiesitter %}
+                <form method="POST" action="approve_doggiesitter">
+                    {% csrf_token %}
+                    <input type="hidden" name="selected_id" value={{u}}><br><br>
+                    <button type="submit">Approve Doggiesitter</button>
+                </form>
+            {% endif %}
         {% endfor %}
     {% endif %}
 
