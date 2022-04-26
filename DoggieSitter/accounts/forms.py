@@ -19,6 +19,7 @@ class ExtendedUserCreationForm(UserCreationForm):
         return user
 
 class AccountsProfileForm(forms.ModelForm):
+
     class Meta:
         model = Accounts
         fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'address', 'is_doggiesitter')
@@ -76,4 +77,4 @@ class AccountChangeForm(forms.ModelForm):
         validator = EmailValidator()
         validator(email)
         return email
-    
+
