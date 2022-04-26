@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Users info{% endblock %}
+{% block title %}successful action{% endblock %}
 
 {% block content %}
 <!DOCTYPE html>
@@ -94,9 +94,9 @@
       <a href="#news">Map</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
-      <a href="#contact">Contact</a>
-      <a class="active" href="{% url 'user_info' %}">User Info</a>
-      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'user_info' %}">User Info</a>
+      <a href="{% url 'about' %}">About & Contact</a>
+      <a href="http://127.0.0.1:8000/admin/">View dashboard</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
@@ -104,66 +104,20 @@
 {% endif %}
 <center>
 
-<h1><span style="background-color:white;">Our users</span></h1><br>
 
-<h2><span style="background-color:orange;">Doggiesitters:</span></h2>
-<table style="background:orange" cellspacing="40" border="2">
-    <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Mail</th>
-        <th>Phone Number</th>
-        <th>Date of Birth</th>
-        <th>ID</th>
-        <th>Approved / Not Approved</th>
-        <th>Admin</th>
-    </tr>
-    {% for us in acc %}
-        {% if us.is_doggiesitter %}
-                <tr>
-                    <td>{{ us.first_name }}</td>
-                    <td>{{ us.last_name }}</td>
-                    <td>{{ us.email }}</td>
-                    <td>{{ us.phone_number }}</td>
-                    <td>{{ us.date_of_birth }}</td>
-                    <td>{{ us.id }}</td>
-                    <td>{{ us.approved }}</td>
-                    <td>{{ us.is_admin }}</td>
-                </tr>
-        {% endif %}
-    {% endfor %}
-</table>
+<h1><span style="background-color:white;">{{ result }}</span></h1><br>
 
-<h2><span style="background-color:lightblue;">Dog Owners:</span></h2>
-<table style="background:lightblue" cellspacing="50" border="2">
-    <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Mail</th>
-        <th>Phone Number</th>
-        <th>Date of Birth</th>
-        <th>ID</th>
-        <th>Admin</th>
-    </tr>
+  {% if user.is_superuser %}
+    <h2><a href="{% url 'user_info' %}">View changes on user information table</a></h2>
+  {% else %}
+    <h2>You're don't admin anymore, <a href="{% url 'home' %}">back home</a></h2>
+  {% endif %}
 
-    {% for us in acc %}
-        {% if not us.is_doggiesitter %}
-            <tr>
-                <td>{{ us.first_name }}</td>
-                <td>{{ us.last_name }}</td>
-                <td>{{ us.email }}</td>
-                <td>{{ us.phone_number }}</td>
-                <td>{{ us.date_of_birth }}</td>
-                <td>{{ us.id }}</td>
-                <td>{{ us.is_admin }}</td>
-            </tr>
-        {% endif %}
-    {% endfor %}
-</table>
 
 
 </center>
 </body>
 </html>
+
 
 {% endblock %}

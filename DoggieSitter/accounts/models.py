@@ -6,9 +6,9 @@ from datetime import date
 
 class Accounts(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False, null=True)
-    last_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False, null=True)
-    email = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False, null=True)
+    first_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
+    last_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
+    email = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
     id = models.CharField(max_length=9,
                           validators=[MinLengthValidator(9)],
                           blank=False,
@@ -30,6 +30,7 @@ class Accounts(models.Model):
     )
     is_doggiesitter = models.BooleanField()
     approved = models.BooleanField(default=False, blank=True, null=True)
+    is_admin = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
