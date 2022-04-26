@@ -78,7 +78,8 @@ class changeAccount(View):
 def GetUsername(request, un):
     user = User.objects.get(username=un)
     return render(request, 'change_password.html', {'user': user})
-
+def go_home(request):
+    return render(request)
 def ChangePassword(request):
 
     user = User.objects.get(username=request.POST.get("user_n"))

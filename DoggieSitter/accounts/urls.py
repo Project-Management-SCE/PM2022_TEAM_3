@@ -5,6 +5,7 @@ from . import views, admin
 from .views import PasswordsChangeView
 
 urlpatterns = [
+    path(" ", views.go_home, name="home"),
     path("signup/", views.SignUpView, name="signup"),
     path('about', TemplateView.as_view(template_name='about.html'), name='about'),
     path('gallery', TemplateView.as_view(template_name='gallery.html'), name='gallery'),

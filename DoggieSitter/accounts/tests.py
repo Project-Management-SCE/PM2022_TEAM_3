@@ -1,7 +1,12 @@
+from django.http import HttpRequest
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.test import TestCase
-from django.urls import reverse
-from . import models
+from . import models, views
 import re
+from django.contrib.auth.models import User
+from django.contrib.auth import SESSION_KEY
+from django.urls import reverse, path, include
 
 
 class BasicTests(TestCase):
@@ -60,15 +65,3 @@ class BasicTests(TestCase):
         acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
         self.assertTrue(len(acc.address) > 50, 'Check name is less than 50 digits long2')
 
-
-class BaseTest(TestCase):
-    def setUp(self):
-        self.signup_url = reverse('signup')
-        return super().setUp()
-
-
-class signUpTest(BaseTest):
-    def can_view(self):
-        response = self.client.get(self.signup_url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'registration/signup.html')
