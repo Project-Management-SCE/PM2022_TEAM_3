@@ -1,0 +1,32 @@
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Set Terms</title>
+</head>
+<body>
+
+<form action="Terms" method="POST">
+    {% csrf_token %}
+
+    <label for="author_id">Admin name</label>
+    <input type="text" id="author_id" name="author_name" value="{{user.username}}" readonly>
+
+    <label for="title_id">Title number</label>
+    <input type="number" id="title_id" name="title_name">
+
+    <label for="body_id">Enter the new term for the selected title number</label>
+    <input type="text" id="body_id" name="body_name">
+
+    <button type="submit">Publish</button>
+
+</form>
+
+
+</body>
+</html>
+
+{% endblock %}
