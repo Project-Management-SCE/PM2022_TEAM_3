@@ -7,9 +7,9 @@ pipeline {
                 steps {
                         
                          
-//                         withEnv(["HOME=${env.WORKSPACE}"]){
-//                                 sh 'python3 -m pip install --upgrade pip setuptools wheel'
-//                         } 
+                        withEnv(["HOME=${env.WORKSPACE}"]){
+                                sh 'python3 -m pip install --upgrade pip setuptools wheel'
+                        } 
                 }
                 
             }
