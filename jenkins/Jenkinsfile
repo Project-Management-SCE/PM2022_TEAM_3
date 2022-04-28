@@ -16,6 +16,7 @@ pipeline {
             stage('Test') {
                 steps {
                         withEnv(["HOME=${env.WORKSPACE}"]){
+                                cd DoggieSitter
                                 sh 'python manage.py test'
                         }
                 }
