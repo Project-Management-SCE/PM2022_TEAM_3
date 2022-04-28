@@ -15,12 +15,20 @@ pipeline {
                 
             }
             stage('Test') {
+                    agent {
+                            docker {
+                                    image 'qnib/pytest'
+                            }
+                    }
                 steps {
                         withEnv(["HOME=${env.WORKSPACE}"]){
-                  
-                                sh 'python accounts/manage.py test'
+                                  sh 'py.test --verbose --junit-xml-reports/results.xml accounts/tests.py'
+                                //sh 'python accounts/manage.py test'
                         }
                 }
+                    post {always {'reports/results.xml'
+                                 }
+                         }
             }
         }
        
