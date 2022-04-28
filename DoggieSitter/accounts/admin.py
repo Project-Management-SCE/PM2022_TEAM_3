@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.shortcuts import render
 from .models import Accounts
 from django.contrib.auth.models import User
+from .models import PostTerms
 
 
 # admin.site.register(Accounts)
@@ -56,4 +57,7 @@ class NewAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Accounts, NewAdmin)
+
+admin.site.register(PostTerms)
+
 
