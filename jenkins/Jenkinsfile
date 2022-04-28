@@ -10,6 +10,9 @@ pipeline {
                         withEnv(["HOME=${env.WORKSPACE}"]){
                                 sh 'python3 -m pip install --upgrade pip setuptools wheel'
                                 sh 'pip install pipenv'
+                                sh 'pipenv install django'
+                                sh 'pipenv shell'
+                                sh 'django-admin startproject DoggieSitter'
                         } 
                 }
                 
