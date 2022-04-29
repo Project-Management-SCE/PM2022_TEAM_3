@@ -3,6 +3,7 @@ from django.shortcuts import render
 from .models import Accounts
 from django.contrib.auth.models import User
 
+actions = ['make_published']
 
 admin.site.register(Accounts)
 
