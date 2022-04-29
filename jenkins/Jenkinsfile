@@ -10,6 +10,8 @@ pipeline {
             steps{
                 withEnv(["HOME=${env.WORKSPACE}"]){
                     sh 'python -m pip install django==2.1.15'
+		    sh 'python DoggieSitter/manage.py makemigrations'
+                    sh 'python DoggieSitter/manage.py migrate'
                 }
             }
         }
