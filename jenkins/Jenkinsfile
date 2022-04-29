@@ -83,6 +83,7 @@ pipeline {
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
 			   sh  "python -m coverage report"
+			   echo 'hello world '
 			   
                     }
 		}
