@@ -20,7 +20,7 @@ pipeline {
 			sh 'python manage.py makemigrations'
 			sh 'python manage.py migrate'
 		}
-                    sh 'python -m pip install django==2.1.15'
+                    sh 'python -m pip install django==4.0.4'
                 }
             }
         }
