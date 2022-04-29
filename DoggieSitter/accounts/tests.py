@@ -254,9 +254,16 @@ class EditUser(TestCase):
         us = User.objects.filter(pk=user.id).first()
         us.last_name = 'newname'
         self.assertNotEqual(us.username, 'unit')
+        
     @tag('Integration-test')
     def test_IT(self):
         self.assertTrue(True)
+        
+    @tag('Integration-test')
+    def test_IT(self):
+        print('IT #2)
+        self.assertTrue(True)
+
 
 
 
