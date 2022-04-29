@@ -34,7 +34,7 @@ pipeline {
             }
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
-		    dir("DoggieSitter"){
+		    dir("DoggieSitter/accounts"){
 			    sh ' python stam.py'
                 	   //sh 'python manage.py stam'
                     }
