@@ -1,25 +1,45 @@
 pipeline {
-        agent {
-            docker { image 'python:3.8' }
-        }
-         stages {
-            stage('Build') {
-                steps {
-                        
-                         
-//                         withEnv(["HOME=${env.WORKSPACE}"]){
-//                                 sh 'python3 -m pip install --upgrade pip setuptools wheel'
-//                         } 
+    agent none
+    stages{
+        stage('Install requirements'){
+            agent{
+                docker{
+                    image 'python:3.7'
                 }
-                
             }
-            stage('Test') {
-                steps {
-                        withEnv(["HOME=${env.WORKSPACE}"]){
-                                sh 'python manage.py test'
-                        }
+            steps{
+                withEnv(["HOME=${env.WORKSPACE}"]){
+                    sh 'python -m pip install django==2.1.15'
                 }
             }
         }
-       
+        stage('Compile'){
+            agent{
+                docker{
+                    image 'python:3.7'
+                }
+            }
+            steps{
+                withEnv(["HOME=${env.WORKSPACE}"]){
+			 sh 'python -m compileall PM2022_TEAM_3//'//manage.py'
+                    	 sh 'pip install django_jenkins'
+                }
+            }
+        }
+        stage('Tests'){
+            agent{
+                docker{
+                    image 'python:3.7'
+                }
+            }
+            steps{
+		 withEnv(["HOME=${env.WORKSPACE}"]){
+		    dir("DoggieSitter/accounts"){
+			    sh ' python stam.py'
+                	   //sh 'python manage.py stam'
+                    }
+		}
+            }
+         }
     }
+}
