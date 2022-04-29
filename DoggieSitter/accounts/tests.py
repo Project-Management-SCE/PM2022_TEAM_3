@@ -1,19 +1,8 @@
-from Tools.scripts import generate_token
 from django.test import TestCase
-from django.urls import reverse, path, include
 from django.contrib.auth.models import User
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from . import models, views
+from . import models
 import re
 from django.urls import reverse
-
-from django.contrib import auth
-from django.http import HttpRequest
-from django.shortcuts import render
-from django.template.loader import render_to_string
-from django.contrib.auth import SESSION_KEY
-
 
 
 class BasicTests(TestCase):
