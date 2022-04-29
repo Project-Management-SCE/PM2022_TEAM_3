@@ -36,14 +36,10 @@ pipeline {
 			 sh 'python -m compileall PM2022_TEAM_3//'//manage.py'
                     	 sh 'pip install django_jenkins'
 			 sh 'pip install django-crispy-forms'
-// 			 sh 'python DoggieSitter/manage.py flush --no-input'
-//                          sh 'rm -r DoggieSitter//migrations/0'
-// 			 sh 'python DoggieSitter/manage.py makemigrations'
-//                          sh 'python DoggieSitter/manage.py migrate'
                 }
             }
         }
-        stage('Tests'){
+        stage('Unit-Tests'){
             agent{
                 docker{
                     image 'python:3.7'
@@ -52,8 +48,23 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-			   //sh ' python stam.py'
-                	   sh 'python manage.py test'
+                	   //sh 'python manage.py test'
+			   sh "python -m coverage run manage.py test --tag=Unit-Test"
+                    }
+		}
+            }
+         }
+	     stage('Integration-Tests'){
+            agent{
+                docker{
+                    image 'python:3.7'
+                }
+            }
+            steps{
+		 withEnv(["HOME=${env.WORKSPACE}"]){
+		    dir("DoggieSitter"){
+                	   //sh 'python manage.py test'
+			   sh "python -m coverage run manage.py test --tag=Integration-test"
                     }
 		}
             }
