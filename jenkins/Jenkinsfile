@@ -81,11 +81,12 @@ pipeline {
             }
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
-		    dir("DoggieSitter"){
-			   sh  "python -m coverage report"
+		   // dir("DoggieSitter"){
 			   echo 'hello world '
+			   sh  "python -m coverage report"
 			   
-                    }
+			   
+                    
 		}
             }
          }
