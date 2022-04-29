@@ -24,6 +24,8 @@ pipeline {
 			 sh 'python -m compileall PM2022_TEAM_3//'//manage.py'
                     	 sh 'pip install django_jenkins'
 			 sh 'pip install django-crispy-forms'
+			 sh 'python DoggieSitter/manage.py flush --no-input'
+                         sh 'rm -r DoggieSitter//migrations/0'
 			 sh 'python DoggieSitter/manage.py makemigrations'
                          sh 'python DoggieSitter/manage.py migrate'
                 }
