@@ -78,8 +78,7 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-                	   
-			   sh ' python -m coverage report '
+			   sh 'python -m coverage report'
 			   
                     }
 		}
