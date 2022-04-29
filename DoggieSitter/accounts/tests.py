@@ -99,19 +99,19 @@ class BaseTest(TestCase):
 
 
 class InsertInfoTest(BaseTest):
-    @tag('Unit-Test')
+    @tag('Integration-test')
 
     def test_can_view_page_correctly(self):
         response = self.client.get(self.login_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration/login.html')
-    @tag('Unit-Test')
+    @tag('Integration-test')
 
     def test_password_incorrect(self):
         response = self.client.post(self.login_url, self.user_unmatching_password, format='text/html')
         self.assertTemplateUsed(response, 'registration/login.html')
         self.assertEqual(response.status_code, 200)
-    @tag('Unit-Test')
+    @tag('Integration-test')
 
     def test_user_incorrect(self):
         response = self.client.post(self.login_url, self.unmatching_user, format='text/html')
@@ -254,7 +254,6 @@ class EditUser(TestCase):
         us = User.objects.filter(pk=user.id).first()
         us.last_name = 'newname'
         self.assertNotEqual(us.username, 'unit')
-        
     @tag('Integration-test')
     def test_IT(self):
         self.assertTrue(True)
