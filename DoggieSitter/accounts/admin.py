@@ -1,5 +1,5 @@
 from django.contrib import admin
-# from django.shortcuts import render
+from django.shortcuts import render
 from .models import Accounts
 from django.contrib.auth.models import User
 
