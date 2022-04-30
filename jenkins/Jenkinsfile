@@ -82,8 +82,8 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-			   sh 'python -m coverage report --ignore-errors'
-			   
+			   //sh 'python -m coverage report --ignore-errors'
+			   sh ' coverage report --ignore-errors' 
                     }
 		}
             }
