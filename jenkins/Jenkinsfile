@@ -53,7 +53,7 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-			   sh "python -m coverage run manage.py test --tag=Unit-Test"
+			   sh "python manage.py test --tag=Unit-Test"
 			   
                     }
 		}
@@ -68,7 +68,7 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-			   sh "python -m coverage run manage.py test --tag=Integration-test"
+			   sh "python manage.py test --tag=Integration-test"
                     }
 		}
             }
