@@ -2,10 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
 from datetime import date
-<<<<<<< HEAD
-=======
 from django.urls import reverse
->>>>>>> Boaz
 
 
 class Accounts(models.Model):
@@ -34,16 +31,10 @@ class Accounts(models.Model):
     )
     is_doggiesitter = models.BooleanField()
     approved = models.BooleanField(default=False, blank=True, null=True)
-<<<<<<< HEAD
-    is_admin = models.BooleanField(default=False, blank=True, null=True)
-=======
->>>>>>> Boaz
 
     def __str__(self):
         return self.user.username
 
-<<<<<<< HEAD
-=======
 class PostTerms(models.Model):
     author = models.TextField()
     title = models.IntegerField()
@@ -55,4 +46,3 @@ class PostTerms(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
->>>>>>> Boaz

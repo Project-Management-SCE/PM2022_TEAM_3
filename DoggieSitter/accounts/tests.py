@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from django.test import TestCase, tag
-=======
 from django.test import TestCase
->>>>>>> Boaz
 from django.contrib.auth.models import User
 from . import models
 import re
@@ -10,39 +6,23 @@ from django.urls import reverse
 
 
 class BasicTests(TestCase):
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_firstname(self):
         acc = models.Accounts()
         acc.first_name = 'Moran'
         self.assertTrue(len(acc.id) <= 9, 'Check name is less than 50 digits long')
         self.assertFalse(len(acc.id) > 50, 'Check name is less than 50 digits long')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_lastname(self):
         print('test2')
         acc = models.Accounts()
         acc.last_name = 'Shalvi'
         self.assertFalse(len(acc.id) > 50, 'Check name is less than 50 digits long')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_id(self):
         acc = models.Accounts()
         acc.id = '123456789'
         self.assertTrue(len(acc.id) == 9, 'Check ID is 9 digits long')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_email(self):
         acc = models.Accounts()
         acc.email = 'Nadavg@mail.com'
@@ -51,10 +31,6 @@ class BasicTests(TestCase):
         acc.email = 'Nadavgmail.com'
         self.assertFalse(re.fullmatch(regex, acc.email), 'check email format is valid')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_gender(self):
         genders = ['male', 'female']
         acc = models.Accounts()
@@ -63,10 +39,6 @@ class BasicTests(TestCase):
         acc.gender = 'unknown'
         self.assertFalse(acc.gender in genders, 'gender test2')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_Date(self):
         acc = models.Accounts()
         acc.phone_number = '0526203790'
@@ -76,10 +48,6 @@ class BasicTests(TestCase):
         acc.phone_number = '052620370'
         self.assertFalse(len(acc.phone_number) == 10, 'Check ID is 10 digits long2')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_address(self):
         acc = models.Accounts()
         acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
@@ -89,11 +57,6 @@ class BasicTests(TestCase):
 
 
 class BaseTest(TestCase):
-<<<<<<< HEAD
-
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def setUp(self):
         self.login_url = reverse('login')
         self.home = reverse('home')
@@ -115,10 +78,6 @@ class BaseTest(TestCase):
         }
         return super().setUp()
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_Logged(self):
         self.credentials = {
             'username': 'testuser',
@@ -130,28 +89,15 @@ class BaseTest(TestCase):
 
 
 class InsertInfoTest(BaseTest):
-<<<<<<< HEAD
-    @tag('Integration-test')
-
-=======
->>>>>>> Boaz
     def test_can_view_page_correctly(self):
         response = self.client.get(self.login_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration/login.html')
-<<<<<<< HEAD
-    @tag('Integration-test')
-=======
->>>>>>> Boaz
 
     def test_password_incorrect(self):
         response = self.client.post(self.login_url, self.user_unmatching_password, format='text/html')
         self.assertTemplateUsed(response, 'registration/login.html')
         self.assertEqual(response.status_code, 200)
-<<<<<<< HEAD
-    @tag('Integration-test')
-=======
->>>>>>> Boaz
 
     def test_user_incorrect(self):
         response = self.client.post(self.login_url, self.unmatching_user, format='text/html')
@@ -160,10 +106,6 @@ class InsertInfoTest(BaseTest):
 
 
 class LogInTest(TestCase):
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
 
     def setUp(self):
         self.credentials = {
@@ -172,19 +114,11 @@ class LogInTest(TestCase):
         }
         user = User.objects.create_user(**self.credentials)
         user.is_active = True
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
 
     def test_login(self):
         response = self.client.post('/accounts/login/', **self.credentials, follow=True)
         status = response.context['user'].is_active
         self.assertFalse(status)
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
 
     def test_logout(self):
         response = self.client.post('/accounts/login/', **self.credentials, follow=True)
@@ -193,11 +127,6 @@ class LogInTest(TestCase):
 
 
 class DeleteUser(TestCase):
-<<<<<<< HEAD
-    @tag('Unit-Test')
-
-=======
->>>>>>> Boaz
     def test_delete(self):
         self.credentials = {
             'username': 'testuser',
@@ -211,11 +140,6 @@ class DeleteUser(TestCase):
 
 
 class CreateTypeUser(TestCase):
-<<<<<<< HEAD
-    @tag('Unit-Test')
-
-=======
->>>>>>> Boaz
     def test_create_Doggie_approved(self):
         self.credentials = {
             'username': 'testuser',
@@ -232,14 +156,7 @@ class CreateTypeUser(TestCase):
         self.assertTrue(isDoggie)
         self.assertFalse(not isApproved)
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
     def test_create_Doggie_not_approved(self):
-
-
-=======
-    def test_create_Doggie_not_approved(self):
->>>>>>> Boaz
         self.credentials = {
             'username': 'testuser',
             'password': 'userpassdskfldskf',
@@ -255,10 +172,6 @@ class CreateTypeUser(TestCase):
         self.assertTrue(isDoggie)
         self.assertFalse(isApproved)
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-=======
->>>>>>> Boaz
     def test_create_Owner(self):
         self.credentials = {
             'username': 'testuser',
@@ -275,11 +188,6 @@ class CreateTypeUser(TestCase):
 
 
 class EditUser(TestCase):
-<<<<<<< HEAD
-    @tag('Unit-Test')
-
-=======
->>>>>>> Boaz
     def setUp(self):
         self.credentials = {
             'username': 'testuser',
@@ -288,62 +196,34 @@ class EditUser(TestCase):
             'last_name': 'unit',
         }
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
     def test_Changeinfo_Username(self):
-
-=======
-    def test_Changeinfo_Username(self):
->>>>>>> Boaz
         user = User.objects.create_user(**self.credentials)
         us = User.objects.filter(pk=user.id).first()
         us.username = 'newname'
         self.assertNotEqual(us.username,'testuser')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
-    def test_Changeinfo_password(self):
-
-=======
 
     def test_Changeinfo_password(self):
->>>>>>> Boaz
         user = User.objects.create_user(**self.credentials)
         us = User.objects.filter(pk=user.id).first()
         us.set_password('pass')
         self.assertNotEqual(us.password, 'testuser')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
     def test_Changeinfo_First_Name(self):
-
-=======
-    def test_Changeinfo_First_Name(self):
->>>>>>> Boaz
         user = User.objects.create_user(**self.credentials)
         us = User.objects.filter(pk=user.id).first()
         us.first_name = 'newname'
         self.assertNotEqual(us.username, 'test')
 
-<<<<<<< HEAD
-    @tag('Unit-Test')
     def test_Changeinfo_Last_Name(self):
-
-=======
-    def test_Changeinfo_Last_Name(self):
->>>>>>> Boaz
         user = User.objects.create_user(**self.credentials)
         us = User.objects.filter(pk=user.id).first()
         us.last_name = 'newname'
         self.assertNotEqual(us.username, 'unit')
-<<<<<<< HEAD
-    @tag('Integration-test')
-    def test_IT(self):
-        self.assertTrue(True)
-=======
 
 
->>>>>>> Boaz
+
+
 
 
 
