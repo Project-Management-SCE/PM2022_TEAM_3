@@ -38,9 +38,26 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+<<<<<<< HEAD
 
 ]
  
+=======
+    'django_jenkins'
+
+]
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.run_pyflakes',
+)
+PROJECT_APPS = (
+'accounts',
+)
+
+
+
+
+>>>>>>> Boaz
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,7 +96,11 @@ WSGI_APPLICATION = 'Dogisiter.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
+<<<<<<< HEAD
         'NAME': str(BASE_DIR / 'db.sqlite3'),
+=======
+        'NAME': BASE_DIR / 'db.sqlite3',
+>>>>>>> Boaz
     }
 }
 

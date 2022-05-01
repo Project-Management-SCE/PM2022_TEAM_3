@@ -103,6 +103,10 @@
       <a href="#news">Map</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
+<<<<<<< HEAD
+=======
+      <a href="{% url 'Terms' %}">Terms</a>
+>>>>>>> Boaz
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
@@ -121,9 +125,16 @@
           <a class="active" href="{% url 'home' %}">Home</a>
           <a href="#news">Map</a>
           <a href="{% url 'gallery' %}">Gallery</a>
+<<<<<<< HEAD
           <a href="{% url 'change_password' user.username %}">change password</a>
           <a href="#news">Take a dog</a>
           <a href="{% url 'about' %}">About & Contact</a>
+=======
+<!--          <a href="{% url 'change_password' user.username %}">change password</a>-->
+          <a href="#news">Take a dog</a>
+          <a href="{% url 'about' %}">About & Contact</a>
+          <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+>>>>>>> Boaz
           <a href="{% url 'logout' %}">Log Out</a>
         </div>
 
@@ -154,9 +165,16 @@
         <a class="active" href="{% url 'home' %}">Home</a>
         <a href="#news">Map</a>
         <a href="{% url 'gallery' %}">Gallery</a>
+<<<<<<< HEAD
         <a href="{% url 'change_password' user.username %}">change password</a>
         <a href="#news">Take a dog</a>
         <a href="{% url 'about' %}">About & Contact</a>
+=======
+<!--        <a href="{% url 'change_password' user.username %}">change password</a>-->
+        <a href="#news">Take a dog</a>
+        <a href="{% url 'about' %}">About & Contact</a>
+        <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+>>>>>>> Boaz
         <a href="{% url 'logout' %}">Log Out</a>
       </div>
      <h2> Which dog would you like to walk with today? </h2>
