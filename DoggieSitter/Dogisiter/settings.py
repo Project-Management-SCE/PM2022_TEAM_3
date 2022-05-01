@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'django_jenkins'
 
 ]
 JENKINS_TASKS = (
@@ -86,11 +85,11 @@ WSGI_APPLICATION = 'Dogisiter.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
+x = str(BASE_DIR / "db.sqlite3")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': x,
     }
 }
 
