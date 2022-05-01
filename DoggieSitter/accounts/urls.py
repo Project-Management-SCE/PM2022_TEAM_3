@@ -19,11 +19,19 @@ urlpatterns = [
     # path('password/', PasswordsChangeView.as_view(template_name='change_password.html'), name="password"),
     # path('password_success', views.password_success, name="password_success"),
 <<<<<<< HEAD
+<<<<<<< HEAD
 #     path('admin_actions/make_admin', admin.make_new_admin, name='admin_actions/make_admin'),
 #     path("admin_actions/remove_admin", admin.delete_admin, name="admin_actions/remove_admin"),
 #     path('admin_actions/delete_user', admin.delete_user, name='admin_actions/delete_user'),
 #     path('admin_actions/approve_doggiesitter', admin.approve_doggiesitter, name='admin_actions/approve_doggiesitter'),
 #     path('admin_actions/', views.SearchUserByID, name='admin_actions'),
+=======
+    path('admin_actions/make_admin', admin.make_new_admin, name='admin_actions/make_admin'),
+    path("admin_actions/remove_admin", admin.delete_admin, name="admin_actions/remove_admin"),
+    path('admin_actions/delete_user', admin.delete_user, name='admin_actions/delete_user'),
+    path('admin_actions/approve_doggiesitter', admin.approve_doggiesitter, name='admin_actions/approve_doggiesitter'),
+    path('admin_actions/', views.SearchUserByID, name='admin_actions'),
+>>>>>>> b065b76f647a5e42c7f4758e77dd917410673e39
     path('change/<user_id>', views.changeAccount.as_view(), name='changeinfo'),
     path('change_password/<un>', views.GetUsername, name='change_password'),
     path('change_password2/', views.ChangePassword, name='change_password2'),

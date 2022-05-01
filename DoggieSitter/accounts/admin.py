@@ -1,28 +1,29 @@
 from django.contrib import admin
 <<<<<<< HEAD
+<<<<<<< HEAD
 # from django.shortcuts import render
+=======
+from django.shortcuts import render
+>>>>>>> b065b76f647a5e42c7f4758e77dd917410673e39
 from .models import Accounts
 from django.contrib.auth.models import User
 
-# actions = ['make_published']
-
-# admin.site.register(Accounts)
-
 
 # @admin.action(description='Grant admin permissions')
-# def make_new_admin(request):
-#     user = User.objects.get(username=request.POST.get("selected_id"))
-#     for i in Accounts.objects.all():
-#         if str(i) == str(user):
-#             ac = Accounts.objects.get(id=i.id)
-#     ac.is_admin = True
-#     user.is_superuser = True
-#     user.is_staff = True
-#     user.save()
-#     ac.save()
-#     return render(request, 'successful_action.html', {'result': "Admin permissions was successfully granted."})
+def make_new_admin(request):
+    user = User.objects.get(username=request.POST.get("selected_id"))
+    for i in Accounts.objects.all():
+        if str(i) == str(user):
+            ac = Accounts.objects.get(id=i.id)
+    ac.is_admin = True
+    user.is_superuser = True
+    user.is_staff = True
+    user.save()
+    ac.save()
+    return render(request, 'successful_action.html', {'result': "Admin permissions was successfully granted."})
 
 # @admin.action(description='Disable admin permissions')
+<<<<<<< HEAD
 # def delete_admin(request):
 #     user = User.objects.get(username=request.POST.get("selected_id"))
 #     for i in Accounts.objects.all():
@@ -79,6 +80,8 @@ def make_new_admin(request):
     return render(request, 'successful_action.html', {'result': "Admin permissions was successfully granted."})
 
 # @admin.action(description='Disable admin permissions')
+=======
+>>>>>>> b065b76f647a5e42c7f4758e77dd917410673e39
 def delete_admin(request):
     user = User.objects.get(username=request.POST.get("selected_id"))
     for i in Accounts.objects.all():
@@ -114,7 +117,10 @@ class NewAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Accounts, NewAdmin)
+<<<<<<< HEAD
 
 
 >>>>>>> Boaz
+=======
+>>>>>>> b065b76f647a5e42c7f4758e77dd917410673e39
 
