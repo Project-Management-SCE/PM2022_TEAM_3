@@ -1,6 +1,7 @@
-from django.test import TestCase, tag
+from django.test import TestCase, tag , Client
+import  json
 from django.contrib.auth.models import User
-from . import models
+from . import models , views
 import re
 from django.urls import reverse
 
@@ -288,3 +289,18 @@ class Integrate_tests(TestCase):
                 i.username = 'Newname'
                 user2.username = 'testuser3'
                 self.assertNotEqual(i.username, user2.username)
+
+class View_test(TestCase):
+    @tag('Unit-Test')
+    def test_about_GET(self):
+        client = Client()
+        response = client.get(reverse('about'))
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response, 'about.html')
+
+    @tag('Unit-Test')
+    def test_gallery_GET(self):
+        client = Client()
+        response = client.get(reverse('gallery'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'gallery.html')
