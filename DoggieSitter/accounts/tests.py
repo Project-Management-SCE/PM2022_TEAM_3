@@ -370,17 +370,11 @@ class View_test(TestCase):
     def test_go_home(self):
         request = HttpRequest()
         response = views.go_home(request,'home.html')
-
-
-    # @tag('Unit-Test')
-    # def test_Terms_POST(self):
-    #     request = HttpRequest()
-    #     request.method = 'POST'
-    #     response = views.Terms(request)
-
+        
     @tag('Unit-Test')
     def test_Terms_GET(self):
         request = HttpRequest()
         request.method = 'GET'
         response = views.Terms(request)
+
 
