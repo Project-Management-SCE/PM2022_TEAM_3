@@ -23,9 +23,9 @@ pipeline {
 			dir("DoggieSitter") {
 			sh 'pip install coverage'
 			sh 'pip install django-admin-actions'
-			sh 'rm -f -r /accounts/migrations/'
 			sh 'python manage.py makemigrations'
 			sh 'python manage.py migrate'
+			sh 'rm -f -r /accounts/migrations/0'
 		    }
 			   
                     
