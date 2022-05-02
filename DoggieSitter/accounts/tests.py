@@ -310,9 +310,9 @@ class View_test(TestCase):
         response = client.get(reverse('user_info'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_info.html')
+
     @tag('Unit-Test')
     def test_SearchUserByID(self):
-
         self.credentials = {
             'username': 'testuser',
             'password': 'userpassdskfldskf',
@@ -331,7 +331,65 @@ class View_test(TestCase):
         self.assertEqual(response.status_code,200)
 
     @tag('Unit-Test')
-    def test_SignUpView(self):
+    def test_password_success(self):
         request = HttpRequest()
-        response = views.GetAccounts(request)
+        response = views.password_success(request)
         self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_SignUpView_GET(self):
+        request = HttpRequest()
+        response = views.SignUpView(request)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_SignUpView_POST(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        print(request.method)
+        response = views.SignUpView(request)
+        print(response.status_code)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_SearchUserByID_POST(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        print(request.method)
+        response = views.SearchUserByID(request)
+        print(response.status_code)
+        self.assertEqual(response.status_code,200)
+    @tag('Unit-Test')
+    def test_GetUsername_POST(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        user = User.objects.create_user(**self.credentials)
+        request = HttpRequest()
+        response = views.GetUsername(request,user.username)
+        print(response.status_code)
+        self.assertEqual(response.status_code,200)
+    @tag('Unit-Test')
+    def test_go_home(self):
+        request = HttpRequest()
+        response = views.go_home(request,'home.html')
+
+
+    @tag('Unit-Test')
+    def test_Terms_POST(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        response = views.Terms(request)
+
+    @tag('Unit-Test')
+    def test_Terms_GET(self):
+        request = HttpRequest()
+        request.method = 'GET'
+        response = views.Terms(request)
+
+
+
+        
