@@ -25,8 +25,12 @@ pipeline {
 			sh 'pip install django-admin-actions'
 			sh 'python manage.py flush --no-input'
 			sh 'rm  -f -r /accounts/migrations/0'
-			sh 'python manage.py makemigrations'
-			sh 'python manage.py migrate'
+			dir("DoggieSitter")
+				{
+					sh 'python manage.py makemigrations'
+					sh 'python manage.py migrate'
+				}	
+	
 			
 		    }
 			   
