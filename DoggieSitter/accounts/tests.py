@@ -17,7 +17,6 @@ class BasicTests(TestCase):
 
     @tag('Unit-Test')
     def test_lastname(self):
-        print('test2')
         acc = models.Accounts()
         acc.last_name = 'Shalvi'
         self.assertFalse(len(acc.id) > 50, 'Check name is less than 50 digits long')
@@ -346,18 +345,14 @@ class View_test(TestCase):
     def test_SignUpView_POST(self):
         request = HttpRequest()
         request.method = 'POST'
-        print(request.method)
         response = views.SignUpView(request)
-        print(response.status_code)
         self.assertEqual(response.status_code,200)
 
     @tag('Unit-Test')
     def test_SearchUserByID_POST(self):
         request = HttpRequest()
         request.method = 'POST'
-        print(request.method)
         response = views.SearchUserByID(request)
-        print(response.status_code)
         self.assertEqual(response.status_code,200)
     @tag('Unit-Test')
     def test_GetUsername_POST(self):
@@ -370,7 +365,6 @@ class View_test(TestCase):
         user = User.objects.create_user(**self.credentials)
         request = HttpRequest()
         response = views.GetUsername(request,user.username)
-        print(response.status_code)
         self.assertEqual(response.status_code,200)
     @tag('Unit-Test')
     def test_go_home(self):
@@ -378,11 +372,11 @@ class View_test(TestCase):
         response = views.go_home(request,'home.html')
 
 
-    @tag('Unit-Test')
-    def test_Terms_POST(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        response = views.Terms(request)
+    # @tag('Unit-Test')
+    # def test_Terms_POST(self):
+    #     request = HttpRequest()
+    #     request.method = 'POST'
+    #     response = views.Terms(request)
 
     @tag('Unit-Test')
     def test_Terms_GET(self):
@@ -390,6 +384,3 @@ class View_test(TestCase):
         request.method = 'GET'
         response = views.Terms(request)
 
-
-
-        
