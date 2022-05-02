@@ -314,7 +314,7 @@ class View_test(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_info.html')
     @tag('Unit-Test')
-    def test_check(self):
+    def test_SearchUserByID(self):
 
         self.credentials = {
             'username': 'testuser',
@@ -323,22 +323,13 @@ class View_test(TestCase):
             'last_name': 'unit',
         }
         user = User.objects.create_user(**self.credentials)
-        print(user.id)
-        print(user.username)
         request = HttpRequest()
         request.POST.appendlist('username', user.username)
-        print(request.POST)
         response = views.SearchUserByID(request)
-        print(response.status_code)
         self.assertEqual(response.status_code,200)
-
-
-
-
-
-
-
-
-
-
+    @tag('Unit-Test')
+    def test_GetAccounts(self):
+        request = HttpRequest()
+        response = views.GetAccounts(request)
+        self.assertEqual(response.status_code,200)
 
