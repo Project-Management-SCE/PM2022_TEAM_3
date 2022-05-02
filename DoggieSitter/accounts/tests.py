@@ -370,11 +370,20 @@ class View_test(TestCase):
     def test_go_home(self):
         request = HttpRequest()
         response = views.go_home(request,'home.html')
-        
+        self.assertEqual(response.status_code,200)
+
     @tag('Unit-Test')
     def test_Terms_GET(self):
         request = HttpRequest()
         request.method = 'GET'
         response = views.Terms(request)
+        self.assertEqual(response.status_code,200)
+
+
+
+
+
+
+
 
 
