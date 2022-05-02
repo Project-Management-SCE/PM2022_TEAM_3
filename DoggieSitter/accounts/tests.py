@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.http import HttpRequest,HttpResponse
 
 
-
 class BasicTests(TestCase):
     @tag('Unit-Test')
     def test_firstname(self):
@@ -89,16 +88,16 @@ class BaseTest(TestCase):
             'password': 'teslatt',
         }
         return super().setUp()
-
     @tag('Unit-Test')
     def test_Logged(self):
         self.credentials = {
             'username': 'testuser',
-            'password': 'userpass'
+            'passwordclea': 'userpass'
         }
         user = User.objects.create_user(**self.credentials)
         login = self.client.login(username='testuser', password='userpass')
         self.assertTrue(login)
+
 
 
 class InsertInfoTest(BaseTest):
@@ -156,7 +155,6 @@ class DeleteUser(TestCase):
         us.delete()
         self.assertFalse(User.objects.filter(username=us).exists())
 
-
 class CreateTypeUser(TestCase):
     @tag('Unit-Test')
     def test_create_Doggie_approved(self):
@@ -205,7 +203,6 @@ class CreateTypeUser(TestCase):
         acc.is_doggiesitter = False
         isDoggie = acc.is_doggiesitter
         self.assertFalse(isDoggie)
-
 
 class EditUser(TestCase):
     @tag('Unit-Test')
@@ -333,3 +330,8 @@ class View_test(TestCase):
         response = views.GetAccounts(request)
         self.assertEqual(response.status_code,200)
 
+    @tag('Unit-Test')
+    def test_SignUpView(self):
+        request = HttpRequest()
+        response = views.GetAccounts(request)
+        self.assertEqual(response.status_code,200)
