@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from . import models , views
 import re
 from django.urls import reverse
+from django.http import HttpRequest,HttpResponse
+
 
 
 class BasicTests(TestCase):
@@ -304,3 +306,39 @@ class View_test(TestCase):
         response = client.get(reverse('gallery'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'gallery.html')
+
+    @tag('Unit-Test')
+    def test_user_info_GET(self):
+        client = Client()
+        response = client.get(reverse('user_info'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'user_info.html')
+    @tag('Unit-Test')
+    def test_check(self):
+
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        user = User.objects.create_user(**self.credentials)
+        print(user.id)
+        print(user.username)
+        request = HttpRequest()
+        request.POST.appendlist('username', user.username)
+        print(request.POST)
+        response = views.SearchUserByID(request)
+        print(response.status_code)
+        self.assertEqual(response.status_code,200)
+
+
+
+
+
+
+
+
+
+
+
