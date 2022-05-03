@@ -1,11 +1,11 @@
 from django.test import TestCase, tag , Client
 import  json
 from django.contrib.auth.models import User
-from . import models , views
+from . import models , views, admin,forms
 import re
+from django import forms
 from django.urls import reverse
 from django.http import HttpRequest,HttpResponse
-
 
 
 class BasicTests(TestCase):
@@ -18,7 +18,6 @@ class BasicTests(TestCase):
 
     @tag('Unit-Test')
     def test_lastname(self):
-        print('test2')
         acc = models.Accounts()
         acc.last_name = 'Shalvi'
         self.assertFalse(len(acc.id) > 50, 'Check name is less than 50 digits long')
@@ -67,8 +66,6 @@ class BasicTests(TestCase):
 
 
 class BaseTest(TestCase):
-
-    @tag('Unit-Test')
     def setUp(self):
         self.login_url = reverse('login')
         self.home = reverse('home')
@@ -89,16 +86,18 @@ class BaseTest(TestCase):
             'password': 'teslatt',
         }
         return super().setUp()
-
     @tag('Unit-Test')
     def test_Logged(self):
         self.credentials = {
-            'username': 'testuser',
-            'password': 'userpass'
+            'username': 'Boaz',
+            'password': 'Bitton',
+            'first_name': 'test',
+            'last_name': 'unit',
         }
         user = User.objects.create_user(**self.credentials)
-        login = self.client.login(username='testuser', password='userpass')
+        login = self.client.login(username='Boaz', password='Bitton')
         self.assertTrue(login)
+
 
 
 class InsertInfoTest(BaseTest):
@@ -156,7 +155,6 @@ class DeleteUser(TestCase):
         us.delete()
         self.assertFalse(User.objects.filter(username=us).exists())
 
-
 class CreateTypeUser(TestCase):
     @tag('Unit-Test')
     def test_create_Doggie_approved(self):
@@ -205,7 +203,6 @@ class CreateTypeUser(TestCase):
         acc.is_doggiesitter = False
         isDoggie = acc.is_doggiesitter
         self.assertFalse(isDoggie)
-
 
 class EditUser(TestCase):
     @tag('Unit-Test')
@@ -313,9 +310,9 @@ class View_test(TestCase):
         response = client.get(reverse('user_info'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'user_info.html')
+
     @tag('Unit-Test')
     def test_SearchUserByID(self):
-
         self.credentials = {
             'username': 'testuser',
             'password': 'userpassdskfldskf',
@@ -327,9 +324,133 @@ class View_test(TestCase):
         request.POST.appendlist('username', user.username)
         response = views.SearchUserByID(request)
         self.assertEqual(response.status_code,200)
+
     @tag('Unit-Test')
     def test_GetAccounts(self):
         request = HttpRequest()
         response = views.GetAccounts(request)
         self.assertEqual(response.status_code,200)
 
+    @tag('Unit-Test')
+    def test_password_success(self):
+        request = HttpRequest()
+        response = views.password_success(request)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_SignUpView_GET(self):
+        request = HttpRequest()
+        response = views.SignUpView(request)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_SignUpView_POST_notValid(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        response = views.SignUpView(request)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_SearchUserByID_POST(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        response = views.SearchUserByID(request)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_GetUsername_POST(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        user = User.objects.create_user(**self.credentials)
+        request = HttpRequest()
+        response = views.GetUsername(request,user.username)
+        self.assertEqual(response.status_code,200)
+    @tag('Unit-Test')
+    def test_go_home(self):
+        request = HttpRequest()
+        response = views.go_home(request,'home.html')
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_Terms_GET(self):
+        request = HttpRequest()
+        request.method = 'GET'
+        response = views.Terms(request)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_ChangePassword_correct(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        user = User.objects.create_user(**self.credentials)
+        request = HttpRequest()
+        request.POST = {'user_n': user.username ,'new_pass1': '123456Bb', 'new_pass2': '123456Bb'}
+        response = views.ChangePassword(request)
+        self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_ChangePassword_notEqual(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        user = User.objects.create_user(**self.credentials)
+        request = HttpRequest()
+        request.POST = {'user_n': user.username, 'new_pass1': '123456Bb', 'new_pass2': '123456'}
+        response = views.ChangePassword(request)
+        self.assertEqual(response.status_code, 200)
+
+    @tag('Unit-Test')
+    def test_ChangePassword_notValid(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        user = User.objects.create_user(**self.credentials)
+        request = HttpRequest()
+        request.POST = {'user_n': user.username, 'new_pass1': '123', 'new_pass2': '123'}
+        response = views.ChangePassword(request)
+        self.assertEqual(response.status_code, 200)
+
+
+
+# class Form_test(TestCase):
+#     @tag('x')
+#     def test_clean_email(self):
+#         t = forms.ModelForm()
+#         acc = forms.AccountChangeForm(t)
+#         acc.cleaned_data['email'] = 'test@gmail.com'
+#         response = forms.AccountChangeForm.clean_email(acc)
+#         print(response)
+
+
+
+
+class Admin_test(TestCase):
+    @tag('Unit-Test')
+    def test_delete_user(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        user = User.objects.create_user(**self.credentials)
+        request = HttpRequest()
+        request.POST = {'selected_id': user.username}
+        response = admin.delete_user(request)
+        self.assertEqual(response.status_code,200)
+
+ 
