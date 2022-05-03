@@ -79,9 +79,8 @@ class changeAccount(View):
 def GetUsername(request, un):
     user = User.objects.get(username=un)
     return render(request, 'change_password.html', {'user': user})
-def go_home(request,name):
-    return render(request,name)
-
+def go_home(request):
+    return render(request)
 def ChangePassword(request):
 
     user = User.objects.get(username=request.POST.get("user_n"))
@@ -120,5 +119,25 @@ def Terms(request):
         return render(request, 'Terms.html', {'pt': pt})
 
 
+def Add(request):
+    pt = PostTerms.objects.all()
+    if request.method == 'POST':
+        form = ExtendedUserCreationForm(request.POST)
+        profile_form = AccountsProfileForm(request.POST)
+        if form.is_valid() and profile_form.is_valid():
+            user = form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
 
+            return render(request, 'home.html')
+        else:
+            return render(request, 'registration/Add.html',
+                          {'form': form, 'profile_form': profile_form, 'pt': pt,
+                           'error': "Bad Data Please Try Again"})
+    else:
+        form = ExtendedUserCreationForm()
+        profile_form = AccountsProfileForm()
+    context = {'form': form, 'profile_form': profile_form, 'error': "Bad Data Please Try Again", 'pt': pt}
+    return render(request, 'registration/Add.html', context)
 

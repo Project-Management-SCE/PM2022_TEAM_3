@@ -425,6 +425,8 @@ class View_test(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+
+
 class Admin_test(TestCase):
     @tag('Unit-Test')
     def test_delete_user(self):
@@ -439,3 +441,4 @@ class Admin_test(TestCase):
         request.POST = {'selected_id': user.username}
         response = admin.delete_user(request)
         self.assertEqual(response.status_code,200)
+
