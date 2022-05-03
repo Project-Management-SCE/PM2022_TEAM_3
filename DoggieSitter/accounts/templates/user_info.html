@@ -93,10 +93,11 @@
       <a href="{% url 'home' %}">Home</a>
       <a href="#news">Map</a>
       <a href="{% url 'gallery' %}">Gallery</a>
+      <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="#contact">Contact</a>
       <a class="active" href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About</a>
-      <a href="http://127.0.0.1:8000/admin/">View dashboard</a>
+      <a href="{% url 'admin_actions' %}">Admin Actions</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
     {% endif %}
@@ -113,7 +114,9 @@
         <th>Mail</th>
         <th>Phone Number</th>
         <th>Date of Birth</th>
+        <th>ID</th>
         <th>Approved / Not Approved</th>
+        <th>Admin</th>
     </tr>
     {% for us in acc %}
         {% if us.is_doggiesitter %}
@@ -123,7 +126,9 @@
                     <td>{{ us.email }}</td>
                     <td>{{ us.phone_number }}</td>
                     <td>{{ us.date_of_birth }}</td>
+                    <td>{{ us.id }}</td>
                     <td>{{ us.approved }}</td>
+                    <td>{{ us.is_admin }}</td>
                 </tr>
         {% endif %}
     {% endfor %}
@@ -137,6 +142,8 @@
         <th>Mail</th>
         <th>Phone Number</th>
         <th>Date of Birth</th>
+        <th>ID</th>
+        <th>Admin</th>
     </tr>
 
     {% for us in acc %}
@@ -147,6 +154,8 @@
                 <td>{{ us.email }}</td>
                 <td>{{ us.phone_number }}</td>
                 <td>{{ us.date_of_birth }}</td>
+                <td>{{ us.id }}</td>
+                <td>{{ us.is_admin }}</td>
             </tr>
         {% endif %}
     {% endfor %}
