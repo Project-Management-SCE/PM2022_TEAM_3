@@ -3,6 +3,7 @@ import  json
 from django.contrib.auth.models import User
 from . import models , views, admin,forms
 import re
+from accounts.models import Accounts
 from django import forms
 from django.urls import reverse
 from django.http import HttpRequest,HttpResponse
@@ -349,6 +350,9 @@ class View_test(TestCase):
         request.method = 'POST'
         response = views.SignUpView(request)
         self.assertEqual(response.status_code,200)
+    # @tag('Unit-Test')
+    # def test_SignUpView_POST_notValid(self):
+
 
     @tag('Unit-Test')
     def test_SearchUserByID_POST(self):
@@ -436,8 +440,6 @@ class View_test(TestCase):
 #         print(response)
 
 
-
-
 class Admin_test(TestCase):
     @tag('Unit-Test')
     def test_delete_user(self):
@@ -453,4 +455,54 @@ class Admin_test(TestCase):
         response = admin.delete_user(request)
         self.assertEqual(response.status_code,200)
 
- 
+    @tag('Unit-Test')
+    def test_make_admin(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = False)
+        self.user.save()
+        self.acc.save()
+        request = HttpRequest()
+        form_data ={'selected_id': self.user.username}
+        response = self.client.post(reverse('admin_actions/make_admin'),data=form_data, follow=True)
+        self.assertEqual(response.context['result'], 'Admin permissions was successfully granted.')
+
+    @tag('Unit-Test')
+    def test_delete_admin(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = False)
+        self.user.save()
+        self.acc.save()
+        request = HttpRequest()
+        form_data = {'selected_id': self.user.username}
+        response = self.client.post(reverse('admin_actions/remove_admin'), data=form_data, follow=True)
+        self.assertEqual(response.context['result'], 'Admin permissions was successfully denied.')
+
+    @tag('Unit-Test')
+    def test_Approve_Doggie(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = False)
+        self.user.save()
+        self.acc.save()
+        request = HttpRequest()
+        form_data = {'selected_id': self.user.username}
+        response = self.client.post(reverse('admin_actions/approve_doggiesitter'), data=form_data, follow=True)
+        self.assertEqual(response.context['result'], 'Doggiesitter was successfully approved.')
+        print(response.context['result'])
