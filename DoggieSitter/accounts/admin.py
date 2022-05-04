@@ -16,7 +16,12 @@ def make_new_admin(request):
     user.is_staff = True
     user.save()
     ac.save()
-    return render(request, 'successful_action.html', {'result': "Admin permissions was successfully granted."})
+    return render(
+        request,
+        "successful_action.html",
+        {"result": "Admin permissions was successfully granted."},
+    )
+
 
 # @admin.action(description='Disable admin permissions')
 def delete_admin(request):
@@ -29,12 +34,20 @@ def delete_admin(request):
     user.is_staff = False
     user.save()
     ac.save()
-    return render(request, 'successful_action.html', {'result': "Admin permissions was successfully denied."})
+    return render(
+        request,
+        "successful_action.html",
+        {"result": "Admin permissions was successfully denied."},
+    )
+
 
 def delete_user(request):
     user = User.objects.get(username=request.POST.get("selected_id"))
     User.delete(user)
-    return render(request, 'successful_action.html', {'result': "User deleted successfully."})
+    return render(
+        request, "successful_action.html", {"result": "User deleted successfully."}
+    )
+
 
 def approve_doggiesitter(request):
     user = User.objects.get(username=request.POST.get("selected_id"))
@@ -44,16 +57,17 @@ def approve_doggiesitter(request):
     ac.approved = True
     user.save()
     ac.save()
-    return render(request, 'successful_action.html', {'result': "Doggiesitter was successfully approved."})
+    return render(
+        request,
+        "successful_action.html",
+        {"result": "Doggiesitter was successfully approved."},
+    )
 
 
 class NewAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'is_doggiesitter', 'approved']
-    ordering = ['first_name', 'last_name']
+    list_display = ["first_name", "last_name", "is_doggiesitter", "approved"]
+    ordering = ["first_name", "last_name"]
     actions = [make_new_admin, delete_admin]
 
 
 admin.site.register(Accounts, NewAdmin)
-
-
-
