@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.core.validators import EmailValidator
 from django.forms import SelectDateWidget
-from .models import Accounts
+from .models import Accounts, PostTerms
 
 
 class ExtendedUserCreationForm(UserCreationForm):
@@ -19,6 +19,7 @@ class ExtendedUserCreationForm(UserCreationForm):
         return user
 
 class AccountsProfileForm(forms.ModelForm):
+
     class Meta:
         model = Accounts
         fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'address', 'is_doggiesitter')
@@ -69,10 +70,38 @@ class AccountsProfileForm(forms.ModelForm):
 class AccountChangeForm(forms.ModelForm):
     class Meta:
         model = Accounts
-        fields = ('first_name', 'last_name', 'email', 'address', 'phone_number')
+        fields = ('first_name', 'last_name', 'email', 'phone_number')
 
     def clean_email(self):
         email = self.cleaned_data['email']
         validator = EmailValidator()
         validator(email)
         return email
+
+
+
+
+class TermsForm(forms.ModelForm):
+    class Meta():
+        model = PostTerms
+        fields = ('author', 'title', 'body')
+
+    def clean_author(self):
+        author = self.cleaned_data['author']
+        for i in User.objects.all():
+            if author == i.username and not i.is_superuser:
+                print("Only admins can post here.")
+                raise forms.ValidationError("Only admins can post here.")
+        return author
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if not title.isdigit():
+            print("Title must be numeric")
+            raise forms.ValidationError("Title must be numeric")
+        if title <= 0:
+            print("Title number must be greater than 1.")
+            raise forms.ValidationError("Title number must be greater than 1.")
+        return title
+    def clean_body(self):
+        body = self.cleaned_data['body']
+        return body

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
 from datetime import date
+from django.urls import reverse
 
 
 class Accounts(models.Model):
@@ -29,9 +30,20 @@ class Accounts(models.Model):
                                     blank=False,
     )
     is_doggiesitter = models.BooleanField()
-    approved = models.BooleanField(default=False, blank=True, null=True)
     is_admin = models.BooleanField(default=False, blank=True, null=True)
+    approved = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
 
+class PostTerms(models.Model):
+    author = models.TextField()
+    title = models.IntegerField()
+    body = models.TextField()
+
+
+    def __str__(self):
+        return str(self.author) + '  |  terms'
+
+    def get_absolute_url(self):
+        return reverse('home')
