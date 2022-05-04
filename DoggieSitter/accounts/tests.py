@@ -1,9 +1,11 @@
+import django.db.models
 from django.test import TestCase, tag , Client
 import  json
 from django.contrib.auth.models import User
 from . import models , views, admin,forms
 import re
-from accounts.models import Accounts
+import datetime
+from accounts.models import Accounts ,PostTerms
 from django import forms
 from django.urls import reverse
 from django.http import HttpRequest,HttpResponse
@@ -350,16 +352,56 @@ class View_test(TestCase):
         request.method = 'POST'
         response = views.SignUpView(request)
         self.assertEqual(response.status_code,200)
-    # @tag('Unit-Test')
-    # def test_SignUpView_POST_notValid(self):
-
+    @tag('Unit-Test')
+    def test_SignUpView_POST_Valid(self):
+        date_of_birth =datetime.datetime(2007,7,5)
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {
+            'username': 'Boaz',
+            'password1': '123456Bb',
+            'password2': '123456Bb',
+            'first_name':'bo',
+            'last_name': 'az',
+            'gender': 'male',
+            'date_of_birth':'January 15 2000',
+            'id': '123456789',
+            'email': 'Bo@gmail.com',
+            'phone_number' : '1234567890',
+            'address':'Bobo street',
+            'is_doggiesitter': False
+        }
+        response = self.client.post(reverse('signup'), request.POST, follow=True)
+        self.assertEqual(response.status_code,200)
+        # self.assertTemplateUsed(response,'home.html')
 
     @tag('Unit-Test')
     def test_SearchUserByID_POST(self):
         request = HttpRequest()
         request.method = 'POST'
+        request.POST = {'search_id': ''}
         response = views.SearchUserByID(request)
         self.assertEqual(response.status_code,200)
+
+    @tag('Unit-Test')
+    def test_SearchUserByID_POSTLen(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(user=self.user, is_doggiesitter=False, id='1')
+        self.user.save()
+        self.acc.save()
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {'search_id': self.user.id}
+        test = Accounts.objects.filter(id=request.POST.get("search_id"))
+        response = views.SearchUserByID(request)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_GetUsername_POST(self):
@@ -427,6 +469,18 @@ class View_test(TestCase):
         request.POST = {'user_n': user.username, 'new_pass1': '123', 'new_pass2': '123'}
         response = views.ChangePassword(request)
         self.assertEqual(response.status_code, 200)
+
+    @tag('Unit-Test')
+    def test_Term_Except(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {
+            'title_name': 1,
+            'body_name' : 'Bitton',
+            'author_name': 'Was here'
+        }
+        response = views.Terms(request)
+        self.assertEqual(response.status_code,200)
 
 
 
@@ -498,11 +552,11 @@ class Admin_test(TestCase):
             'last_name': 'unit',
         }
         self.user = User.objects.create_user(**self.credentials)
-        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = False)
+        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = True)
         self.user.save()
         self.acc.save()
         request = HttpRequest()
         form_data = {'selected_id': self.user.username}
         response = self.client.post(reverse('admin_actions/approve_doggiesitter'), data=form_data, follow=True)
         self.assertEqual(response.context['result'], 'Doggiesitter was successfully approved.')
-        print(response.context['result'])
+
