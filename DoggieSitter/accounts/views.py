@@ -66,7 +66,6 @@ class changeAccount(View):
 
     def post(self, request, user_id):
         form = AccountChangeForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
             user = User.objects.get(pk=user_id)
             account = Accounts.objects.get(user=user)
@@ -100,7 +99,6 @@ def ChangePassword(request):
 
 def Terms(request):
     term_form = TermsForm(request.POST)
-
     if request.method == 'POST' and not term_form.is_valid():
         try:
             post = PostTerms.objects.get(title=request.POST.get("title_name"))
@@ -115,7 +113,7 @@ def Terms(request):
         post.body = request.POST.get("body_name")
         post.author = request.POST.get("author_name")
         post.save()
-        return render(request, 'home.html')
+        return render(request, 'home.html',{'Term': 'Try Worked'})
     else:
         pt = PostTerms.objects.all()
         return render(request, 'Terms.html', {'pt': pt})
@@ -132,7 +130,7 @@ def Add(request):
             profile.user = user
             profile.save()
 
-            return render(request, 'home.html')
+            return render(request, 'home.html', {'add': 'done'})
         else:
             return render(request, 'registration/Add.html',
                           {'form': form, 'profile_form': profile_form, 'pt': pt,
