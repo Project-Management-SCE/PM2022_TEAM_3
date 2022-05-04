@@ -62,19 +62,21 @@ class changeAccount(View):
         user = User.objects.get(pk=user_id)
         account = Accounts.objects.get(user=user)
         form = AccountChangeForm(instance=account)
-        return render(request, 'change.html', {'form_user': form})
+        return render(request, 'change.html', {'form_user': form, 'ok?': 'yes!'})
 
     def post(self, request, user_id):
         form = AccountChangeForm(request.POST)
+        print(form.is_valid())
         if form.is_valid():
             user = User.objects.get(pk=user_id)
             account = Accounts.objects.get(user=user)
             account.first_name = form.cleaned_data['first_name']
             account.last_name = form.cleaned_data['last_name']
             account.email = form.cleaned_data['email']
+            account.phone_number = form.cleaned_data['phone_number']
             account.save()
-            return render(request, 'home.html')
-        return render(request, 'change.html', {'form_user': form})
+            return render(request, 'home.html', {'ok?': 'form is valid!'})
+        return render(request, 'change.html', {'form_user': form, 'ok?': 'form is not valid!'})
 
 def GetUsername(request, un):
     user = User.objects.get(username=un)
