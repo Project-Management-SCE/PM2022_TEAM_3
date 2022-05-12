@@ -62,7 +62,7 @@ class changeAccount(View):
         user = User.objects.get(pk=user_id)
         account = Accounts.objects.get(user=user)
         form = AccountChangeForm(instance=account)
-        return render(request, 'change.html', {'form_user': form})
+        return render(request, 'change.html', {'form_user': form, 'ok?': 'yes!'})
 
     def post(self, request, user_id):
         form = AccountChangeForm(request.POST)
@@ -72,15 +72,16 @@ class changeAccount(View):
             account.first_name = form.cleaned_data['first_name']
             account.last_name = form.cleaned_data['last_name']
             account.email = form.cleaned_data['email']
+            account.phone_number = form.cleaned_data['phone_number']
             account.save()
-            return render(request, 'home.html')
-        return render(request, 'change.html', {'form_user': form})
+            return render(request, 'home.html', {'ok?': 'form is valid!'})
+        return render(request, 'change.html', {'form_user': form, 'ok?': 'form is not valid!'})
 
 def GetUsername(request, un):
     user = User.objects.get(username=un)
     return render(request, 'change_password.html', {'user': user})
-def go_home(request):
-    return render(request)
+def go_home(request,temp):
+    return render(request,temp)
 def ChangePassword(request):
 
     user = User.objects.get(username=request.POST.get("user_n"))
@@ -98,7 +99,6 @@ def ChangePassword(request):
 
 def Terms(request):
     term_form = TermsForm(request.POST)
-
     if request.method == 'POST' and not term_form.is_valid():
         try:
             post = PostTerms.objects.get(title=request.POST.get("title_name"))
@@ -113,11 +113,31 @@ def Terms(request):
         post.body = request.POST.get("body_name")
         post.author = request.POST.get("author_name")
         post.save()
-        return render(request, 'home.html')
+        return render(request, 'home.html',{'Term': 'Try Worked'})
     else:
         pt = PostTerms.objects.all()
         return render(request, 'Terms.html', {'pt': pt})
 
 
+def Add(request):
+    pt = PostTerms.objects.all()
+    if request.method == 'POST':
+        form = ExtendedUserCreationForm(request.POST)
+        profile_form = AccountsProfileForm(request.POST)
+        if form.is_valid() and profile_form.is_valid():
+            user = form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
 
+            return render(request, 'home.html', {'add': 'done'})
+        else:
+            return render(request, 'registration/Add.html',
+                          {'form': form, 'profile_form': profile_form, 'pt': pt,
+                           'error': "Bad Data Please Try Again"})
+    else:
+        form = ExtendedUserCreationForm()
+        profile_form = AccountsProfileForm()
+    context = {'form': form, 'profile_form': profile_form, 'error': "Bad Data Please Try Again", 'pt': pt}
+    return render(request, 'registration/Add.html', context)
 

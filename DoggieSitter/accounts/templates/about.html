@@ -1,6 +1,9 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 {% load static %}
+{% block title %}About & Contact{% endblock %}
 
+{% block content %}
+<!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -113,9 +116,9 @@ html {
       <a href="#news">Map</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
-      <a href="{% url 'about' %}">Contact</a>
+      <a href="{% url 'Add' %}">Add user</a>
       <a href="{% url 'user_info' %}">User Info</a>
-      <a class="active" href="{% url 'about' %}">About</a>
+      <a class="active" href="{% url 'about' %}">About us & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
@@ -238,3 +241,4 @@ html {
 
 </body>
 </html>
+{% endblock %}

@@ -30,6 +30,7 @@ class Accounts(models.Model):
                                     blank=False,
     )
     is_doggiesitter = models.BooleanField()
+    is_admin = models.BooleanField(default=False, blank=True, null=True)
     approved = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
