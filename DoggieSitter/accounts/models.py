@@ -58,3 +58,17 @@ class PostTerms(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
+
+
+
+class PostFeedback(models.Model):
+    author = models.TextField()
+    about = models.TextField()
+    body = models.TextField()
+
+
+    def __str__(self):
+        return str(self.author) + '  |  Feedback'
+
+    def get_absolute_url(self):
+        return reverse('home')

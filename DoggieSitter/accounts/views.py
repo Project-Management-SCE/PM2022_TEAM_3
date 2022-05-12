@@ -7,13 +7,14 @@ from django.views import View
 from .forms import ExtendedUserCreationForm, AccountsProfileForm, AccountChangeForm, TermsForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from .models import Accounts, PostTerms
+from .models import Accounts, PostTerms, PostFeedback
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse_lazy
 import googlemaps
 from geopy.geocoders import Nominatim
 from pprint import pprint
+from django.views.generic import ListView, DetailView
 
 
 class PasswordsChangeView(PasswordChangeView):
@@ -186,6 +187,20 @@ def Vet_Map(request, un):
         except:
             break
 
-
     return render(request, 'vet_map.html', {'location_data': location_data, 'city': city})
 
+def Feedback(request):
+    if request.method == 'POST':
+        post = PostFeedback()
+        post.body = request.POST.get("body_name")
+        post.author = request.POST.get("author_name")
+        post.about = request.POST.get("about_id")
+        post.save()
+        return render(request, 'home.html')
+    else:
+        pt = PostFeedback.objects.all()
+        return render(request, 'Feedback.html', {'pt': pt})
+
+class ShowFeedback(ListView):
+    model = PostFeedback
+    template_name =  'ShowFeedback.html'

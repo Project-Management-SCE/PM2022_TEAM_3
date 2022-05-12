@@ -3,7 +3,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 from . import views, admin
 from .views import PasswordsChangeView
-from .views import Terms, Add
+from .views import Terms, Add, Feedback, ShowFeedback
 
 urlpatterns = [
     path(" ", views.go_home, name="home"),
@@ -20,6 +20,8 @@ urlpatterns = [
     path('change_password/<un>', views.GetUsername, name='change_password'),
     path('change_password2/', views.ChangePassword, name='change_password2'),
     path('Terms', views.Terms, name="Terms"),
+    path('Feedback', views.Feedback, name="Feedback"),
+    path('ShowFeedback', ShowFeedback.as_view(), name="ShowFeedback"),
     path('Add', views.Add, name="Add"),
     path('vet_map/<un>', views.Vet_Map, name="vet_map"),
 
