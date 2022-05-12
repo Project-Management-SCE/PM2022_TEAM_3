@@ -5,6 +5,7 @@ from datetime import date
 from django.urls import reverse
 
 
+
 class Accounts(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)

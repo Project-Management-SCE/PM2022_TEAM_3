@@ -11,8 +11,6 @@ urlpatterns = [
     path('about', TemplateView.as_view(template_name='about.html'), name='about'),
     path('gallery', TemplateView.as_view(template_name='gallery.html'), name='gallery'),
     path("user_info/", views.GetAccounts, name="user_info"),
-    # path('password/', PasswordsChangeView.as_view(template_name='change_password.html'), name="password"),
-    # path('password_success', views.password_success, name="password_success"),
     path('admin_actions/make_admin', admin.make_new_admin, name='admin_actions/make_admin'),
     path("admin_actions/remove_admin", admin.delete_admin, name="admin_actions/remove_admin"),
     path('admin_actions/delete_user', admin.delete_user, name='admin_actions/delete_user'),
@@ -23,5 +21,6 @@ urlpatterns = [
     path('change_password2/', views.ChangePassword, name='change_password2'),
     path('Terms', views.Terms, name="Terms"),
     path('Add', views.Add, name="Add"),
+    path('vet_map/<un>', views.Vet_Map, name="vet_map"),
 
 ]

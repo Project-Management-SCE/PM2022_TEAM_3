@@ -1,4 +1,5 @@
 # accounts/views.py
+from time import sleep
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -10,6 +11,10 @@ from .models import Accounts, PostTerms
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse_lazy
+import googlemaps
+from geopy.geocoders import Nominatim
+from pprint import pprint
+
 
 class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
@@ -140,4 +145,47 @@ def Add(request):
         profile_form = AccountsProfileForm()
     context = {'form': form, 'profile_form': profile_form, 'error': "Bad Data Please Try Again", 'pt': pt}
     return render(request, 'registration/Add.html', context)
+
+
+def Vet_Map(request, un):
+    API_KEY = "AIzaSyA1NSKaMXW4cC5k9RB8dtOqlfZq9v7FNHc"
+    map_client = googlemaps.Client(API_KEY)
+    app = Nominatim(user_agent="tutorial")
+
+    location_name = "Veterinary Clinic, "
+    location = ""
+
+    for i in Accounts.objects.all():
+        if str(i) == str(un):
+            user = Accounts.objects.get(id=i.id)
+            location_name += user.city
+            location = app.geocode("Israel, " + str(user.city)).raw
+
+    city = {'lat': location['lat'], 'lng': location['lon']}
+
+    try:
+        response = map_client.places(query=location_name)
+        results = response.get('results')
+    except Exception as e:
+        print(e)
+        return None
+
+    # pprint(results)
+
+
+    location_data = []
+    for i in results:
+        location_data.append(i['geometry']['location'])
+        (location_data[location_data.index(i['geometry']['location'])])['name'] = i['name']
+
+        try:
+            if i['opening_hours'].values() == True:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Open"
+            else:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Close"
+        except:
+            break
+
+
+    return render(request, 'vet_map.html', {'location_data': location_data, 'city': city})
 

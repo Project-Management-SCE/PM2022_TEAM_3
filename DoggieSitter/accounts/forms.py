@@ -80,7 +80,6 @@ class AccountChangeForm(forms.ModelForm):
 
 
 
-
 class TermsForm(forms.ModelForm):
     class Meta():
         model = PostTerms
