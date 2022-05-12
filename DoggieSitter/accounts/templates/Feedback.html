@@ -85,6 +85,14 @@
             <div class="te">
                 <h1 class="t"><b>Add Feedback</b></h1>
                 <br>
+                {% if user.accounts.is_doggiesitter %}
+                    {% if user.accounts.approved %}
+                        <input type="text" id="type" name="type" value="dog" hidden>
+                    {% endif %}
+                {% endif %}
+                {% if not user.accounts.is_doggiesitter %}
+                    <input type="text" id="type" name="type" value="doggiesitter" hidden>
+                {% endif %}
                 <label for="author_id">Author name: </label><br>
                 <input type="text" id="author_id" name="author_name" value="{{user.username}}" readonly>
                 <br><br>

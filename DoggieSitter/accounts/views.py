@@ -195,6 +195,7 @@ def Feedback(request):
         post.body = request.POST.get("body_name")
         post.author = request.POST.get("author_name")
         post.about = request.POST.get("about_id")
+        post.type = request.POST.get("type")
         post.save()
         return render(request, 'home.html')
     else:

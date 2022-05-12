@@ -64,6 +64,7 @@ class PostTerms(models.Model):
 class PostFeedback(models.Model):
     author = models.TextField()
     about = models.TextField()
+    type = models.TextField()
     body = models.TextField()
 
 
