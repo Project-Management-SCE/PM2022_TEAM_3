@@ -91,11 +91,11 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-			   dir("accounts"){
 			sh 'python -m pip uninstall coverage --yes'
 			sh 'python -m pip install coverage'
-			sh 'python -m coverage report --ignore-errors'
-		    }
+			//sh 'python -m coverage report --ignore-errors'
+			sh 'coverage run .\manage.py test -v 2 ; python -m coverage report --ignore-errors;'
+		    
                     }
 		}
             }
