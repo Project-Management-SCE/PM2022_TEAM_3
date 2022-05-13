@@ -5,6 +5,7 @@ from datetime import date
 from django.urls import reverse
 
 
+
 class Accounts(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
@@ -54,6 +55,21 @@ class PostTerms(models.Model):
 
     def __str__(self):
         return str(self.author) + '  |  terms'
+
+    def get_absolute_url(self):
+        return reverse('home')
+
+
+
+class PostFeedback(models.Model):
+    author = models.TextField()
+    about = models.TextField()
+    type = models.TextField()
+    body = models.TextField()
+
+
+    def __str__(self):
+        return str(self.author) + '  |  Feedback'
 
     def get_absolute_url(self):
         return reverse('home')

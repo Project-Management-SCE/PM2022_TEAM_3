@@ -80,7 +80,6 @@ class AccountChangeForm(forms.ModelForm):
 
 
 
-
 class TermsForm(forms.ModelForm):
     class Meta():
         model = PostTerms
@@ -89,13 +88,16 @@ class TermsForm(forms.ModelForm):
     def clean_author(self):
         author = self.cleaned_data['author']
         for i in User.objects.all():
+            print(i.username)
+            print(author==i.username)
+            print(i.is_superuser)
             if author == i.username and not i.is_superuser:
                 print("Only admins can post here.")
                 raise forms.ValidationError("Only admins can post here.")
         return author
     def clean_title(self):
         title = self.cleaned_data['title']
-        if not title.isdigit():
+        if not str(title).isdigit():
             print("Title must be numeric")
             raise forms.ValidationError("Title must be numeric")
         if title <= 0:
