@@ -692,7 +692,7 @@ class Admin_test(TestCase):
 
 
 class DogAccountTest(TestCase):
-    @tag('Unit-Test')
+    @tag('Hackaton')
     def test_AddDog_GET(self):
         self.credentials = {
             'username': 'testuser',
@@ -706,7 +706,7 @@ class DogAccountTest(TestCase):
 
 
 class FeedBackTest(TestCase):
-    @tag('Unit-Test')
+    @tag('Hackaton')
     def test_FeedBack_POST(self):
         form = {
             'body_name': 'dsjfhdjklsf',
@@ -717,7 +717,7 @@ class FeedBackTest(TestCase):
         response = self.client.post(reverse('Feedback'), data=form, follow=True)
         self.assertEqual(response.context['ok?'], 'post!')
 
-    @tag('Unit-Test')
+    @tag('Hackaton')
     def test_FeedBack_GET(self):
         form = {
             'body_name': 'dsjfhdjklsf',
@@ -730,7 +730,7 @@ class FeedBackTest(TestCase):
 
 
 class APITest(TestCase):
-    @tag('Unit-Test')
+    @tag('Hackaton')
     def test_API(self):
         self.credentials = {
             'username': 'testuser',
@@ -757,31 +757,31 @@ class APITest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TermFormTest(TestCase):
-    @tag('Dog')
-    def test_form(self):
-        self.credentials = {
-            'username': 'testuser',
-            'password': 'userpassdskfldskf',
-            'first_name': 'test',
-            'last_name': 'unit',
-        }
-        self.user = User.objects.create_user(**self.credentials)
-        self.acc = Accounts.objects.create(
-            user=self.user,
-            email='Bo@gmail.com',
-            phone_number='1234567890',
-            city='Dimona',
-            neighborhood='Bobo street',
-            street='Bobo street',
-            Aprt='Bobo street',
-            is_doggiesitter=True
-        )
-        self.user.is_admin = True
-        self.user.is_superuser = True
-        self.user.is_staff = True
-        self.user.save()
-        self.acc.save()
-        form = {'author': self.acc, 'title': 1, 'body': 'dskfhksdlfhji'}
-        term_form = accounts.forms.TermsForm(form)
-        self.assertTrue(term_form.is_valid())
+# class TermFormTest(TestCase):
+#     @tag('Hackaton')
+#     def test_form(self):
+#         self.credentials = {
+#             'username': 'testuser',
+#             'password': 'userpassdskfldskf',
+#             'first_name': 'test',
+#             'last_name': 'unit',
+#         }
+#         self.user = User.objects.create_user(**self.credentials)
+#         self.acc = Accounts.objects.create(
+#             user=self.user,
+#             email='Bo@gmail.com',
+#             phone_number='1234567890',
+#             city='Dimona',
+#             neighborhood='Bobo street',
+#             street='Bobo street',
+#             Aprt='Bobo street',
+#             is_doggiesitter=True
+#         )
+#         self.user.is_admin = True
+#         self.user.is_superuser = True
+#         self.user.is_staff = True
+#         self.user.save()
+#         self.acc.save()
+#         form = {'author': self.acc, 'title': 1, 'body': 'dskfhksdlfhji'}
+#         term_form = accounts.forms.TermsForm(form)
+#         self.assertTrue(term_form.is_valid())

@@ -12,7 +12,7 @@ from dog.models import Dog
 
 
 class DogView(TestCase):
-    @tag('Unit-Test')
+    @tag('Hackaton')
     def test_AddDog_GET(self):
         self.credentials = {
             'username': 'testuser',
@@ -24,7 +24,7 @@ class DogView(TestCase):
         response = self.client.get(reverse('dog:Adding', kwargs={'user_id': self.user.id}), follow=True)
         self.assertEqual(response.context['ok?'], 'yes!')
 
-    @tag('Unit-Test')
+    @tag('Hackaton')
     def test_AddDog_POST_VALID(self):
         self.credentials = {
             'username': 'testuser',
@@ -45,7 +45,7 @@ class DogView(TestCase):
         response = self.client.post(reverse('dog:Adding', kwargs={'user_id': self.user.id}), data=newform, follow=True)
         self.assertEqual(response.context['ok?'], 'form is valid!')
 
-    @tag('Unit-Test')
+    @tag('Hackaton')
     def test_AddDog_POST_NOT_VALID(self):
         self.credentials = {
             'username': 'testuser',
