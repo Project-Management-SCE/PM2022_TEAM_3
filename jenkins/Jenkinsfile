@@ -93,7 +93,7 @@ pipeline {
 		    dir("DoggieSitter"){
 			sh 'python -m pip uninstall coverage --yes'
 			sh 'python -m pip install coverage'
-			sh 'coverage report --ignore-errors'
+			sh 'python coverage report --ignore-errors'
                     }
 		}
             }
