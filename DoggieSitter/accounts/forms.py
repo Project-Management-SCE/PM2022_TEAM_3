@@ -107,3 +107,7 @@ class TermsForm(forms.ModelForm):
     def clean_body(self):
         body = self.cleaned_data['body']
         return body
+<<<<<<< HEAD
+=======
+
+>>>>>>> be08178441abf18261c29badf69608a0659962e8
