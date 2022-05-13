@@ -94,7 +94,7 @@ class TermsForm(forms.ModelForm):
         return author
     def clean_title(self):
         title = self.cleaned_data['title']
-        if not str(title).isdigit():
+        if not title.isdigit():
             print("Title must be numeric")
             raise forms.ValidationError("Title must be numeric")
         if title <= 0:
