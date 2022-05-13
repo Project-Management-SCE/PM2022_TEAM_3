@@ -88,9 +88,6 @@ class TermsForm(forms.ModelForm):
     def clean_author(self):
         author = self.cleaned_data['author']
         for i in User.objects.all():
-            print(i.username)
-            print(author==i.username)
-            print(i.is_superuser)
             if author == i.username and not i.is_superuser:
                 print("Only admins can post here.")
                 raise forms.ValidationError("Only admins can post here.")
@@ -107,7 +104,3 @@ class TermsForm(forms.ModelForm):
     def clean_body(self):
         body = self.cleaned_data['body']
         return body
-<<<<<<< HEAD
-=======
-
->>>>>>> be08178441abf18261c29badf69608a0659962e8

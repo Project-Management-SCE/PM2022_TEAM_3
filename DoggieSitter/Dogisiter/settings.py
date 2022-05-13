@@ -38,10 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-<<<<<<< HEAD
     'dog'
-=======
->>>>>>> be08178441abf18261c29badf69608a0659962e8
     # 'django_google_maps',
 
 ]

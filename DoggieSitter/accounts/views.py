@@ -15,11 +15,8 @@ import googlemaps
 from geopy.geocoders import Nominatim
 from pprint import pprint
 from django.views.generic import ListView, DetailView
-<<<<<<< HEAD
 from dog.models import Dog
 from dog.forms import DogForm
-=======
->>>>>>> be08178441abf18261c29badf69608a0659962e8
 
 
 class PasswordsChangeView(PasswordChangeView):
@@ -192,11 +189,7 @@ def Vet_Map(request, un):
         except:
             break
 
-<<<<<<< HEAD
     return render(request, 'vet_map.html', {'location_data': location_data, 'city': city,'ok?':'yes!'})
-=======
-    return render(request, 'vet_map.html', {'location_data': location_data, 'city': city})
->>>>>>> be08178441abf18261c29badf69608a0659962e8
 
 def Feedback(request):
     if request.method == 'POST':
@@ -206,22 +199,14 @@ def Feedback(request):
         post.about = request.POST.get("about_id")
         post.type = request.POST.get("type")
         post.save()
-<<<<<<< HEAD
         return render(request, 'home.html',{'ok?': 'post!'})
     else:
         pt = PostFeedback.objects.all()
         return render(request, 'Feedback.html', {'pt': pt,'ok?': 'get!'})
-=======
-        return render(request, 'home.html')
-    else:
-        pt = PostFeedback.objects.all()
-        return render(request, 'Feedback.html', {'pt': pt})
->>>>>>> be08178441abf18261c29badf69608a0659962e8
 
 class ShowFeedback(ListView):
     model = PostFeedback
     template_name =  'ShowFeedback.html'
-<<<<<<< HEAD
 
 class DogPage(View):
     def get(self, request, user_id):
@@ -231,5 +216,3 @@ class DogPage(View):
         return render(request, 'DogPage.html', {'dogs': mydog, 'ok?': 'yes!'})
 
 
-=======
->>>>>>> be08178441abf18261c29badf69608a0659962e8

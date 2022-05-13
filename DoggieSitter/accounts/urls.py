@@ -4,11 +4,8 @@ from django.views.generic import TemplateView
 from . import views, admin
 from .views import PasswordsChangeView
 from .views import Terms, Add, Feedback, ShowFeedback
-<<<<<<< HEAD
 from dog.views import AddDog
 
-=======
->>>>>>> be08178441abf18261c29badf69608a0659962e8
 
 urlpatterns = [
     path(" ", views.go_home, name="home"),
@@ -29,9 +26,6 @@ urlpatterns = [
     path('ShowFeedback', ShowFeedback.as_view(), name="ShowFeedback"),
     path('Add', views.Add, name="Add"),
     path('vet_map/<un>', views.Vet_Map, name="vet_map"),
-<<<<<<< HEAD
     path('DogPage/<user_id>', views.DogPage.as_view(), name='DogPage'),
-=======
->>>>>>> be08178441abf18261c29badf69608a0659962e8
 
 ]
