@@ -22,7 +22,7 @@ class AccountsProfileForm(forms.ModelForm):
 
     class Meta:
         model = Accounts
-        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'address', 'is_doggiesitter')
+        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'city', 'neighborhood', 'street', 'Aprt',  'is_doggiesitter')
         widgets = {
             'date_of_birth': SelectDateWidget(years=range(1902, date.today().year + 1)),
         }
@@ -80,7 +80,6 @@ class AccountChangeForm(forms.ModelForm):
 
 
 
-
 class TermsForm(forms.ModelForm):
     class Meta():
         model = PostTerms
@@ -95,7 +94,7 @@ class TermsForm(forms.ModelForm):
         return author
     def clean_title(self):
         title = self.cleaned_data['title']
-        if not title.isdigit():
+        if not str(title).isdigit():
             print("Title must be numeric")
             raise forms.ValidationError("Title must be numeric")
         if title <= 0:

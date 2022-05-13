@@ -98,6 +98,7 @@
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a class="active" href="{% url 'admin_actions' %}">Admin Actions</a>
+      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
     {% endif %}
