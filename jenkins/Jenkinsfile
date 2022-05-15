@@ -48,7 +48,7 @@ pipeline {
             steps{
                 withEnv(["HOME=${env.WORKSPACE}"]){
 			 sh 'python -m compileall PM2022_TEAM_3//'//manage.py'
-                    	 sh 'pip install django_jenkins'
+                    	 //sh 'pip install django_jenkins'
 			 sh 'pip install django-crispy-forms' 
                 }
             }
