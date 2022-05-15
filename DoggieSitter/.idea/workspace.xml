@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c8db048-fc8b-4e5c-b794-c4a127973da4" name="Changes" comment="" />
+    <list default="true" id="5de38039-925b-44e4-91c0-4a835185ca1d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,8 +13,7 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="296BygbskIGs5N0OUy7kKg4rGtM" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="296x0OYBvXq8Elr0RxBZNwlWhHn" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -19,16 +21,15 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DoggieSitter1" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0c8db048-fc8b-4e5c-b794-c4a127973da4" name="Changes" comment="" />
-      <created>1652423915974</created>
+      <changelist id="5de38039-925b-44e4-91c0-4a835185ca1d" name="Changes" comment="" />
+      <created>1652447112852</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1652423915974</updated>
+      <updated>1652447112852</updated>
     </task>
     <servers />
   </component>
