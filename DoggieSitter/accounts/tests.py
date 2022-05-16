@@ -1,14 +1,17 @@
 import django.db.models
-from django.test import TestCase, tag , Client
-import  json
+from django.test import TestCase, tag, Client
+import json
 from django.contrib.auth.models import User
-from . import models , views, admin,forms
+from django import forms
+import accounts.forms
+from . import models, views, admin, forms
 import re
 import datetime
-from accounts.models import Accounts ,PostTerms
-from django import forms
+from accounts.models import Accounts, PostTerms
+from accounts import forms
 from django.urls import reverse
-from django.http import HttpRequest,HttpResponse
+from django.http import HttpRequest, HttpResponse
+from dog.models import Dog
 
 
 class BasicTests(TestCase):
@@ -59,13 +62,13 @@ class BasicTests(TestCase):
         acc.phone_number = '052620370'
         self.assertFalse(len(acc.phone_number) == 10, 'Check ID is 10 digits long2')
 
-    @tag('Unit-Test')
-    def test_address(self):
-        acc = models.Accounts()
-        acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
-        self.assertFalse(len(acc.address) <= 50, 'Check name is less than 50 digits long1')
-        acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
-        self.assertTrue(len(acc.address) > 50, 'Check name is less than 50 digits long2')
+    # @tag('Unit-Test')
+    # def test_address(self):
+    #     acc = models.Accounts()
+    #     acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
+    #     self.assertFalse(len(acc.address) <= 50, 'Check name is less than 50 digits long1')
+    #     acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
+    #     self.assertTrue(len(acc.address) > 50, 'Check name is less than 50 digits long2')
 
 
 class BaseTest(TestCase):
@@ -89,6 +92,7 @@ class BaseTest(TestCase):
             'password': 'teslatt',
         }
         return super().setUp()
+
     @tag('Unit-Test')
     def test_Logged(self):
         self.credentials = {
@@ -100,7 +104,6 @@ class BaseTest(TestCase):
         user = User.objects.create_user(**self.credentials)
         login = self.client.login(username='Boaz', password='Bitton')
         self.assertTrue(login)
-
 
 
 class InsertInfoTest(BaseTest):
@@ -158,6 +161,7 @@ class DeleteUser(TestCase):
         us.delete()
         self.assertFalse(User.objects.filter(username=us).exists())
 
+
 class CreateTypeUser(TestCase):
     @tag('Unit-Test')
     def test_create_Doggie_approved(self):
@@ -206,6 +210,7 @@ class CreateTypeUser(TestCase):
         acc.is_doggiesitter = False
         isDoggie = acc.is_doggiesitter
         self.assertFalse(isDoggie)
+
 
 class EditUser(TestCase):
     @tag('Unit-Test')
@@ -292,12 +297,13 @@ class Integrate_tests(TestCase):
                 user2.username = 'testuser3'
                 self.assertNotEqual(i.username, user2.username)
 
+
 class View_test(TestCase):
     @tag('Unit-Test')
     def test_about_GET(self):
         client = Client()
         response = client.get(reverse('about'))
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'about.html')
 
     @tag('Unit-Test')
@@ -326,53 +332,57 @@ class View_test(TestCase):
         request = HttpRequest()
         request.POST.appendlist('username', user.username)
         response = views.SearchUserByID(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_GetAccounts(self):
         request = HttpRequest()
         response = views.GetAccounts(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_password_success(self):
         request = HttpRequest()
         response = views.password_success(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_SignUpView_GET(self):
         request = HttpRequest()
         response = views.SignUpView(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_SignUpView_POST_notValid(self):
         request = HttpRequest()
         request.method = 'POST'
         response = views.SignUpView(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
+
     @tag('Unit-Test')
     def test_SignUpView_POST_Valid(self):
-        date_of_birth =datetime.datetime(2007,7,5)
+        date_of_birth = datetime.datetime(2007, 7, 5)
         request = HttpRequest()
         request.method = 'POST'
         request.POST = {
             'username': 'Boaz',
             'password1': '123456Bb',
             'password2': '123456Bb',
-            'first_name':'bo',
+            'first_name': 'bo',
             'last_name': 'az',
             'gender': 'male',
-            'date_of_birth':'January 15 2000',
+            'date_of_birth': 'January 15 2000',
             'id': '123456789',
             'email': 'Bo@gmail.com',
-            'phone_number' : '1234567890',
-            'address':'Bobo street',
+            'phone_number': '1234567890',
+            'city': 'Bobo street',
+            'neighborhood': 'Bobo street',
+            'street': 'Bobo street',
+            'Aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         response = self.client.post(reverse('signup'), request.POST, follow=True)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
         # self.assertTemplateUsed(response,'home.html')
 
     @tag('Unit-Test')
@@ -381,7 +391,7 @@ class View_test(TestCase):
         request.method = 'POST'
         request.POST = {'search_id': ''}
         response = views.SearchUserByID(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_SearchUserByID_POSTLen(self):
@@ -413,20 +423,21 @@ class View_test(TestCase):
         }
         user = User.objects.create_user(**self.credentials)
         request = HttpRequest()
-        response = views.GetUsername(request,user.username)
-        self.assertEqual(response.status_code,200)
+        response = views.GetUsername(request, user.username)
+        self.assertEqual(response.status_code, 200)
+
     @tag('Unit-Test')
     def test_go_home(self):
         request = HttpRequest()
-        response = views.go_home(request,'home.html')
-        self.assertEqual(response.status_code,200)
+        response = views.go_home(request, 'home.html')
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_Terms_GET(self):
         request = HttpRequest()
         request.method = 'GET'
         response = views.Terms(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_ChangePassword_correct(self):
@@ -438,9 +449,9 @@ class View_test(TestCase):
         }
         user = User.objects.create_user(**self.credentials)
         request = HttpRequest()
-        request.POST = {'user_n': user.username ,'new_pass1': '123456Bb', 'new_pass2': '123456Bb'}
+        request.POST = {'user_n': user.username, 'new_pass1': '123456Bb', 'new_pass2': '123456Bb'}
         response = views.ChangePassword(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_ChangePassword_notEqual(self):
@@ -471,16 +482,25 @@ class View_test(TestCase):
         self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
+    def test_Term_Try(self):
+        post = PostTerms(author='Nadav1', title=1, body='Hello World1')
+        post.save()
+        p = PostTerms.objects.get(title=1)
+        newform = {'author_name': 'Nadav2', 'title_name': 1, 'body_name': 'Hello World2'}
+        response = self.client.post(reverse('Terms'), data=newform, follow=True)
+        self.assertEqual(response.context['Term'], 'Try Worked')
+
+    @tag('Unit-Test')
     def test_Term_Except(self):
         request = HttpRequest()
         request.method = 'POST'
         request.POST = {
             'title_name': 1,
-            'body_name' : 'Bitton',
+            'body_name': 'Bitton',
             'author_name': 'Was here'
         }
         response = views.Terms(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_Changeinfo_GET(self):
@@ -491,10 +511,10 @@ class View_test(TestCase):
             'last_name': 'unit',
         }
         self.user = User.objects.create_user(**self.credentials)
-        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = False)
+        self.acc = Accounts.objects.create(user=self.user, is_doggiesitter=False)
         self.user.save()
         self.acc.save()
-        response = self.client.get(reverse('changeinfo', kwargs={'user_id':self.user.id}),data='',follow=True)
+        response = self.client.get(reverse('changeinfo', kwargs={'user_id': self.user.id}), data='', follow=True)
         self.assertEqual(response.context['ok?'], 'yes!')
 
     @tag('Unit-Test')
@@ -529,16 +549,79 @@ class View_test(TestCase):
         response = self.client.post(reverse('changeinfo', kwargs={'user_id': self.user.id}), data=newform, follow=True)
         self.assertEqual(response.context['ok?'], 'form is not valid!')
 
+    @tag('Unit-Test')
+    def test_Add_GET(self):
+        response = self.client.get(reverse('Add'), data='', follow=True)
+        self.assertEqual(response.context['error'], "Bad Data Please Try Again")
 
+    @tag('Unit-Test')
+    def test_Add_POST_VALID(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(user=self.user, is_doggiesitter=False)
+        self.acc.is_admin = True
+        self.acc.is_superuser = True
+        self.acc.is_staff = True
+        self.user.save()
+        self.acc.save()
+        newform = {
+            'username': 'Boaz',
+            'password1': '123456Bb',
+            'password2': '123456Bb',
+            'first_name': 'bo',
+            'last_name': 'az',
+            'gender': 'male',
+            'date_of_birth': 'January 15 2000',
+            'id': '123456789',
+            'email': 'Bo@gmail.com',
+            'phone_number': '1234567890',
+            'city': 'Bobo street',
+            'neighborhood': 'Bobo street',
+            'street': 'Bobo street',
+            'Aprt': 'Bobo street',
+            'is_doggiesitter': False
+        }
+        post = PostTerms(author='Nadav', title=1, body='Hello World')
+        post.save()
+        response = self.client.post(reverse('Add'), data=newform, follow=True)
+        self.assertEqual(response.context['add'], 'done')
 
-# class Form_test(TestCase):
-#     @tag('x')
-#     def test_clean_email(self):
-#         t = forms.ModelForm()
-#         acc = forms.AccountChangeForm(t)
-#         acc.cleaned_data['email'] = 'test@gmail.com'
-#         response = forms.AccountChangeForm.clean_email(acc)
-#         print(response)
+    @tag('Unit-Test')
+    def test_Add_POST_NOTVALID(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(user=self.user, is_doggiesitter=False)
+        self.acc.is_admin = True
+        self.acc.is_superuser = True
+        self.acc.is_staff = True
+        self.user.save()
+        self.acc.save()
+        newform = {
+            'username': 'Boaz',
+            'password1': '123456Bb',
+            'password2': '123456Bb',
+            'email': 'Bo@gmail.com',
+            'phone_number': '1234567890',
+            'city': 'Bobo street',
+            'neighborhood': 'Bobo street',
+            'street': 'Bobo street',
+            'Aprt': 'Bobo street',
+            'is_doggiesitter': False
+        }
+        post = PostTerms(author='Nadav', title=1, body='Hello World')
+        post.save()
+        response = self.client.post(reverse('Add'), data=newform, follow=True)
+        self.assertEqual(response.context['error'], 'Bad Data Please Try Again')
 
 
 class Admin_test(TestCase):
@@ -554,7 +637,7 @@ class Admin_test(TestCase):
         request = HttpRequest()
         request.POST = {'selected_id': user.username}
         response = admin.delete_user(request)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     @tag('Unit-Test')
     def test_make_admin(self):
@@ -565,12 +648,12 @@ class Admin_test(TestCase):
             'last_name': 'unit',
         }
         self.user = User.objects.create_user(**self.credentials)
-        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = False)
+        self.acc = Accounts.objects.create(user=self.user, is_doggiesitter=False)
         self.user.save()
         self.acc.save()
         request = HttpRequest()
-        form_data ={'selected_id': self.user.username}
-        response = self.client.post(reverse('admin_actions/make_admin'),data=form_data, follow=True)
+        form_data = {'selected_id': self.user.username}
+        response = self.client.post(reverse('admin_actions/make_admin'), data=form_data, follow=True)
         self.assertEqual(response.context['result'], 'Admin permissions was successfully granted.')
 
     @tag('Unit-Test')
@@ -582,7 +665,7 @@ class Admin_test(TestCase):
             'last_name': 'unit',
         }
         self.user = User.objects.create_user(**self.credentials)
-        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = False)
+        self.acc = Accounts.objects.create(user=self.user, is_doggiesitter=False)
         self.user.save()
         self.acc.save()
         request = HttpRequest()
@@ -599,7 +682,7 @@ class Admin_test(TestCase):
             'last_name': 'unit',
         }
         self.user = User.objects.create_user(**self.credentials)
-        self.acc = Accounts.objects.create(user=self.user,is_doggiesitter = True)
+        self.acc = Accounts.objects.create(user=self.user, is_doggiesitter=True)
         self.user.save()
         self.acc.save()
         request = HttpRequest()
@@ -607,3 +690,98 @@ class Admin_test(TestCase):
         response = self.client.post(reverse('admin_actions/approve_doggiesitter'), data=form_data, follow=True)
         self.assertEqual(response.context['result'], 'Doggiesitter was successfully approved.')
 
+
+class DogAccountTest(TestCase):
+    @tag('Hackaton')
+    def test_AddDog_GET(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        response = self.client.get(reverse('DogPage', kwargs={'user_id': self.user.id}), follow=True)
+        self.assertEqual(response.context['ok?'], 'yes!')
+
+
+class FeedBackTest(TestCase):
+    @tag('Hackaton')
+    def test_FeedBack_POST(self):
+        form = {
+            'body_name': 'dsjfhdjklsf',
+            'author_name': 'sakjdnhsakjd',
+            'about_id': 1,
+            'type': 'dsjkhfjkds'
+        }
+        response = self.client.post(reverse('Feedback'), data=form, follow=True)
+        self.assertEqual(response.context['ok?'], 'post!')
+
+    @tag('Hackaton')
+    def test_FeedBack_GET(self):
+        form = {
+            'body_name': 'dsjfhdjklsf',
+            'author_name': 'sakjdnhsakjd',
+            'about_id': 1,
+            'type': 'dsjkhfjkds'
+        }
+        response = self.client.get(reverse('Feedback'), data=form, follow=True)
+        self.assertEqual(response.context['ok?'], 'get!')
+
+
+class APITest(TestCase):
+    @tag('Hackaton')
+    def test_API(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(
+            user=self.user,
+            email='Bo@gmail.com',
+            phone_number='1234567890',
+            city='Dimona',
+            neighborhood='Bobo street',
+            street='Bobo street',
+            Aprt='Bobo street',
+            is_doggiesitter=True
+        )
+        self.user.save()
+        self.acc.save()
+        request = HttpRequest()
+        request.method = 'GET'
+        response = views.Vet_Map(request, self.acc)
+        self.assertEqual(response.status_code, 200)
+
+
+# class TermFormTest(TestCase):
+#     @tag('Hackaton')
+#     def test_form(self):
+#         self.credentials = {
+#             'username': 'testuser',
+#             'password': 'userpassdskfldskf',
+#             'first_name': 'test',
+#             'last_name': 'unit',
+#         }
+#         self.user = User.objects.create_user(**self.credentials)
+#         self.acc = Accounts.objects.create(
+#             user=self.user,
+#             email='Bo@gmail.com',
+#             phone_number='1234567890',
+#             city='Dimona',
+#             neighborhood='Bobo street',
+#             street='Bobo street',
+#             Aprt='Bobo street',
+#             is_doggiesitter=True
+#         )
+#         self.user.is_admin = True
+#         self.user.is_superuser = True
+#         self.user.is_staff = True
+#         self.user.save()
+#         self.acc.save()
+#         form = {'author': self.acc, 'title': 1, 'body': 'dskfhksdlfhji'}
+#         term_form = accounts.forms.TermsForm(form)
+#         self.assertTrue(term_form.is_valid())

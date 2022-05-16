@@ -22,7 +22,7 @@ class AccountsProfileForm(forms.ModelForm):
 
     class Meta:
         model = Accounts
-        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'address', 'is_doggiesitter')
+        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'city', 'neighborhood', 'street', 'Aprt',  'is_doggiesitter')
         widgets = {
             'date_of_birth': SelectDateWidget(years=range(1902, date.today().year + 1)),
         }
@@ -77,7 +77,6 @@ class AccountChangeForm(forms.ModelForm):
         validator = EmailValidator()
         validator(email)
         return email
-
 
 
 

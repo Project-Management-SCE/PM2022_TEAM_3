@@ -120,6 +120,7 @@ html {
       <a href="{% url 'user_info' %}">User Info</a>
       <a class="active" href="{% url 'about' %}">About us & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
+      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
 
