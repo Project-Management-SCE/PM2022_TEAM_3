@@ -123,9 +123,6 @@ pipeline {
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
 			    sh 'echo hello'
-			    sh 'pip install radon'
-			    sh 'radon cc  .\accounts\ -a '
-			   
                     }
 		}
             }
