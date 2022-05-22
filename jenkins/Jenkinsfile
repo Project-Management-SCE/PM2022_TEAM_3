@@ -124,7 +124,7 @@ pipeline {
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
 			    sh 'pip install radon'
-			    sh 'radon cc  accounts -a'
+			    sh 'python -m radon cc  accounts -a'
                     }
 		}
             }
