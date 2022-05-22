@@ -31,7 +31,7 @@ pipeline {
 			sh 'python manage.py makemigrations'
 			sh 'python manage.py migrate'
 			
-			sh 'pip install radon'
+			
 		    }
                 }
             }
@@ -123,9 +123,8 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-			    sh 'echo hello'
-			    //sh 'radon cc  .\accounts\ -a'
-			    //sh 'pip install radon'
+			    sh 'pip install radon'
+			    sh 'radon cc  accounts -a'
                     }
 		}
             }
