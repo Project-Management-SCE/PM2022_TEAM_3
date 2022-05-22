@@ -104,7 +104,7 @@ pipeline {
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
 			    sh 'pip install pylint-django'
-			    sh 'python -m pylint'
+			    sh 'python -m pylint accounts dog Dogisiter'
 //  			    sh 'python -m pylint .\accounts\ .\Dogisiter\  --load-plugins=pylint_django'
 			   
                     }
