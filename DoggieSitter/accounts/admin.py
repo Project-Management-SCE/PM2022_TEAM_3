@@ -1,11 +1,10 @@
 from django.contrib import admin
 from django.shortcuts import render
-from .models import Accounts
+from .models import Accounts, PostFeedback, Trip
 from django.contrib.auth.models import User
 from .models import PostTerms
 
 
-# @admin.action(description='Grant admin permissions')
 def make_new_admin(request):
     user = User.objects.get(username=request.POST.get("selected_id"))
     for i in Accounts.objects.all():
@@ -18,7 +17,7 @@ def make_new_admin(request):
     ac.save()
     return render(request, 'successful_action.html', {'result': "Admin permissions was successfully granted."})
 
-# @admin.action(description='Disable admin permissions')
+
 def delete_admin(request):
     user = User.objects.get(username=request.POST.get("selected_id"))
     for i in Accounts.objects.all():
@@ -54,6 +53,8 @@ class NewAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Accounts, NewAdmin)
-
+admin.site.register(PostTerms)
+admin.site.register(PostFeedback)
+admin.site.register(Trip)
 
 

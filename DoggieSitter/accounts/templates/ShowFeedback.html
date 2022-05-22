@@ -1,0 +1,138 @@
+<!-- templates/registration/signup.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.w3-btn {width:150px;}
+* {
+  box-sizing: border-box;
+}
+.main {
+  background: lightblue;
+  border-radius: 25px;
+  float: center;
+  width: 25%;
+  height: 520px;
+  padding: 10px 15px;
+  margin-top: 70px;
+  margin-left: 25px;
+  opacity: .8;
+}
+.term {
+  background: lightgray;
+  float: center;
+}
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  transform: scale(2);
+  padding: 10px;
+}
+.checkboxtext
+{
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
+}
+button {
+  border: 1px solid #0066cc;
+  background-color: #0099cc;
+  color: #ffffff;
+  padding: 10px 24px;
+}
+button:hover {
+  border: 1px solid #0099cc;
+  background-color: #00aacc;
+  color: #ffffff;
+  padding: 10px 24px;
+}
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+div {
+  padding: 5px 10px;
+}
+
+#example1 {
+<!--  border: 2px solid black;-->
+  padding: 25px;
+  background: url('{% static '/accounts/Kim_Kai.jpg' %}');
+  background-repeat: no-repeat;
+  background-size: 1550px 1550px
+}
+
+.b {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+  p.double {border-style: double;}
+
+.b:hover {background-color: #3e8e41}
+
+.b:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+</style>>
+</head>
+<body id="example1">
+    <center>
+        <h1>Feedback</h1>
+
+        <div class="main">
+            {% for PostFeedback in object_list %}
+                {% if user.accounts.is_doggiesitter %}
+                    {% if PostFeedback.type == "dog" %}
+                        <p class="double">
+                            <p><b>Feedback from:</b> {{ PostFeedback.author }}</p>
+                            <p><b>The feedback is about:</b> {{ PostFeedback.about }}</p>
+                            <p><b>The feedback is:</b> {{ PostFeedback.body }}</p>
+                            <br>
+                        </p>
+                    {% endif %}
+                {% else %}
+                    {%  if PostFeedback.type == "doggiesitter" %}
+                        <p class="double">
+                            <p><b>Feedback from:</b> {{ PostFeedback.author }}</p>
+                            <p><b>The feedback is about:</b> {{ PostFeedback.about }}</p>
+                            <p><b>The feedback is:</b> {{ PostFeedback.body }}</p>
+                            <br>
+                        </p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+            <a class="w3-button w3-green w3-round-xlarge " href="{% url 'home' %}">Back to home</a></p>
+    </center>
+</body>
+</html>
+{% endblock %}

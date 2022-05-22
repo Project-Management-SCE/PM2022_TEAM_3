@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
+    path('', include(('dog.urls', 'Adding'), namespace='dog')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
+
 ]

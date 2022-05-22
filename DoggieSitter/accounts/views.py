@@ -1,15 +1,23 @@
 # accounts/views.py
+from time import sleep
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.views import View
-from .forms import ExtendedUserCreationForm, AccountsProfileForm, AccountChangeForm, TermsForm
+
+from django import forms
+from .forms import ExtendedUserCreationForm, AccountsProfileForm, AccountChangeForm, TermsForm, TripForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from .models import Accounts, PostTerms
+from .models import Accounts, PostTerms, PostFeedback, Trip
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse_lazy
+import googlemaps
+from geopy.geocoders import Nominatim
+from django.views.generic import ListView
+from dog.models import Dog
+
 
 class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
@@ -129,7 +137,6 @@ def Add(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
-
             return render(request, 'home.html', {'add': 'done'})
         else:
             return render(request, 'registration/Add.html',
@@ -141,3 +148,146 @@ def Add(request):
     context = {'form': form, 'profile_form': profile_form, 'error': "Bad Data Please Try Again", 'pt': pt}
     return render(request, 'registration/Add.html', context)
 
+
+def Vet_Map(request, un):
+    API_KEY = "AIzaSyA1NSKaMXW4cC5k9RB8dtOqlfZq9v7FNHc"
+    map_client = googlemaps.Client(API_KEY)
+    app = Nominatim(user_agent="tutorial")
+
+    location_name = "Veterinary Clinic, "
+    location = ""
+
+    for i in Accounts.objects.all():
+        if str(i) == str(un):
+            user = Accounts.objects.get(id=i.id)
+            location_name += user.city
+            location = app.geocode("Israel, " + str(user.city)).raw
+
+    city = {'lat': location['lat'], 'lng': location['lon']}
+
+    try:
+        response = map_client.places(query=location_name)
+        results = response.get('results')
+    except Exception as e:
+        print(e)
+        return None
+
+    # pprint(results)
+
+
+    location_data = []
+    for i in results:
+        location_data.append(i['geometry']['location'])
+        (location_data[location_data.index(i['geometry']['location'])])['name'] = i['name']
+
+        try:
+            if i['opening_hours'].values() == True:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Open"
+            else:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Close"
+        except:
+            pass
+
+    return render(request, 'vet_map.html', {'location_data': location_data, 'city': city,'ok?':'yes!'})
+
+def Feedback(request):
+    if request.method == 'POST':
+        post = PostFeedback()
+        post.body = request.POST.get("body_name")
+        post.author = request.POST.get("author_name")
+        post.about = request.POST.get("about_id")
+        post.type = request.POST.get("type")
+        post.save()
+        return render(request, 'home.html',{'ok?': 'post!'})
+    else:
+        pt = PostFeedback.objects.all()
+        return render(request, 'Feedback.html', {'pt': pt,'ok?': 'get!'})
+
+class ShowFeedback(ListView):
+    model = PostFeedback
+    template_name =  'ShowFeedback.html'
+
+class DogPage(View):
+    def get(self, request, user_id):
+        user = User.objects.get(pk=user_id)
+        all = Dog.objects.all()
+        mydog = Dog.objects.filter(owner=user).order_by('name')
+        return render(request, 'DogPage.html', {'dogs': mydog, 'ok?': 'yes!'})
+
+
+def Parks(request, un):
+    API_KEY = "AIzaSyA1NSKaMXW4cC5k9RB8dtOqlfZq9v7FNHc"
+    map_client = googlemaps.Client(API_KEY)
+    app = Nominatim(user_agent="tutorial")
+
+    location_name = "Dog Park, "
+    location = ""
+
+    for i in Accounts.objects.all():
+        if str(i) == str(un):
+            user = Accounts.objects.get(id=i.id)
+            location_name += user.city
+            location = app.geocode("Israel, " + str(user.city)).raw
+
+    city = {'lat': location['lat'], 'lng': location['lon']}
+
+    try:
+        response = map_client.places(query=location_name)
+        results = response.get('results')
+    except Exception as e:
+        print(e)
+        return None
+
+    location_data = []
+    for i in results:
+        location_data.append(i['geometry']['location'])
+
+        try:
+            if i['opening_hours'].values() == True:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Open"
+            else:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Close"
+        except:
+            pass
+        try:
+            (location_data[location_data.index(i['geometry']['location'])])['name'] = i['name']
+        except:
+            pass
+        try:
+            (location_data[location_data.index(i['geometry']['location'])])['rating'] = i['rating']
+        except:
+            pass
+        try:
+            (location_data[location_data.index(i['geometry']['location'])])['formatted_address'] = i['formatted_address']
+        except:
+            pass
+
+    return render(request, 'parks.html', {'location_data': location_data, 'city': city, 'ok?': 'yes!'})
+
+
+def AddTrip(request, usr):
+    if request.method == 'POST':
+        trip = TripForm(request.POST)
+        trips = Trip()
+        if trip.is_valid():
+            trips.dog_owner = usr
+            trips.date = trip.cleaned_data['date']
+            trips.time = trip.cleaned_data['time']
+            trips.address = trip.cleaned_data['address']
+            trips.comments = trip.cleaned_data['comments']
+            trips.save()
+            return render(request, 'home.html', {'ok?': 'post!'})
+        else:
+            return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
+    else:
+        trip = TripForm()
+        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
+
+def AllTrips(request):
+    trips = Trip.objects.all()
+    return render(request, 'alltrips.html', {'trips': trips})
+
+
+def dogs(request):
+   all = Dog.objects.all()
+   return render(request, 'dogs.html', {'all': all})
