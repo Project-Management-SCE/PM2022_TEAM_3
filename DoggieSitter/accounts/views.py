@@ -9,14 +9,23 @@ from django import forms
 from .forms import ExtendedUserCreationForm, AccountsProfileForm, AccountChangeForm, TermsForm, TripForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+<<<<<<< Updated upstream
 from .models import Accounts, PostTerms, PostFeedback, Trip
+=======
+from .models import Accounts, PostTerms, PostFeedback
+>>>>>>> Stashed changes
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse_lazy
 import googlemaps
 from geopy.geocoders import Nominatim
+<<<<<<< Updated upstream
 from django.views.generic import ListView
 from dog.models import Dog
+=======
+from pprint import pprint
+from django.views.generic import ListView, DetailView
+>>>>>>> Stashed changes
 
 
 class PasswordsChangeView(PasswordChangeView):
@@ -187,9 +196,15 @@ def Vet_Map(request, un):
             else:
                 (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Close"
         except:
+<<<<<<< Updated upstream
             pass
 
     return render(request, 'vet_map.html', {'location_data': location_data, 'city': city,'ok?':'yes!'})
+=======
+            break
+
+    return render(request, 'vet_map.html', {'location_data': location_data, 'city': city})
+>>>>>>> Stashed changes
 
 def Feedback(request):
     if request.method == 'POST':
@@ -197,16 +212,25 @@ def Feedback(request):
         post.body = request.POST.get("body_name")
         post.author = request.POST.get("author_name")
         post.about = request.POST.get("about_id")
+<<<<<<< Updated upstream
         post.type = request.POST.get("type")
         post.save()
         return render(request, 'home.html',{'ok?': 'post!'})
     else:
         pt = PostFeedback.objects.all()
         return render(request, 'Feedback.html', {'pt': pt,'ok?': 'get!'})
+=======
+        post.save()
+        return render(request, 'home.html')
+    else:
+        pt = PostFeedback.objects.all()
+        return render(request, 'Feedback.html', {'pt': pt})
+>>>>>>> Stashed changes
 
 class ShowFeedback(ListView):
     model = PostFeedback
     template_name =  'ShowFeedback.html'
+<<<<<<< Updated upstream
 
 class DogPage(View):
     def get(self, request, user_id):
@@ -292,3 +316,5 @@ def AllTrips(request):
 def dogs(request):
    all = Dog.objects.all()
    return render(request, 'dogs.html', {'all': all})
+=======
+>>>>>>> Stashed changes
