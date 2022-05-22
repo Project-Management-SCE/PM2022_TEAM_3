@@ -106,7 +106,7 @@ pipeline {
 			    sh 'pip install black'
 			    sh 'python -m black accounts dog '
 			    sh 'pip install pylint-django'
-			    sh 'python -m pylint accounts dog Dogisiter'
+			    sh 'python -m pylint --exit-zero accounts dog Dogisiter '
 //  			    sh 'python -m pylint .\accounts\ .\Dogisiter\  --load-plugins=pylint_django'
 			   
                     }
