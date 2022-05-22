@@ -103,7 +103,7 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-				sh 'python -m pylint .\accounts\ .\Dogisiter\  --load-plugins=pylint_django'
+// 				sh 'python -m pylint .\accounts\ .\Dogisiter\  --load-plugins=pylint_django'
 			   
                     }
 		}
