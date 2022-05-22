@@ -113,7 +113,7 @@ pipeline {
             }
          }
 		
-		 stage('Pylint Metric2'){
+		 stage('Cyclomatic Complexity Metric'){
             agent{
                 docker{
                     image 'python:3.7'
