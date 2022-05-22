@@ -94,9 +94,11 @@
       <a href="#news">Map</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
+      <a href="{% url 'Add' %}">Add user</a>
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a class="active" href="{% url 'admin_actions' %}">Admin Actions</a>
+      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
     {% endif %}

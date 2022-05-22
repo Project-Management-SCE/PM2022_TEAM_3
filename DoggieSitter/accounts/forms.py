@@ -3,8 +3,8 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django import forms
 from django.core.validators import EmailValidator
-from django.forms import SelectDateWidget
-from .models import Accounts, PostTerms
+from django.forms import SelectDateWidget, SplitDateTimeWidget
+from .models import Accounts, PostTerms, Trip
 
 
 class ExtendedUserCreationForm(UserCreationForm):
@@ -22,7 +22,7 @@ class AccountsProfileForm(forms.ModelForm):
 
     class Meta:
         model = Accounts
-        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'address', 'is_doggiesitter')
+        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'city', 'neighborhood', 'street', 'aprt',  'is_doggiesitter')
         widgets = {
             'date_of_birth': SelectDateWidget(years=range(1902, date.today().year + 1)),
         }
@@ -65,19 +65,40 @@ class AccountsProfileForm(forms.ModelForm):
         validator = EmailValidator()
         validator(email)
         return email
+    def clean_city(self):
+        city = self.cleaned_data['city']
+        if not city.isalpha():
+            raise forms.ValidationError("City must contain letters only")
+        if len(city) < 2:
+            raise forms.ValidationError("City must be at least 2 letters long.")
+        return city
+    def clean_neighborhood(self):
+        neighborhood = self.cleaned_data['neighborhood']
+        if len(neighborhood) < 1:
+            raise forms.ValidationError("Neighborhood must be at least 1 character long.")
+        return neighborhood
+    def clean_street(self):
+        street = self.cleaned_data['street']
+        if len(street) < 2:
+            raise forms.ValidationError("Street must be at least 2 character long.")
+        return street
+    def clean_aprt(self):
+        aprt = self.cleaned_data['aprt']
+        if len(aprt) < 1:
+            raise forms.ValidationError("Aprt must be at least 1 character long.")
+        return aprt
 
 
 class AccountChangeForm(forms.ModelForm):
     class Meta:
         model = Accounts
-        fields = ('first_name', 'last_name', 'email', 'address', 'phone_number')
+        fields = ('first_name', 'last_name', 'email', 'phone_number')
 
     def clean_email(self):
         email = self.cleaned_data['email']
         validator = EmailValidator()
         validator(email)
         return email
-
 
 
 
@@ -105,3 +126,30 @@ class TermsForm(forms.ModelForm):
     def clean_body(self):
         body = self.cleaned_data['body']
         return body
+
+
+class TripForm(forms.ModelForm):
+    class Meta():
+        model = Trip
+        fields = ('dog_owner', 'date', 'time', 'address', 'comments')
+        widgets = {
+            'date': SelectDateWidget(years=range(date.today().year, date.today().year + 1)),
+            'time': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        today = date.today()
+        if(date.month < today.month or (date.month == today.month and date.day < today.day) ):
+                raise forms.ValidationError("This date already passed.")
+        return date
+
+    def clean_address(self):
+        address = self.cleaned_data['address']
+        if(len(address) < 6):
+                raise forms.ValidationError("Address is to short, please fill the full pickup address: city, neighborhood, street and aprt.")
+        return address
+
+    def clean_comments(self):
+        comments = self.cleaned_data['comments']
+        return comments
