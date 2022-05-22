@@ -33,7 +33,11 @@ class Accounts(models.Model):
                               default="street and number"
     )
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     aprt = models.CharField(max_length=50,
+=======
+    Aprt = models.CharField(max_length=50,
+>>>>>>> Stashed changes
 =======
     Aprt = models.CharField(max_length=50,
 >>>>>>> Stashed changes
@@ -67,9 +71,14 @@ class PostTerms(models.Model):
 
 class PostFeedback(models.Model):
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     author = models.TextField(max_length=50)
     about = models.TextField()
     type = models.TextField()
+=======
+    author = models.TextField()
+    about = models.TextField()
+>>>>>>> Stashed changes
 =======
     author = models.TextField()
     about = models.TextField()
@@ -83,6 +92,7 @@ class PostFeedback(models.Model):
     def get_absolute_url(self):
         return reverse('home')
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 
 class Trip(models.Model):
@@ -92,5 +102,7 @@ class Trip(models.Model):
     address = models.CharField(max_length=50, blank=True)
     comments = models.TextField(blank=True)
     doggiesitter = models.TextField()
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

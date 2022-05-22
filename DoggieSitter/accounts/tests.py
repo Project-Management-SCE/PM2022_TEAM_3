@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import django.db.models
 from django.test import TestCase, tag, Client
 import json
@@ -14,11 +15,16 @@ from django.urls import reverse
 from django.http import HttpRequest, HttpResponse
 from dog.models import Dog
 =======
+=======
+>>>>>>> Stashed changes
 from django.test import TestCase
 from django.contrib.auth.models import User
 from . import models
 import re
 from django.urls import reverse
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 
@@ -976,4 +982,7 @@ class EditUser(TestCase):
 
 
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
