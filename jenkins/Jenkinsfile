@@ -123,6 +123,7 @@ pipeline {
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
 			    sh 'echo hello'
+			    sh 'radon cc  .\accounts\ -a'
                     }
 		}
             }
