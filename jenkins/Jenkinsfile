@@ -30,13 +30,7 @@ pipeline {
 			sh 'pip install django_google_maps'
 			sh 'python manage.py makemigrations'
 			sh 'python manage.py migrate'
-			
-		
-	
-			
 		    }
-			   
-                    
                 }
             }
         }
@@ -107,7 +101,7 @@ pipeline {
             steps{
 		 withEnv(["HOME=${env.WORKSPACE}"]){
 		    dir("DoggieSitter"){
-				sh 'echo hello'
+				sh "python -m coverage run -a manage.py test --tag=Hackaton"
 			   
                     }
 		}
