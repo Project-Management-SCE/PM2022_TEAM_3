@@ -32,7 +32,7 @@ class Accounts(models.Model):
                               blank=False,
                               default="street and number"
     )
-    Aprt = models.CharField(max_length=50,
+    aprt = models.CharField(max_length=50,
                             blank=False,
                             default="Aprt. number"
     )
@@ -62,7 +62,7 @@ class PostTerms(models.Model):
 
 
 class PostFeedback(models.Model):
-    author = models.TextField()
+    author = models.TextField(max_length=50)
     about = models.TextField()
     type = models.TextField()
     body = models.TextField()
@@ -73,3 +73,12 @@ class PostFeedback(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
+
+
+class Trip(models.Model):
+    dog_owner = models.CharField(max_length=50)
+    date = models.DateField(default=date.today)
+    time = models.TimeField(blank=False)
+    address = models.CharField(max_length=50, blank=True)
+    comments = models.TextField(blank=True)
+    doggiesitter = models.TextField()
