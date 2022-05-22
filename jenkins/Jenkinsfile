@@ -97,7 +97,7 @@ pipeline {
 		}
             }
          }
-		 stage('Unit-Tests2'){
+		 stage('Pylint Metric'){
             agent{
                 docker{
                     image 'python:3.7'
