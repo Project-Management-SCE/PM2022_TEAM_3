@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import render
-from .models import Accounts, PostFeedback
+from .models import Accounts, PostFeedback, Trip
 from django.contrib.auth.models import User
 from .models import PostTerms
 
@@ -55,4 +55,6 @@ class NewAdmin(admin.ModelAdmin):
 admin.site.register(Accounts, NewAdmin)
 admin.site.register(PostTerms)
 admin.site.register(PostFeedback)
+admin.site.register(Trip)
+
 

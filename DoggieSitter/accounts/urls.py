@@ -26,6 +26,10 @@ urlpatterns = [
     path('ShowFeedback', ShowFeedback.as_view(), name="ShowFeedback"),
     path('Add', views.Add, name="Add"),
     path('vet_map/<un>', views.Vet_Map, name="vet_map"),
+    path('parks/<un>', views.Parks, name="parks"),
     path('DogPage/<user_id>', views.DogPage.as_view(), name='DogPage'),
+    path("addtrip/<usr>", views.AddTrip, name="addtrip"),
+    path("alltrips/", views.AllTrips, name="alltrips"),
+    path('dogs', views.dogs, name="dogs"),
 
 ]

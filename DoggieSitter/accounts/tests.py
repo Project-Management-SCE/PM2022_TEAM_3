@@ -580,10 +580,10 @@ class View_test(TestCase):
             'id': '123456789',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobostreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         post = PostTerms(author='Nadav', title=1, body='Hello World')
@@ -611,11 +611,17 @@ class View_test(TestCase):
             'password1': '123456Bb',
             'password2': '123456Bb',
             'email': 'Bo@gmail.com',
+            'first_name' : 'boaz',
+            'last_name' : 'bitton',
+            'gender' : 'male',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
-            'neighborhood': 'Bobo street',
-            'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'date_of_birth' : 'May 1 1990',
+            'id' : '123456789',
+            'phone_number' : '123457890',
+            'city': 'Bobos treet',
+            'neighborhood': 'Bobostreet',
+            'street': 'Bobostreet',
+            'aprt': '12',
             'is_doggiesitter': False
         }
         post = PostTerms(author='Nadav', title=1, body='Hello World')
@@ -746,7 +752,7 @@ class APITest(TestCase):
             city='Dimona',
             neighborhood='Bobo street',
             street='Bobo street',
-            Aprt='Bobo street',
+            aprt='Bobo street',
             is_doggiesitter=True
         )
         self.user.save()
