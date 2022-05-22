@@ -1,14 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import render
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 from .models import Accounts, PostFeedback, Trip
-=======
-from .models import Accounts, PostFeedback
->>>>>>> Stashed changes
-=======
-from .models import Accounts, PostFeedback
->>>>>>> Stashed changes
 from django.contrib.auth.models import User
 from .models import PostTerms
 
@@ -63,12 +55,6 @@ class NewAdmin(admin.ModelAdmin):
 admin.site.register(Accounts, NewAdmin)
 admin.site.register(PostTerms)
 admin.site.register(PostFeedback)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 admin.site.register(Trip)
 
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 

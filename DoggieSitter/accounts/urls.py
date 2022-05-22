@@ -4,14 +4,8 @@ from django.views.generic import TemplateView
 from . import views, admin
 from .views import PasswordsChangeView
 from .views import Terms, Add, Feedback, ShowFeedback
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 from dog.views import AddDog
 
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 urlpatterns = [
     path(" ", views.go_home, name="home"),
@@ -32,16 +26,10 @@ urlpatterns = [
     path('ShowFeedback', ShowFeedback.as_view(), name="ShowFeedback"),
     path('Add', views.Add, name="Add"),
     path('vet_map/<un>', views.Vet_Map, name="vet_map"),
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     path('parks/<un>', views.Parks, name="parks"),
     path('DogPage/<user_id>', views.DogPage.as_view(), name='DogPage'),
     path("addtrip/<usr>", views.AddTrip, name="addtrip"),
     path("alltrips/", views.AllTrips, name="alltrips"),
     path('dogs', views.dogs, name="dogs"),
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 ]

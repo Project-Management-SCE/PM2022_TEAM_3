@@ -38,14 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     'dog'
     # 'django_google_maps',
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 ]
 JENKINS_TASKS = (
