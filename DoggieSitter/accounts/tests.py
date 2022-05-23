@@ -2,8 +2,7 @@ import django.db.models
 from django.test import TestCase, tag, Client
 import json
 from django.contrib.auth.models import User
-from django import forms
-import accounts.forms
+
 from . import models, views, admin, forms
 import re
 import datetime
@@ -375,10 +374,10 @@ class View_test(TestCase):
             'id': '123456789',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobostreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         response = self.client.post(reverse('signup'), request.POST, follow=True)
@@ -580,10 +579,10 @@ class View_test(TestCase):
             'id': '123456789',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobotreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         post = PostTerms(author='Nadav', title=1, body='Hello World')
@@ -612,10 +611,10 @@ class View_test(TestCase):
             'password2': '123456Bb',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobostreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         post = PostTerms(author='Nadav', title=1, body='Hello World')
@@ -746,7 +745,7 @@ class APITest(TestCase):
             city='Dimona',
             neighborhood='Bobo street',
             street='Bobo street',
-            Aprt='Bobo street',
+            aprt='Bobo street',
             is_doggiesitter=True
         )
         self.user.save()
