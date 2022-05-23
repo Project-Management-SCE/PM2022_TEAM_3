@@ -1,10 +1,11 @@
-from datetime import date
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+import datetime
+from datetime import date, time, datetime
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.core.validators import EmailValidator
 from django.forms import SelectDateWidget
-from .models import Accounts, PostTerms
+from .models import Accounts, PostTerms, Trip
 
 
 class ExtendedUserCreationForm(UserCreationForm):
@@ -22,7 +23,7 @@ class AccountsProfileForm(forms.ModelForm):
 
     class Meta:
         model = Accounts
-        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'city', 'neighborhood', 'street', 'Aprt',  'is_doggiesitter')
+        fields = ('first_name', 'last_name', 'gender', 'date_of_birth', 'id', 'email', 'phone_number', 'city', 'neighborhood', 'street', 'aprt',  'is_doggiesitter')
         widgets = {
             'date_of_birth': SelectDateWidget(years=range(1902, date.today().year + 1)),
         }
@@ -65,6 +66,28 @@ class AccountsProfileForm(forms.ModelForm):
         validator = EmailValidator()
         validator(email)
         return email
+    def clean_city(self):
+        city = self.cleaned_data['city']
+        if not city.isalpha():
+            raise forms.ValidationError("City must contain letters only")
+        if len(city) < 2:
+            raise forms.ValidationError("City must be at least 2 letters long.")
+        return city
+    def clean_neighborhood(self):
+        neighborhood = self.cleaned_data['neighborhood']
+        if len(neighborhood) < 1:
+            raise forms.ValidationError("Neighborhood must be at least 1 character long.")
+        return neighborhood
+    def clean_street(self):
+        street = self.cleaned_data['street']
+        if len(street) < 2:
+            raise forms.ValidationError("Street must be at least 2 character long.")
+        return street
+    def clean_aprt(self):
+        aprt = self.cleaned_data['aprt']
+        if len(aprt) < 1:
+            raise forms.ValidationError("Aprt must be at least 1 character long.")
+        return aprt
 
 
 class AccountChangeForm(forms.ModelForm):
@@ -104,3 +127,59 @@ class TermsForm(forms.ModelForm):
     def clean_body(self):
         body = self.cleaned_data['body']
         return body
+
+
+class TripForm(forms.ModelForm):
+    class Meta():
+        model = Trip
+        fields = ('dog_owner', 'date', 'time', 'endtime', 'address', 'comments')
+        widgets = {
+            'date': SelectDateWidget(years=range(date.today().year, date.today().year + 1)),
+            'time': forms.TimeInput(attrs={'type': 'time'}),
+            'endtime': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        today = date.today()
+        if(date.month < today.month or (date.month == today.month and date.day < today.day) ):
+                raise forms.ValidationError("This date already passed.")
+        return date
+
+    def clean_time(self):
+        time = self.cleaned_data['time']
+        date1 = date(1, 1, 1)
+        time1 = datetime.combine(date1, time)
+        timenow = datetime.combine(date1, datetime.now().time())
+        duration = time1 - timenow
+
+        date2 = self.cleaned_data['date']
+        today = date.today()
+        if (date2.month == today.month and date2.day == today.day):
+            if (duration.days < 0):
+                raise forms.ValidationError("This time already passed.")
+        return time
+
+    def clean_address(self):
+        address = self.cleaned_data['address']
+        if(len(address) < 6):
+                raise forms.ValidationError("Address is to short, please fill the full pickup address: city, neighborhood, street and aprt.")
+        return address
+
+    def clean_comments(self):
+        comments = self.cleaned_data['comments']
+        return comments
+
+    def clean_endtime(self):
+        endtime = self.cleaned_data['endtime']
+        try:
+            start = self.clean_time()
+        except:
+            raise forms.ValidationError("Please check the starting time.")
+        date1 = date(1, 1, 1)
+        endtime1 = datetime.combine(date1, endtime)
+        start1 = datetime.combine(date1, start)
+        duration = endtime1 - start1
+        if (duration.days < 0):
+            raise forms.ValidationError("The end time must be after the starting time.")
+        return endtime

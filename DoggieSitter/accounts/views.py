@@ -1,22 +1,25 @@
 # accounts/views.py
+import json
+from datetime import date, datetime
 from time import sleep
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 from django.views import View
-from .forms import ExtendedUserCreationForm, AccountsProfileForm, AccountChangeForm, TermsForm
+
+from django import forms
+from .forms import ExtendedUserCreationForm, AccountsProfileForm, AccountChangeForm, TermsForm, TripForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from .models import Accounts, PostTerms, PostFeedback
+from .models import Accounts, PostTerms, PostFeedback, Trip
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse_lazy
 import googlemaps
 from geopy.geocoders import Nominatim
-from pprint import pprint
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from dog.models import Dog
-from dog.forms import DogForm
 
 
 class PasswordsChangeView(PasswordChangeView):
@@ -187,7 +190,7 @@ def Vet_Map(request, un):
             else:
                 (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Close"
         except:
-            break
+            pass
 
     return render(request, 'vet_map.html', {'location_data': location_data, 'city': city,'ok?':'yes!'})
 
@@ -216,3 +219,108 @@ class DogPage(View):
         return render(request, 'DogPage.html', {'dogs': mydog, 'ok?': 'yes!'})
 
 
+def Parks(request, un):
+    API_KEY = "AIzaSyA1NSKaMXW4cC5k9RB8dtOqlfZq9v7FNHc"
+    map_client = googlemaps.Client(API_KEY)
+    app = Nominatim(user_agent="tutorial")
+
+    location_name = "Dog Park, "
+    location = ""
+
+    for i in Accounts.objects.all():
+        if str(i) == str(un):
+            user = Accounts.objects.get(id=i.id)
+            location_name += user.city
+            location = app.geocode("Israel, " + str(user.city)).raw
+
+    city = {'lat': location['lat'], 'lng': location['lon']}
+
+    try:
+        response = map_client.places(query=location_name)
+        results = response.get('results')
+    except Exception as e:
+        print(e)
+        return None
+
+    location_data = []
+    for i in results:
+        location_data.append(i['geometry']['location'])
+
+        try:
+            if i['opening_hours'].values() == True:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Open"
+            else:
+                (location_data[location_data.index(i['geometry']['location'])])['opening_hours'] = "Close"
+        except:
+            pass
+        try:
+            (location_data[location_data.index(i['geometry']['location'])])['name'] = i['name']
+        except:
+            pass
+        try:
+            (location_data[location_data.index(i['geometry']['location'])])['rating'] = i['rating']
+        except:
+            pass
+        try:
+            (location_data[location_data.index(i['geometry']['location'])])['formatted_address'] = i['formatted_address']
+        except:
+            pass
+
+    return render(request, 'parks.html', {'location_data': location_data, 'city': city, 'ok?': 'yes!'})
+
+
+def AddTrip(request, usr):
+    if request.method == 'POST':
+        trip = TripForm(request.POST)
+        trips = Trip()
+        if trip.is_valid():
+            trips.dog_owner = usr
+            trips.date = trip.cleaned_data['date']
+            trips.time = trip.cleaned_data['time']
+            trips.endtime = trip.cleaned_data['endtime']
+            trips.address = trip.cleaned_data['address']
+            trips.comments = trip.cleaned_data['comments']
+
+            date1 = date(1, 1, 1)
+            endtime1 = datetime.combine(date1, trips.endtime)
+            start1 = datetime.combine(date1, trips.time)
+            duration = endtime1 - start1
+            trips.duration = duration.seconds / 3600
+            trips.price = trips.duration * 30
+            trips.save()
+            return render(request, 'home.html', {'ok?': 'post!'})
+        else:
+            return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
+    else:
+        trip = TripForm()
+        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
+
+def AllTrips(request):
+    trips = Trip.objects.all()
+    return render(request, 'alltrips.html', {'trips': trips})
+
+
+def dogs(request):
+   all = Dog.objects.all()
+   return render(request, 'dogs.html', {'all': all})
+
+
+def TakeTrip(request, tr_id):
+    if request.method == 'POST':
+        trip = Trip.objects.get(trip_id=tr_id)
+        return render(request, 'taketrip.html', {'trip': trip})
+    return render(request, 'home.html')
+
+def DepositComplete(request):
+    body = json.loads(request.body)
+    trip = Trip.objects.get(trip_id=body['tripid'])
+    trip.is_taken = True
+    trip.doggiesitter = body['doggiesitter']
+    trip.save()
+    print('BODY:', body)
+    return render(request, 'taketrip.html', {'trip': trip})
+    # return JsonResponse('Deposit payment completed!', safe=False)
+
+def UpcomingTrips(request, usr):
+    trips = Trip.objects.filter(doggiesitter=usr)
+    return render(request, 'upcoming_trips.html', {'trips': trips})
