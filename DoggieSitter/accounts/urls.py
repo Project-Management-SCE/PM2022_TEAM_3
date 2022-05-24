@@ -34,7 +34,10 @@ urlpatterns = [
     path('dogs', views.dogs, name="dogs"),
     path("deposit_complete/", views.DepositComplete, name="deposit_complete/"),
     path("upcoming_trips/<usr>", views.UpcomingTrips, name="upcoming_trips"),
+<<<<<<< HEAD
     path("RateDoggie/<usr>", views.RateDoggie, name="Rate"),
+=======
+>>>>>>> eb9c4d00169c421ff7f04b5b08c2b4b7c20ea676
 
 
 ]

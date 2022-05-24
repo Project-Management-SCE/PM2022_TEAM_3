@@ -299,6 +299,10 @@ def AddTrip(request, usr):
             trips.endtime = trip.cleaned_data['endtime']
             trips.address = trip.cleaned_data['address']
             trips.comments = trip.cleaned_data['comments']
+<<<<<<< HEAD
+=======
+
+>>>>>>> eb9c4d00169c421ff7f04b5b08c2b4b7c20ea676
             date1 = date(1, 1, 1)
             endtime1 = datetime.combine(date1, trips.endtime)
             start1 = datetime.combine(date1, trips.time)
@@ -320,8 +324,13 @@ def AllTrips(request):
 
 
 def dogs(request):
+<<<<<<< HEAD
     all = Dog.objects.all()
     return render(request, 'dogs.html', {'all': all})
+=======
+   all = Dog.objects.all()
+   return render(request, 'dogs.html', {'all': all})
+>>>>>>> eb9c4d00169c421ff7f04b5b08c2b4b7c20ea676
 
 
 def TakeTrip(request, tr_id):
@@ -330,7 +339,10 @@ def TakeTrip(request, tr_id):
         return render(request, 'taketrip.html', {'trip': trip})
     return render(request, 'home.html')
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> eb9c4d00169c421ff7f04b5b08c2b4b7c20ea676
 def DepositComplete(request):
     body = json.loads(request.body)
     trip = Trip.objects.get(trip_id=body['tripid'])
@@ -341,6 +353,7 @@ def DepositComplete(request):
     return render(request, 'taketrip.html', {'trip': trip})
     # return JsonResponse('Deposit payment completed!', safe=False)
 
+<<<<<<< HEAD
 
 def UpcomingTrips(request, usr):
     trips = Trip.objects.filter(doggiesitter=usr,is_done = False)
@@ -355,3 +368,8 @@ def RateDoggie(request, usr):
         a = Accounts.objects.get(user=u)
         list.append(a)
     return render(request, 'RateDoggie.html',{'acc': set(list), 'ok?':'ok'})
+=======
+def UpcomingTrips(request, usr):
+    trips = Trip.objects.filter(doggiesitter=usr)
+    return render(request, 'upcoming_trips.html', {'trips': trips})
+>>>>>>> eb9c4d00169c421ff7f04b5b08c2b4b7c20ea676
