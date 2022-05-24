@@ -76,9 +76,15 @@ class PostFeedback(models.Model):
 
 
 class Trip(models.Model):
+    trip_id = models.AutoField(primary_key=True)
     dog_owner = models.CharField(max_length=50)
     date = models.DateField(default=date.today)
     time = models.TimeField(blank=False)
+    endtime = models.TimeField(blank=False)
     address = models.CharField(max_length=50, blank=True)
     comments = models.TextField(blank=True)
+    duration = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
+    price = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     doggiesitter = models.TextField()
+    is_taken = models.BooleanField(default=False, blank=True, null=True)
+    is_done = models.BooleanField(default=False, blank=True, null=True)

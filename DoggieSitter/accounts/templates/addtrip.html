@@ -32,7 +32,7 @@
       border-radius: 25px;
       float: center;
       width: 30%;
-      height: 600px;
+      height: 800px;
       padding: 10px 15px;
       margin-top: 70px;
       margin-left: 25px;
@@ -76,6 +76,58 @@
 
 </style>
 <body class="b">
+
+{% if user.is_authenticated %}
+  {% if user.is_superuser %}          <!--  admin - logged in -->
+    <div class="topnav">
+      <a href="{% url 'home' %}">Home</a>
+      <a class="active" href="{% url 'addtrip' user.username %}">Add trip</a>
+      <a href="{% url 'alltrips' %}">Available trips</a>
+      <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
+      <a href="{% url 'gallery' %}">Gallery</a>
+      <a href="{% url 'change_password' user.username %}">change password</a>
+      <a href="{% url 'Add' %}">Add user</a>
+      <a href="{% url 'Terms' %}">Terms</a>
+      <a href="{% url 'user_info' %}">User Info</a>
+      <a href="{% url 'about' %}">About & Contact</a>
+      <a href="{% url 'admin_actions' %}">Admin Actions</a>
+      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+      <a href="{% url 'logout' %}">Log Out</a>
+    </div>
+
+  {% else %}                        <!--  account - logged in -->
+
+    {% if not user.accounts.approved %}
+      {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
+
+
+      {% else %}                                    <!--  dog owner -->
+        {% if not user.is_superuser %}
+          <div class="topnav">
+            <a href="{% url 'home' %}">Home</a>
+            <a class="active" href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'DogPage' user.id %}">Dog Page</a>
+            <a href="{% url 'gallery' %}">Gallery</a>
+            <a href="{% url 'change_password' user.username %}">change password</a>
+            <a href="{% url 'Feedback' %}">Add Feedback</a>
+            <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
+            <a href="#news">Post new schedule</a>
+            <a href="{% url 'about' %}">About & Contact</a>
+            <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+            <a href="{% url 'logout' %}">Log Out</a>
+          </div>
+        {% endif %}
+    {% endif %}
+
+  {% else %}
+    {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
+
+    {% endif %}
+  {% endif %}
+{% endif %}
+{% endif %}
+
+
     <center>
         <form method="POST" action="{% url 'addtrip' user.username %}" >
             <div class="te">

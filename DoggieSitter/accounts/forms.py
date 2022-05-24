@@ -1,9 +1,10 @@
-from datetime import date
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+import datetime
+from datetime import date, time, datetime
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.core.validators import EmailValidator
-from django.forms import SelectDateWidget, SplitDateTimeWidget
+from django.forms import SelectDateWidget
 from .models import Accounts, PostTerms, Trip
 
 
@@ -131,10 +132,11 @@ class TermsForm(forms.ModelForm):
 class TripForm(forms.ModelForm):
     class Meta():
         model = Trip
-        fields = ('dog_owner', 'date', 'time', 'address', 'comments')
+        fields = ('dog_owner', 'date', 'time', 'endtime', 'address', 'comments')
         widgets = {
             'date': SelectDateWidget(years=range(date.today().year, date.today().year + 1)),
             'time': forms.TimeInput(attrs={'type': 'time'}),
+            'endtime': forms.TimeInput(attrs={'type': 'time'}),
         }
 
     def clean_date(self):
@@ -143,6 +145,22 @@ class TripForm(forms.ModelForm):
         if(date.month < today.month or (date.month == today.month and date.day < today.day) ):
                 raise forms.ValidationError("This date already passed.")
         return date
+
+    def clean_time(self):
+        time = self.cleaned_data['time']
+        date1 = date(1, 1, 1)
+        time1 = datetime.combine(date1, time)
+        timenow = datetime.combine(date1, datetime.now().time())
+        duration = time1 - timenow
+        try:
+            date2 = self.cleaned_data['date']
+        except:
+            raise forms.ValidationError("Please check the date")
+        today = date.today()
+        if (date2.month == today.month and date2.day == today.day):
+            if (duration.days < 0):
+                raise forms.ValidationError("This time already passed.")
+        return time
 
     def clean_address(self):
         address = self.cleaned_data['address']
@@ -153,3 +171,17 @@ class TripForm(forms.ModelForm):
     def clean_comments(self):
         comments = self.cleaned_data['comments']
         return comments
+
+    def clean_endtime(self):
+        endtime = self.cleaned_data['endtime']
+        try:
+            start = self.clean_time()
+        except:
+            raise forms.ValidationError("Please check the starting time.")
+        date1 = date(1, 1, 1)
+        endtime1 = datetime.combine(date1, endtime)
+        start1 = datetime.combine(date1, start)
+        duration = endtime1 - start1
+        if (duration.days < 0):
+            raise forms.ValidationError("The end time must be after the starting time.")
+        return endtime

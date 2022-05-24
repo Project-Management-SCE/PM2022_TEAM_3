@@ -2,8 +2,7 @@ import django.db.models
 from django.test import TestCase, tag, Client
 import json
 from django.contrib.auth.models import User
-from django import forms
-import accounts.forms
+
 from . import models, views, admin, forms
 import re
 import datetime
@@ -375,10 +374,10 @@ class View_test(TestCase):
             'id': '123456789',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobostreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         response = self.client.post(reverse('signup'), request.POST, follow=True)
@@ -580,7 +579,7 @@ class View_test(TestCase):
             'id': '123456789',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobostreet',
+            'city': 'Bobotreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
             'aprt': 'Bobo street',
@@ -611,17 +610,11 @@ class View_test(TestCase):
             'password1': '123456Bb',
             'password2': '123456Bb',
             'email': 'Bo@gmail.com',
-            'first_name' : 'boaz',
-            'last_name' : 'bitton',
-            'gender' : 'male',
             'phone_number': '1234567890',
-            'date_of_birth' : 'May 1 1990',
-            'id' : '123456789',
-            'phone_number' : '123457890',
-            'city': 'Bobos treet',
-            'neighborhood': 'Bobostreet',
-            'street': 'Bobostreet',
-            'aprt': '12',
+            'city': 'Bobostreet',
+            'neighborhood': 'Bobo street',
+            'street': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         post = PostTerms(author='Nadav', title=1, body='Hello World')
