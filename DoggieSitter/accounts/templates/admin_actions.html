@@ -18,7 +18,17 @@
   margin-right: 60%;
   padding-left:15px;
 }
+.main {
+  background: lightblue;
+  border-radius: 25px;
+  width: 24%;
+  height: 235px;
+  padding: 10px 15px;
+  margin-top: 50px;
 
+  opacity: .8;
+  text-align: center;
+}
 .clearfix{
     clear:both
 }
@@ -107,13 +117,18 @@
 
 <h1><span style="background-color:white;">Admin Actions</span></h1><br>
 
-<div>
+<div class="main">
     <form action="{% url 'admin_actions' %}" method="POST">
     {% csrf_token %}
+     <p>Choose Action for admin action and Activity for user Acitvity</p>
+     <input type="radio" id="html" name="adminac" value="info" checked="checked">
+     <label for="html">Action</label>
+     <input type="radio" id="css" name="adminac" value="activity">
+     <label for="css">Activity</label><br>
 
     <label style="background:lightgray" for="id_search">Enter an id to search for a user:</label>
     <input type="text" id="id_search" name="search_id"><br><br>
-    <button style="color:blue" type="submit">Submit</button>
+    <button class="w3-button w3-green w3-round-xlarge " type="submit">Submit</button>
 </form>
 </div>
 

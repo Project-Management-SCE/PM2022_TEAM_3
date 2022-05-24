@@ -82,6 +82,10 @@
   background-color: #04AA6D;
   color: white;
 }
+.tab {
+    display: inline-block;
+    margin-left: 40px;
+}
 
 </style>
 </head>
@@ -103,20 +107,31 @@
     </div>
     {% endif %}
 {% endif %}
-<center>
-<h1><span style="background-color:white;">Search Result</span></h1><br>
 
+<center>
+    {% if doggiok%}
+    <h1><span style="background-color:white;">DoggieSitter Activity</span></h1><br>
+    {% else %}
+    <h1><span style="background-color:white;">Dog Owner Activity</span></h1><br>
+{%endif%}
     {% if us == 'empty' %}
         <h2><span style="background-color:red;">User not exist.<br>Please make sure you spelled the id correct.</span></h2><br>
         <span style="background-color:yellow;"><a href="{% url 'admin_actions' %}">Try again</a></span><br>
-
-
     {% else %}
-    kjdsfhbjksdhfkjdshfnjk
-
     {% endif %}
-
 </center>
+{% for trip in trips %}
+<div class="tab" style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">
+      Dog owner name: {{ trip.dog_owner }} <br>
+      Date: {{ trip.date }} <br>
+      Starting time: {{ trip.time }} <br>
+      End time: {{ trip.endtime }} <br>
+      Address for pickup: {{ trip.address }} <br>
+      Comments: {{ trip.comments }} <br>
+      Duration: {{ trip.duration }} <br>
+      Price: {{ trip.price }} <br>
+</div>
+ {% endfor%}
 </body>
 </html>
 

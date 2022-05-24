@@ -67,10 +67,17 @@ def SearchUserByID(request):
         us = Accounts.objects.filter(id=request.POST.get("search_id"))
         if (len(us) == 0):
             return render(request, 'search_result.html', {'us': 'empty'})
-
-        return render(request, 'search_result.html', {'us': us})
+        if request.POST.get('adminac') == 'info':
+            return render(request, 'search_result.html', {'us': us})
+        else:
+            usr = us[0].user.username
+            if us[0].is_doggiesitter:
+                taken = Trip.objects.filter(doggiesitter=usr)
+                return render(request , 'UserActivity.html',{'trips' : taken,'doggiok':'ok'})
+            else:
+                posted = Trip.objects.filter(dog_owner=usr)
+                return render(request , 'UserActivity.html',{'trips' : posted,'ownerok':'ok'})
     return render(request, 'admin_actions.html')
-
 
 class changeAccount(View):
 
