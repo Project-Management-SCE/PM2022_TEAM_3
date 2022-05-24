@@ -152,15 +152,10 @@ class TripForm(forms.ModelForm):
         time1 = datetime.combine(date1, time)
         timenow = datetime.combine(date1, datetime.now().time())
         duration = time1 - timenow
-<<<<<<< HEAD
         try:
             date2 = self.cleaned_data['date']
         except:
             raise forms.ValidationError("Please check the date")
-=======
-
-        date2 = self.cleaned_data['date']
->>>>>>> eb9c4d00169c421ff7f04b5b08c2b4b7c20ea676
         today = date.today()
         if (date2.month == today.month and date2.day == today.day):
             if (duration.days < 0):
