@@ -23,5 +23,6 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path('', include(('dog.urls', 'Adding'), namespace='dog')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 
 ]

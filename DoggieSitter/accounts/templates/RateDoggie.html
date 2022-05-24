@@ -1,16 +1,18 @@
 <!-- templates/registration/signup.html -->
 {% extends "base.html" %}
 {% load static %}
-
-{% block title %}All trips{% endblock %}
+{% load ratings %}
+{% block title %}Change Password{% endblock %}
 
 {% block content %}
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+    <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
 <style>
 .u-section-1 .u-image-1 {
   height: 550px;
@@ -23,10 +25,10 @@
   background: lightblue;
   border-radius: 25px;
   float: center;
-  width: 20%;
-  height: 180px;
+  width: 11%;
+  height: 100px;
   padding: 10px 15px;
-  margin-top: 70px;
+  margin-top: 50px;
   margin-left: 25px;
   opacity: .8;
 }
@@ -107,17 +109,15 @@
   {% if user.is_superuser %}          <!--  admin - logged in -->
     <div class="topnav">
       <a href="{% url 'home' %}">Home</a>
-      <a href="{% url 'addtrip' user.username %}">Add trip</a>
-      <a class="active" href="{% url 'alltrips' %}">Available trips</a>
-      <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
+      <a href="#news">Map</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="{% url 'Add' %}">Add user</a>
-      <a href="{% url 'Terms' %}">Terms</a>
+      <a href="{% url 'about' %}">Contact</a>
       <a href="{% url 'user_info' %}">User Info</a>
-      <a href="{% url 'about' %}">About & Contact</a>
+      <a href="{% url 'about' %}">About</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+      <a class="active" href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
 
@@ -125,11 +125,30 @@
 
     {% if not user.accounts.approved %}
       {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
-
+        <div class="topnav">
+          <a href="{% url 'home' %}">Home</a>
+          <a href="#news">Map</a>
+          <a href="{% url 'gallery' %}">Gallery</a>
+          <a href="{% url 'change_password' user.username %}">change password</a>
+          <a href="#news">Take a dog</a>
+          <a href="{% url 'about' %}">About & Contact</a>
+          <a class="active" href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+          <a href="{% url 'logout' %}">Log Out</a>
+        </div>
 
       {% else %}                                    <!--  dog owner -->
         {% if not user.is_superuser %}
-
+          <div class="topnav">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="#news">Map</a>
+            <a class="active" href="{% url 'Rate' user.username %}">Rate</a>
+            <a href="{% url 'gallery' %}">Gallery</a>
+            <a  href="{% url 'change_password' user.username %}">change password</a>
+            <a href="#news">Post new schedule</a>
+            <a href="{% url 'about' %}">About & Contact</a>
+            <a  href="{% url 'change_password' user.username %}">Change Personal Info.</a>
+            <a href="{% url 'logout' %}">Log Out</a>
+          </div>
         {% endif %}
     {% endif %}
 
@@ -137,17 +156,12 @@
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
       <div class="topnav">
         <a href="{% url 'home' %}">Home</a>
-        <a class="active" href="{% url 'alltrips' %}">Available trips</a>
-        <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
-        <a href="{% url 'vet_map' user.username %}">Vet' map</a>
-        <a href="{% url 'parks' user.username %}">Parks</a>
+        <a href="#news">Map</a>
         <a href="{% url 'gallery' %}">Gallery</a>
-        <a href="{% url 'change_password' user.username %}">change password</a>
-        <a href="{% url 'Feedback' %}">Add Feedback</a>
-        <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
-        <a href="{% url 'dogs' %}">Show dogs</a>
+<!--        <a  href="{% url 'change_password' user.username %}">change password</a>-->
+        <a href="#news">Take a dog</a>
         <a href="{% url 'about' %}">About & Contact</a>
-        <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+        <a class="active" href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
         <a href="{% url 'logout' %}">Log Out</a>
       </div>
     {% endif %}
@@ -155,29 +169,29 @@
 {% endif %}
 {% endif %}
 
-<center><h2><span style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">All available trips</span></h2></center><br><br><br>
-
-  {% for trip in trips %}
-  <form method="POST" action="{% url 'taketrip' trip.trip_id %}" >
-  {% csrf_token %}
-    {% if trip.is_taken == False %}
-      <span class="tab" style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">
-        Dog owner name: {{ trip.dog_owner }} <br>
-        Date: {{ trip.date }} <br>
-        Starting time: {{ trip.time }} <br>
-        End time: {{ trip.endtime }} <br>
-        Address for pickup: {{ trip.address }} <br>
-        Comments: {{ trip.comments }} <br>
-        Duration: {{ trip.duration }} <br>
-        Price: {{ trip.price }} <br>
-
-        <center><button style="color:blue" type="submit">View this trip</button></center>
-      </span>
-    {% endif %}
-  </form>
-  {% endfor %}
+<br><br>
 
 
+        <span style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">Rate a Doggie Sitter</span><br><br>
+
+  {% for us in acc %}
+  <span class="tab" style="background-color:white; opacity: .7">
+
+
+      DoggieSitter's  Name: {{ us.first_name }}<br>
+      {% ratings us%}
+
+  </span>
+{% endfor %}
+<center>
+
+    <div class="main">
+      <center>
+          <br>
+              <a class="w3-button w3-green w3-round-xlarge " href="{% url 'home' %}">Back to home</a>
+      </center>
+    </div>
+  </center>
 </body>
 </html>
 

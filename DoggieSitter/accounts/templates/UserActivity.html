@@ -18,17 +18,7 @@
   margin-right: 60%;
   padding-left:15px;
 }
-.main {
-  background: lightblue;
-  border-radius: 25px;
-  width: 24%;
-  height: 235px;
-  padding: 10px 15px;
-  margin-top: 50px;
 
-  opacity: .8;
-  text-align: center;
-}
 .clearfix{
     clear:both
 }
@@ -92,6 +82,10 @@
   background-color: #04AA6D;
   color: white;
 }
+.tab {
+    display: inline-block;
+    margin-left: 40px;
+}
 
 </style>
 </head>
@@ -107,32 +101,37 @@
       <a href="{% url 'Add' %}">Add user</a>
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
-      <a class="active" href="{% url 'admin_actions' %}">Admin Actions</a>
+      <a href="{% url 'admin_actions' %}">Admin Actions</a>
       <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
     {% endif %}
 {% endif %}
+
 <center>
-
-<h1><span style="background-color:white;">Admin Actions</span></h1><br>
-
-<div class="main">
-    <form action="{% url 'admin_actions' %}" method="POST">
-    {% csrf_token %}
-     <p>Choose Action for admin action and Activity for user Acitvity</p>
-     <input type="radio" id="html" name="adminac" value="info" checked="checked">
-     <label for="html">Action</label>
-     <input type="radio" id="css" name="adminac" value="activity">
-     <label for="css">Activity</label><br>
-
-    <label style="background:lightgray" for="id_search">Enter an id to search for a user:</label>
-    <input type="text" id="id_search" name="search_id"><br><br>
-    <button class="w3-button w3-green w3-round-xlarge " type="submit">Submit</button>
-</form>
-</div>
-
+    {% if doggiok%}
+    <h1><span style="background-color:white;">DoggieSitter Activity</span></h1><br>
+    {% else %}
+    <h1><span style="background-color:white;">Dog Owner Activity</span></h1><br>
+{%endif%}
+    {% if us == 'empty' %}
+        <h2><span style="background-color:red;">User not exist.<br>Please make sure you spelled the id correct.</span></h2><br>
+        <span style="background-color:yellow;"><a href="{% url 'admin_actions' %}">Try again</a></span><br>
+    {% else %}
+    {% endif %}
 </center>
+{% for trip in trips %}
+<div class="tab" style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">
+      Dog owner name: {{ trip.dog_owner }} <br>
+      Date: {{ trip.date }} <br>
+      Starting time: {{ trip.time }} <br>
+      End time: {{ trip.endtime }} <br>
+      Address for pickup: {{ trip.address }} <br>
+      Comments: {{ trip.comments }} <br>
+      Duration: {{ trip.duration }} <br>
+      Price: {{ trip.price }} <br>
+</div>
+ {% endfor%}
 </body>
 </html>
 
