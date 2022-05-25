@@ -23,7 +23,7 @@ pipeline {
 			dir("DoggieSitter") {
 			sh 'pip install coverage'
 			sh 'pip install django-admin-actions'
-			sh 'python manage.py flush --no-input'
+// 			sh 'python manage.py flush --no-input'
 			sh 'rm  -f -r /mymigrations'
 		 	sh 'pip install googlemaps'
 			sh 'pip install geopy'
