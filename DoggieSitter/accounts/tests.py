@@ -784,57 +784,6 @@ class APITest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TripTest(TestCase):
-    @tag('Unit-Test')
-    def test_AddTrip_VALID(self):
-        owner1 = User.objects.create(username='Boaz',
-                                     password='Bitton',
-                                     first_name='test',
-                                     last_name='unit', )
-        owner1.save()
-        owner = User.objects.get(username='Boaz')
-        form = {'trip_id': '100',
-                'dog_owner': owner,
-                'date': 'July 1 2022',
-                'time': '10:00',
-                'endtime': '12:00',
-                'address': 'dsfsdfsdf',
-                'comments': 'sdfdsfdsfsd',
-                'duration': '2',
-                'price': '100',
-                'doggiesitter': 'Boaz',
-                'is_taken': True,
-                'is_done': True
-                }
-        response = self.client.post(reverse('addtrip', kwargs={'usr': owner.username})
-                                    , data=form, follow=True)
-        self.assertEqual(response.context['ok?'], 'post!')
-
-
-class TripFuncTest(TestCase):
-    @tag('Unit-Test')
-    def test_dogs(self):
-        owner = User.objects.create(username='Boaz',
-                                    password='Bitton',
-                                    first_name='test',
-                                    last_name='unit', )
-        owner.save()
-        trip = Trip.objects.create(
-            trip_id=100,
-            dog_owner=owner.username,
-            time='10:00',
-            endtime='12:00',
-            address='dsfsdfsdf',
-            comments='sdfdsfdsfsd',
-            duration=2,
-            price=100,
-            doggiesitter='Boaz',
-            is_taken=True,
-            is_done=True
-        )
-        trip.save()
-        response = self.client.get(reverse('dogs'), data='', follow=True)
-        self.assertEqual(response.context['ok?'], 'yes')
 
 
     # def test_TakeTrip(self):
