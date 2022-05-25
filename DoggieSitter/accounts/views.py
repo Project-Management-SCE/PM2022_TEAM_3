@@ -294,6 +294,7 @@ def AddTrip(request, usr):
         trip = TripForm(request.POST)
         trips = Trip()
         if trip.is_valid():
+            trips.trip_id = Trip.objects.count() + 1
             trips.dog_owner = usr
             trips.date = trip.cleaned_data['date']
             trips.time = trip.cleaned_data['time']
@@ -354,11 +355,16 @@ def UpcomingTrips(request, usr):
 def RateDoggie(request, usr):
     list = []
     all = Trip.objects.filter(dog_owner=usr, is_done=True)
-    for i in all.iterator():
-        u = User.objects.get(username=i.doggiesitter)
-        a = Accounts.objects.get(user=u)
-        list.append(a)
-    return render(request, 'RateDoggie.html',{'acc': set(list), 'ok?':'ok'})
+    try:
+        for i in all.iterator():
+            u = User.objects.get(username=i.doggiesitter)
+            a = Accounts.objects.get(user=u)
+            list.append(a)
+        return render(request, 'RateDoggie.html', {'acc': set(list), 'ok?': 'ok'})
+    except:
+        return render(request, 'RateDoggie.html', {'ok?': 'ok'})
+
+
 
 
 def CheckPayment(request):

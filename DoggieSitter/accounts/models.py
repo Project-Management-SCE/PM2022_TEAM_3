@@ -76,7 +76,7 @@ class PostFeedback(models.Model):
 
 
 class Trip(models.Model):
-    trip_id = models.AutoField(primary_key=True)
+    trip_id = models.IntegerField(primary_key=True)
     dog_owner = models.CharField(max_length=50)
     date = models.DateField(default=date.today)
     time = models.TimeField(blank=False)
