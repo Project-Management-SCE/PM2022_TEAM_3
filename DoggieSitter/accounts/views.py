@@ -320,15 +320,15 @@ def AllTrips(request):
 
 
 def dogs(request):
-    all = Dog.objects.all()
-    return render(request, 'dogs.html', {'all': all})
+   all = Dog.objects.all()
+   return render(request, 'dogs.html', {'all': all,'ok?':'yes'})
 
 
 def TakeTrip(request, tr_id):
     if request.method == 'POST':
         trip = Trip.objects.get(trip_id=tr_id)
-        return render(request, 'taketrip.html', {'trip': trip})
-    return render(request, 'home.html')
+        return render(request, 'taketrip.html', {'trip': trip,'ok?':'post'})
+    return render(request, 'home.html',{'ok?':'get'})
 
 
 def DepositComplete(request):
