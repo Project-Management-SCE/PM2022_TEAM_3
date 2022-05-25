@@ -810,35 +810,7 @@ class TripTest(TestCase):
                                     , data=form, follow=True)
         self.assertEqual(response.context['ok?'], 'post!')
 
-    @tag('Unit-Test')
-    def test_AddTrip_NOTVALID(self):
-        owner1 = User.objects.create(username='Boaz',
-                                     password='Bitton',
-                                     first_name='test',
-                                     last_name='unit', )
-        owner1.save()
-        owner = User.objects.get(username='Boaz')
-        date = datetime.time(11, 00, 00)
-        form = {'trip_id': '100',
-                'dog_owner': owner,
-                'date': 'July 1 2022',
-                'time': '10:00',
-                'endtime': '12:00',
-                'address': 'dsfsdfsdf',
-                'comments': 'sdfdsfdsfsd',
-                'duration': '2',
-                'price': '100',
-                'doggiesitter': 'Boaz',
-                'is_taken': True,
-                'is_done': True
-                }
-        request = HttpRequest()
-        request.method = 'GET'
-        # response = views.AddTrip(request, owner.username)
-
-        response = self.client.get(reverse('addtrip', kwargs={'usr': owner.username}), data=form, follow=True)
-        print(response.status_code)
-        # self.assertEqual(response.context['ok?'],'post!')
+   
 
 
 class TripFuncTest(TestCase):
