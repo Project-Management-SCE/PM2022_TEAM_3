@@ -35,6 +35,7 @@ urlpatterns = [
     path("deposit_complete/", views.DepositComplete, name="deposit_complete/"),
     path("upcoming_trips/<usr>", views.UpcomingTrips, name="upcoming_trips"),
     path("RateDoggie/<usr>", views.RateDoggie, name="Rate"),
+    path("checkpayment/", views.CheckPayment, name="checkpayment"),
 
 
 ]

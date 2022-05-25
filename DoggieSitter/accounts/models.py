@@ -88,3 +88,9 @@ class Trip(models.Model):
     doggiesitter = models.TextField()
     is_taken = models.BooleanField(default=False, blank=True, null=True)
     is_done = models.BooleanField(default=False, blank=True, null=True)
+    payment = models.CharField(
+                                max_length=6,
+                                choices=[('cash', 'cash'), ('credit', 'credit')],
+                                blank=False,
+                                )
+    is_paid = models.BooleanField(default=False, blank=True, null=True)

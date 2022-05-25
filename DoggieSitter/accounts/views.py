@@ -289,6 +289,7 @@ def Parks(request, un):
 
 
 def AddTrip(request, usr):
+    print('-----------------------in-------------------------')
     if request.method == 'POST':
         trip = TripForm(request.POST)
         trips = Trip()
@@ -299,6 +300,7 @@ def AddTrip(request, usr):
             trips.endtime = trip.cleaned_data['endtime']
             trips.address = trip.cleaned_data['address']
             trips.comments = trip.cleaned_data['comments']
+            trips.payment = trip.cleaned_data['payment']
             date1 = date(1, 1, 1)
             endtime1 = datetime.combine(date1, trips.endtime)
             start1 = datetime.combine(date1, trips.time)
@@ -306,6 +308,8 @@ def AddTrip(request, usr):
             trips.duration = duration.seconds / 3600
             trips.price = trips.duration * 30
             trips.save()
+            if trips.payment == "credit":
+                return render(request, 'checkpayment.html', {'trip': trips, 'ok?': 'post!'})
             return render(request, 'home.html', {'ok?': 'post!'})
         else:
             return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
@@ -314,21 +318,23 @@ def AddTrip(request, usr):
         return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
 
 
+
+
 def AllTrips(request):
     trips = Trip.objects.all()
     return render(request, 'alltrips.html', {'trips': trips})
 
 
 def dogs(request):
-   all = Dog.objects.all()
-   return render(request, 'dogs.html', {'all': all,'ok?':'yes'})
+    all = Dog.objects.all()
+    return render(request, 'dogs.html', {'all': all, 'ok?': 'yes'})
 
 
 def TakeTrip(request, tr_id):
     if request.method == 'POST':
         trip = Trip.objects.get(trip_id=tr_id)
-        return render(request, 'taketrip.html', {'trip': trip,'ok?':'post'})
-    return render(request, 'home.html',{'ok?':'get'})
+        return render(request, 'taketrip.html', {'trip': trip, 'ok?': 'post'})
+    return render(request, 'home.html', {'ok?': 'get'})
 
 
 def DepositComplete(request):
@@ -337,9 +343,7 @@ def DepositComplete(request):
     trip.is_taken = True
     trip.doggiesitter = body['doggiesitter']
     trip.save()
-    print('BODY:', body)
     return render(request, 'taketrip.html', {'trip': trip})
-    # return JsonResponse('Deposit payment completed!', safe=False)
 
 
 def UpcomingTrips(request, usr):
@@ -355,3 +359,12 @@ def RateDoggie(request, usr):
         a = Accounts.objects.get(user=u)
         list.append(a)
     return render(request, 'RateDoggie.html',{'acc': set(list), 'ok?':'ok'})
+
+
+def CheckPayment(request):
+    print(json.loads(request.body))
+    body = json.loads(request.body)
+    trip = Trip.objects.get(trip_id=body['tripid'])
+    trip.is_paid = True
+    trip.save()
+    return render(request, 'home.html')

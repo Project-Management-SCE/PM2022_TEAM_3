@@ -132,7 +132,7 @@ class TermsForm(forms.ModelForm):
 class TripForm(forms.ModelForm):
     class Meta():
         model = Trip
-        fields = ('dog_owner', 'date', 'time', 'endtime', 'address', 'comments')
+        fields = ('dog_owner', 'date', 'time', 'endtime', 'address', 'comments', 'payment')
         widgets = {
             'date': SelectDateWidget(years=range(date.today().year, date.today().year + 1)),
             'time': forms.TimeInput(attrs={'type': 'time'}),
@@ -185,3 +185,7 @@ class TripForm(forms.ModelForm):
         if (duration.days < 0):
             raise forms.ValidationError("The end time must be after the starting time.")
         return endtime
+
+    def clean_payment(self):
+        payment = self.cleaned_data['payment']
+        return payment
