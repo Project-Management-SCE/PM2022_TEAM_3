@@ -6,11 +6,13 @@ from django.contrib.auth.models import User
 from . import models, views, admin, forms
 import re
 import datetime
-from accounts.models import Accounts, PostTerms
+from accounts.models import Accounts, PostTerms, Trip
 from accounts import forms
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponse
 from dog.models import Dog
+
+from .forms import TripForm
 
 
 class BasicTests(TestCase):
@@ -730,7 +732,7 @@ class FeedBackTest(TestCase):
 
 class APITest(TestCase):
     @tag('Hackaton')
-    def test_API(self):
+    def test_Vet_API(self):
         self.credentials = {
             'username': 'testuser',
             'password': 'userpassdskfldskf',
@@ -755,32 +757,175 @@ class APITest(TestCase):
         response = views.Vet_Map(request, self.acc)
         self.assertEqual(response.status_code, 200)
 
+    @tag('Unit-Test')
+    def test_Park_API(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(
+            user=self.user,
+            email='Bo@gmail.com',
+            phone_number='1234567890',
+            city='Dimona',
+            neighborhood='Bobo street',
+            street='Bobo street',
+            aprt='Bobo street',
+            is_doggiesitter=True
+        )
+        self.user.save()
+        self.acc.save()
+        request = HttpRequest()
+        request.method = 'GET'
+        response = views.Parks(request, self.acc)
+        self.assertEqual(response.status_code, 200)
 
-# class TermFormTest(TestCase):
-#     @tag('Hackaton')
-#     def test_form(self):
-#         self.credentials = {
-#             'username': 'testuser',
-#             'password': 'userpassdskfldskf',
-#             'first_name': 'test',
-#             'last_name': 'unit',
-#         }
-#         self.user = User.objects.create_user(**self.credentials)
-#         self.acc = Accounts.objects.create(
-#             user=self.user,
-#             email='Bo@gmail.com',
-#             phone_number='1234567890',
-#             city='Dimona',
-#             neighborhood='Bobo street',
-#             street='Bobo street',
-#             Aprt='Bobo street',
-#             is_doggiesitter=True
-#         )
-#         self.user.is_admin = True
-#         self.user.is_superuser = True
-#         self.user.is_staff = True
-#         self.user.save()
-#         self.acc.save()
-#         form = {'author': self.acc, 'title': 1, 'body': 'dskfhksdlfhji'}
-#         term_form = accounts.forms.TermsForm(form)
-#         self.assertTrue(term_form.is_valid())
+
+class TripTest(TestCase):
+    @tag('Unit-Test')
+    def test_AddTrip_VALID(self):
+        owner1 = User.objects.create(username='Boaz',
+                                     password='Bitton',
+                                     first_name='test',
+                                     last_name='unit', )
+        owner1.save()
+        owner = User.objects.get(username='Boaz')
+        form = {'trip_id': '100',
+                'dog_owner': owner,
+                'date': 'July 1 2022',
+                'time': '10:00',
+                'endtime': '12:00',
+                'address': 'dsfsdfsdf',
+                'comments': 'sdfdsfdsfsd',
+                'duration': '2',
+                'price': '100',
+                'doggiesitter': 'Boaz',
+                'is_taken': True,
+                'is_done': True
+                }
+        response = self.client.post(reverse('addtrip', kwargs={'usr': owner.username})
+                                    , data=form, follow=True)
+        self.assertEqual(response.context['ok?'], 'post!')
+
+    @tag('Unit-Test')
+    def test_AddTrip_NOTVALID(self):
+        owner1 = User.objects.create(username='Boaz',
+                                     password='Bitton',
+                                     first_name='test',
+                                     last_name='unit', )
+        owner1.save()
+        owner = User.objects.get(username='Boaz')
+        date = datetime.time(11, 00, 00)
+        form = {'trip_id': '100',
+                'dog_owner': owner,
+                'date': 'July 1 2022',
+                'time': '10:00',
+                'endtime': '12:00',
+                'address': 'dsfsdfsdf',
+                'comments': 'sdfdsfdsfsd',
+                'duration': '2',
+                'price': '100',
+                'doggiesitter': 'Boaz',
+                'is_taken': True,
+                'is_done': True
+                }
+        request = HttpRequest()
+        request.method = 'GET'
+        # response = views.AddTrip(request, owner.username)
+
+        response = self.client.get(reverse('addtrip', kwargs={'usr': owner.username}), data=form, follow=True)
+        print(response.status_code)
+        # self.assertEqual(response.context['ok?'],'post!')
+
+
+class TripFuncTest(TestCase):
+    @tag('Unit-Test')
+    def test_dogs(self):
+        owner = User.objects.create(username='Boaz',
+                                    password='Bitton',
+                                    first_name='test',
+                                    last_name='unit', )
+        owner.save()
+        trip = Trip.objects.create(
+            trip_id=100,
+            dog_owner=owner.username,
+            time='10:00',
+            endtime='12:00',
+            address='dsfsdfsdf',
+            comments='sdfdsfdsfsd',
+            duration=2,
+            price=100,
+            doggiesitter='Boaz',
+            is_taken=True,
+            is_done=True
+        )
+        trip.save()
+        response = self.client.get(reverse('dogs'), data='', follow=True)
+        self.assertEqual(response.context['ok?'], 'yes')
+
+
+    # def test_TakeTrip(self):
+    #     owner = User.objects.create(username='Boaz',
+    #                                 password='Bitton',
+    #                                 first_name='test',
+    #                                 last_name='unit', )
+    #     owner.save()
+    #     trip = Trip.objects.create(
+    #         trip_id=100,
+    #         dog_owner=owner.username,
+    #         time='10:00',
+    #         endtime='12:00',
+    #         address='dsfsdfsdf',
+    #         comments='sdfdsfdsfsd',
+    #         duration=2,
+    #         price=100,
+    #         doggiesitter='Boaz',
+    #         is_taken=True,
+    #         is_done=True
+    #     )
+    #     trip.save()
+    #     request = HttpRequest()
+    #     request.method = 'POST'
+    #     response = views.TakeTrip(request,trip.trip_id)
+        # response = self.client.post(reverse('taketrip', kwargs={'tr_id': str(trip.trip_id)}), data='', follow=True)
+        # print(response.status_code)
+        # self.assertEqual(response.context['ok?'], 'post')
+        # response = self.client.get(reverse('taketrip'), data='', follow=True)
+        # self.assertEqual(response.context['ok?'], 'post')
+
+
+
+
+
+
+        #class TermFormTest(TestCase):
+    #     @tag('Hackaton')
+    #     def test_form(self):
+    #         self.credentials = {
+    #             'username': 'testuser',
+    #             'password': 'userpassdskfldskf',
+    #             'first_name': 'test',
+    #             'last_name': 'unit',
+    #         }
+    #         self.user = User.objects.create_user(**self.credentials)
+    #         self.acc = Accounts.objects.create(
+    #             user=self.user,
+    #             email='Bo@gmail.com',
+    #             phone_number='1234567890',
+    #             city='Dimona',
+    #             neighborhood='Bobo street',
+    #             street='Bobo street',
+    #             Aprt='Bobo street',
+    #             is_doggiesitter=True
+    #         )
+    #         self.user.is_admin = True
+    #         self.user.is_superuser = True
+    #         self.user.is_staff = True
+    #         self.user.save()
+    #         self.acc.save()
+    #         form = {'author': self.acc, 'title': 1, 'body': 'dskfhksdlfhji'}
+    #         term_form = accounts.forms.TermsForm(form)
+    #         self.assertTrue(term_form.is_valid())
