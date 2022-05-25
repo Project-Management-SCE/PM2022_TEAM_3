@@ -810,8 +810,6 @@ class TripTest(TestCase):
                                     , data=form, follow=True)
         self.assertEqual(response.context['ok?'], 'post!')
 
-   
-
 
 class TripFuncTest(TestCase):
     @tag('Unit-Test')

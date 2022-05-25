@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,13 +82,30 @@ WSGI_APPLICATION = 'Dogisiter.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-x = str(BASE_DIR / "db.sqlite3")
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': x,
+# x = str(BASE_DIR / "db.sqlite3")
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': x,
+#     }
+# }
+
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "mydatabase"}
     }
-}
+else:
+    DATABASES = {
+            'default': {
+                'ENGINE': 'djongo',
+                'NAME': 'DoggieSitter',
+                'CLIENT': {
+                    'host': 'mongodb+srv://DoggieSitter:123456Ds@cluster0.ogted.mongodb.net/?retryWrites=true&w=majority'
+                }
+            }
+    }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
