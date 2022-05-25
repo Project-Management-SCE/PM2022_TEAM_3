@@ -28,7 +28,7 @@ pipeline {
 		 	sh 'pip install googlemaps'
 			sh 'pip install geopy'
 			sh 'pip install django_google_maps'
-			sh 'pip install django-star-ratings'	
+// 			sh 'pip install django-star-ratings'	
 			sh 'python manage.py makemigrations'
 			sh 'python manage.py migrate'
 			
