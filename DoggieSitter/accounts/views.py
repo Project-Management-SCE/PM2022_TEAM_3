@@ -73,19 +73,23 @@ def SearchUserByID(request):
             usr = us[0].user.username
             if us[0].is_doggiesitter:
                 taken = Trip.objects.filter(doggiesitter=usr)
-                return render(request , 'UserActivity.html',{'trips' : taken,'doggiok':'ok'})
+                return render(request, 'UserActivity.html', {'trips': taken, 'doggiok': 'ok'})
             else:
                 posted = Trip.objects.filter(dog_owner=usr)
-                return render(request , 'UserActivity.html',{'trips' : posted,'ownerok':'ok'})
+                return render(request, 'UserActivity.html', {'trips': posted, 'ownerok': 'ok'})
     return render(request, 'admin_actions.html')
+
 
 class changeAccount(View):
 
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        account = Accounts.objects.get(user=user)
-        form = AccountChangeForm(instance=account)
-        return render(request, 'change.html', {'form_user': form, 'ok?': 'yes!'})
+        if not user.is_superuser:
+            account = Accounts.objects.get(user=user)
+            form = AccountChangeForm(instance=account)
+            return render(request, 'change.html', {'form_user': form, 'ok?': 'yes!'})
+        else:
+            return render(request, 'home.html', {'ok?': 'yes!'})
 
     def post(self, request, user_id):
         form = AccountChangeForm(request.POST)
@@ -319,8 +323,6 @@ def AddTrip(request, usr):
         return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
 
 
-
-
 def AllTrips(request):
     trips = Trip.objects.all()
     return render(request, 'alltrips.html', {'trips': trips})
@@ -343,18 +345,20 @@ def DepositComplete(request):
     trip = Trip.objects.get(trip_id=body['tripid'])
     trip.is_taken = True
     trip.doggiesitter = body['doggiesitter']
+    trip.duration = trip.duration.to_decimal()
+    trip.price = trip.price.to_decimal()
     trip.save()
     return render(request, 'taketrip.html', {'trip': trip})
 
 
 def UpcomingTrips(request, usr):
-    trips = Trip.objects.filter(doggiesitter=usr,is_done = False)
+    trips = Trip.objects.filter(doggiesitter=usr, is_done__in=[False])
     return render(request, 'upcoming_trips.html', {'trips': trips})
 
 
 def RateDoggie(request, usr):
     list = []
-    all = Trip.objects.filter(dog_owner=usr, is_done=True)
+    all = Trip.objects.filter(dog_owner=usr, is_done__in=[True])
     try:
         for i in all.iterator():
             u = User.objects.get(username=i.doggiesitter)
@@ -363,8 +367,6 @@ def RateDoggie(request, usr):
         return render(request, 'RateDoggie.html', {'acc': set(list), 'ok?': 'ok'})
     except:
         return render(request, 'RateDoggie.html', {'ok?': 'ok'})
-
-
 
 
 def CheckPayment(request):
