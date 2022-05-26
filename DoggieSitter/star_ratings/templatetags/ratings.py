@@ -46,7 +46,7 @@ def ratings(context, item, icon_height=app_settings.STAR_RATINGS_STAR_HEIGHT, ic
         'user_rating_percentage': user_rating_percentage,
         'stars': stars,
         'star_count': app_settings.STAR_RATINGS_RANGE,
-        'percentage': 100 * (rating.average / Decimal(app_settings.STAR_RATINGS_RANGE)),
+        'percentage': 100 * (rating.average / app_settings.STAR_RATINGS_RANGE),
         'icon_height': icon_height,
         'icon_width': icon_width,
         'sprite_width': icon_width * 3,

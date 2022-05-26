@@ -76,7 +76,7 @@ class AbstractBaseRating(models.Model):
     """
     count = models.PositiveIntegerField(default=0)
     total = models.PositiveIntegerField(default=0)
-    average = models.DecimalField(max_digits=6, decimal_places=3, default=Decimal(0.0))
+    average = models.FloatField(default=Decimal(0.0))
     content_type = models.ForeignKey(ContentType, null=True, blank=True, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey()

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
 from datetime import date
 from django.urls import reverse
+from dog.models import Dog
 
 
 
@@ -49,7 +50,7 @@ class Accounts(models.Model):
 
 class PostTerms(models.Model):
     author = models.TextField()
-    title = models.IntegerField()
+    title = models.IntegerField(primary_key=True)
     body = models.TextField()
 
 
@@ -78,6 +79,7 @@ class PostFeedback(models.Model):
 class Trip(models.Model):
     trip_id = models.IntegerField(primary_key=True)
     dog_owner = models.CharField(max_length=50)
+    dog = models.CharField(max_length=50)
     date = models.DateField(default=date.today)
     time = models.TimeField(blank=False)
     endtime = models.TimeField(blank=False)

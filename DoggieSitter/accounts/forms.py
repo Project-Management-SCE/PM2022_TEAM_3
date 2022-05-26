@@ -68,7 +68,8 @@ class AccountsProfileForm(forms.ModelForm):
         return email
     def clean_city(self):
         city = self.cleaned_data['city']
-        if not city.isalpha():
+        city1 = city.replace(" ", "")
+        if not city1.isalpha():
             raise forms.ValidationError("City must contain letters only")
         if len(city) < 2:
             raise forms.ValidationError("City must be at least 2 letters long.")
@@ -132,7 +133,7 @@ class TermsForm(forms.ModelForm):
 class TripForm(forms.ModelForm):
     class Meta():
         model = Trip
-        fields = ('dog_owner', 'date', 'time', 'endtime', 'address', 'comments', 'payment')
+        fields = ('date', 'time', 'endtime', 'address', 'comments', 'payment')
         widgets = {
             'date': SelectDateWidget(years=range(date.today().year, date.today().year + 1)),
             'time': forms.TimeInput(attrs={'type': 'time'}),

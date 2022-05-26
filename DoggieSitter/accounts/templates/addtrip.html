@@ -132,9 +132,15 @@
         <form method="POST" action="{% url 'addtrip' user.username %}" >
             <div class="te">
                 <h1 class="t"><b>Add Trip</b></h1>
-                    <br>
+
                     {% csrf_token %}
+                     Dog <select name="item_id">
+                        {% for entry in result %}
+                           <option value="{{ entry }}">{{ entry }}</option>
+                        {% endfor %}
+                        </select>
                     {% for field in trip %}
+
                     <p>
                         {% if field.label == 'Payment' %}
                             <br>In order to place the trip you have to choose one of the payment options below.<br><br>

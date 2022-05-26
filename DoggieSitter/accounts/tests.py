@@ -693,7 +693,7 @@ class Admin_test(TestCase):
 
 
 class DogAccountTest(TestCase):
-    @tag('Hackaton')
+    @tag('x')
     def test_AddDog_GET(self):
         self.credentials = {
             'username': 'testuser',
@@ -702,7 +702,7 @@ class DogAccountTest(TestCase):
             'last_name': 'unit',
         }
         self.user = User.objects.create_user(**self.credentials)
-        response = self.client.get(reverse('DogPage', kwargs={'user_id': self.user.id}), follow=True)
+        response = self.client.get(reverse('DogPage', kwargs={'user_id': self.user.username}), follow=True)
         self.assertEqual(response.context['ok?'], 'yes!')
 
 

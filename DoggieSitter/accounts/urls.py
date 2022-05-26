@@ -29,6 +29,7 @@ urlpatterns = [
     path('parks/<un>', views.Parks, name="parks"),
     path('DogPage/<user_id>', views.DogPage.as_view(), name='DogPage'),
     path("addtrip/<usr>", views.AddTrip, name="addtrip"),
+    path("takentrip/<usr>", views.TakenTrips, name="taken"),
     path("alltrips/", views.AllTrips, name="alltrips"),
     path("taketrip/<tr_id>", views.TakeTrip, name="taketrip"),
     path('dogs', views.dogs, name="dogs"),
