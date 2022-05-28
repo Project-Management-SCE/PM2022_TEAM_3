@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Change Password{% endblock %}
+{% block title %}Change Personal Info{% endblock %}
 
 {% block content %}
 
@@ -137,7 +137,6 @@
             <a href="#news">Map</a>
             <a href="{% url 'gallery' %}">Gallery</a>
             <a href="{% url 'change_password' user.username %}">change password</a>
-            <a href="#news">Post new schedule</a>
             <a href="{% url 'about' %}">About & Contact</a>
             <a class="active" href="{% url 'change_password' user.username %}">Change Personal Info.</a>
             <a href="{% url 'logout' %}">Log Out</a>

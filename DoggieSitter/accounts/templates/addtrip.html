@@ -111,7 +111,6 @@
             <a href="{% url 'change_password' user.username %}">change password</a>
             <a href="{% url 'Feedback' %}">Add Feedback</a>
             <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
-            <a href="#news">Post new schedule</a>
             <a href="{% url 'about' %}">About & Contact</a>
             <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
             <a href="{% url 'logout' %}">Log Out</a>
@@ -132,15 +131,9 @@
         <form method="POST" action="{% url 'addtrip' user.username %}" >
             <div class="te">
                 <h1 class="t"><b>Add Trip</b></h1>
-
+                    <br>
                     {% csrf_token %}
-                     Dog <select name="item_id">
-                        {% for entry in result %}
-                           <option value="{{ entry }}">{{ entry }}</option>
-                        {% endfor %}
-                        </select>
                     {% for field in trip %}
-
                     <p>
                         {% if field.label == 'Payment' %}
                             <br>In order to place the trip you have to choose one of the payment options below.<br><br>
