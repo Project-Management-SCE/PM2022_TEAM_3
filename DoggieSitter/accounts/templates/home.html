@@ -75,7 +75,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 /* Change the color of links on hover */
@@ -110,11 +110,10 @@
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
-    <span style="background-color:lightblue; opacity: .7; border:3px solid #ccc; font:26px/26px Georgia, Garamond, Serif;">
     <br>
+    <span style="background-color:lightblue; opacity: .7; border:3px solid #ccc; font:26px/26px Georgia, Garamond, Serif;">
       Hi admin
     </span>
 
@@ -124,17 +123,16 @@
       {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
         <div class="topnav">
           <a class="active" href="{% url 'home' %}">Home</a>
-          <a href="#news">Map</a>
           <a href="{% url 'gallery' %}">Gallery</a>
           <a href="{% url 'change_password' user.username %}">change password</a>
-          <a href="#news">Take a dog</a>
           <a href="{% url 'about' %}">About & Contact</a>
-          <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+          <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
           <a href="{% url 'logout' %}">Log Out</a>
         </div>
 
+          <br><br>
           <h2><span style="background-color:white; opacity: .7; border:3px solid #ccc; font:26px/26px Georgia, Garamond, Serif;">
-            <br><br><br><br>Thank you for your goodwill to join our DoggieSitters family <br>
+            Thank you for your goodwill to join our DoggieSitters family <br>
             We need to verify you in our system before you can start working with us. We promise that it will not take so long time. <br>
             Thank you for your patience.
           </span></h2>
@@ -144,14 +142,15 @@
           <div class="topnav">
             <a class="active" href="{% url 'home' %}">Home</a>
             <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'taken' user.username %}">Taken trips</a>
+            <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
             <a href="{% url 'DogPage' user.id %}">Dog Page</a>
             <a href="{% url 'gallery' %}">Gallery</a>
             <a href="{% url 'change_password' user.username %}">change password</a>
             <a href="{% url 'Feedback' %}">Add Feedback</a>
             <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
-            <a href="#news">Post new schedule</a>
             <a href="{% url 'about' %}">About & Contact</a>
-            <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+            <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
             <a href="{% url 'logout' %}">Log Out</a>
           </div>
         {% endif %}
@@ -169,9 +168,8 @@
         <a href="{% url 'change_password' user.username %}">change password</a>
         <a href="{% url 'Feedback' %}">Add Feedback</a>
         <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
-        <a href="{% url 'dogs' %}">Show dogs</a>
         <a href="{% url 'about' %}">About & Contact</a>
-        <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+        <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
         <a href="{% url 'logout' %}">Log Out</a>
       </div>
 
@@ -203,5 +201,10 @@
         <span class="btn w3-button w3-green w3-round-xlarge"><a href="{% url 'signup' %}">Sign Up</a></span>
     </section>
 {% endif %}
+  {% if not user.accounts.is_doggiesitter and user.is_authenticated and not user.is_superuser%}
+  <div>
+
+  </div>
+  {% endif %}
 </body>
 {% endblock %}

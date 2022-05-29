@@ -1,17 +1,19 @@
 import django.db.models
+from bson import Decimal128
 from django.test import TestCase, tag, Client
 import json
 from django.contrib.auth.models import User
-from django import forms
-import accounts.forms
+
 from . import models, views, admin, forms
 import re
 import datetime
-from accounts.models import Accounts, PostTerms
+from accounts.models import Accounts, PostTerms, Trip
 from accounts import forms
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponse
 from dog.models import Dog
+
+from .forms import TripForm
 
 
 class BasicTests(TestCase):
@@ -61,14 +63,6 @@ class BasicTests(TestCase):
         self.assertTrue(len(acc.phone_number) == 10, 'Check ID is 10 digits long1')
         acc.phone_number = '052620370'
         self.assertFalse(len(acc.phone_number) == 10, 'Check ID is 10 digits long2')
-
-    # @tag('Unit-Test')
-    # def test_address(self):
-    #     acc = models.Accounts()
-    #     acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
-    #     self.assertFalse(len(acc.address) <= 50, 'Check name is less than 50 digits long1')
-    #     acc.address = 'One Apple Park Way, Cupertino, CA 95014, United States'
-    #     self.assertTrue(len(acc.address) > 50, 'Check name is less than 50 digits long2')
 
 
 class BaseTest(TestCase):
@@ -375,15 +369,14 @@ class View_test(TestCase):
             'id': '123456789',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobostreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         response = self.client.post(reverse('signup'), request.POST, follow=True)
         self.assertEqual(response.status_code, 200)
-        # self.assertTemplateUsed(response,'home.html')
 
     @tag('Unit-Test')
     def test_SearchUserByID_POST(self):
@@ -580,10 +573,10 @@ class View_test(TestCase):
             'id': '123456789',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobotreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         post = PostTerms(author='Nadav', title=1, body='Hello World')
@@ -612,10 +605,10 @@ class View_test(TestCase):
             'password2': '123456Bb',
             'email': 'Bo@gmail.com',
             'phone_number': '1234567890',
-            'city': 'Bobo street',
+            'city': 'Bobostreet',
             'neighborhood': 'Bobo street',
             'street': 'Bobo street',
-            'Aprt': 'Bobo street',
+            'aprt': 'Bobo street',
             'is_doggiesitter': False
         }
         post = PostTerms(author='Nadav', title=1, body='Hello World')
@@ -691,20 +684,6 @@ class Admin_test(TestCase):
         self.assertEqual(response.context['result'], 'Doggiesitter was successfully approved.')
 
 
-class DogAccountTest(TestCase):
-    @tag('Hackaton')
-    def test_AddDog_GET(self):
-        self.credentials = {
-            'username': 'testuser',
-            'password': 'userpassdskfldskf',
-            'first_name': 'test',
-            'last_name': 'unit',
-        }
-        self.user = User.objects.create_user(**self.credentials)
-        response = self.client.get(reverse('DogPage', kwargs={'user_id': self.user.id}), follow=True)
-        self.assertEqual(response.context['ok?'], 'yes!')
-
-
 class FeedBackTest(TestCase):
     @tag('Hackaton')
     def test_FeedBack_POST(self):
@@ -731,7 +710,7 @@ class FeedBackTest(TestCase):
 
 class APITest(TestCase):
     @tag('Hackaton')
-    def test_API(self):
+    def test_Vet_API(self):
         self.credentials = {
             'username': 'testuser',
             'password': 'userpassdskfldskf',
@@ -746,7 +725,7 @@ class APITest(TestCase):
             city='Dimona',
             neighborhood='Bobo street',
             street='Bobo street',
-            Aprt='Bobo street',
+            aprt='Bobo street',
             is_doggiesitter=True
         )
         self.user.save()
@@ -756,32 +735,144 @@ class APITest(TestCase):
         response = views.Vet_Map(request, self.acc)
         self.assertEqual(response.status_code, 200)
 
+    @tag('Unit-Test')
+    def test_Park_API(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.acc = Accounts.objects.create(
+            user=self.user,
+            email='Bo@gmail.com',
+            phone_number='1234567890',
+            city='Dimona',
+            neighborhood='Bobo street',
+            street='Bobo street',
+            aprt='Bobo street',
+            is_doggiesitter=True
+        )
+        self.user.save()
+        self.acc.save()
+        request = HttpRequest()
+        request.method = 'GET'
+        response = views.Parks(request, self.acc)
+        self.assertEqual(response.status_code, 200)
 
-# class TermFormTest(TestCase):
-#     @tag('Hackaton')
-#     def test_form(self):
-#         self.credentials = {
-#             'username': 'testuser',
-#             'password': 'userpassdskfldskf',
-#             'first_name': 'test',
-#             'last_name': 'unit',
-#         }
-#         self.user = User.objects.create_user(**self.credentials)
-#         self.acc = Accounts.objects.create(
-#             user=self.user,
-#             email='Bo@gmail.com',
-#             phone_number='1234567890',
-#             city='Dimona',
-#             neighborhood='Bobo street',
-#             street='Bobo street',
-#             Aprt='Bobo street',
-#             is_doggiesitter=True
-#         )
-#         self.user.is_admin = True
-#         self.user.is_superuser = True
-#         self.user.is_staff = True
-#         self.user.save()
-#         self.acc.save()
-#         form = {'author': self.acc, 'title': 1, 'body': 'dskfhksdlfhji'}
-#         term_form = accounts.forms.TermsForm(form)
-#         self.assertTrue(term_form.is_valid())
+
+class DogAccountTest(TestCase):
+    @tag('Unit-Test')
+    def test_AddDog_GET(self):
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'userpassdskfldskf',
+            'first_name': 'test',
+            'last_name': 'unit',
+        }
+        self.user = User.objects.create_user(**self.credentials)
+        self.user.save()
+        check = User.objects.get(username='testuser')
+        response = self.client.get(reverse('DogPage', kwargs={'user_id': check.id}), data="", follow=True)
+        self.assertEqual(response.context['ok?'], 'yes!')
+
+
+class AddnTakeTripTest(TestCase):
+    @tag('Integration-test')
+    def test_AddnTake_POST(self):
+        self.credentials = {
+            'username': 'owner',
+            'password': 'ownerpass',
+            'first_name': 'owner',
+            'last_name': 'dog',
+        }
+        self.user1 = User.objects.create_user(**self.credentials)
+        self.acc1 = Accounts.objects.create(
+            user=self.user1,
+            email='Bo@gmail.com',
+            phone_number='1234567890',
+            city='Dimona',
+            neighborhood='Bobo street',
+            street='Bobo street',
+            aprt='Bobo street',
+            is_doggiesitter=False
+        )
+        self.user1.save()
+        self.acc1.save()
+        form = {
+            'item_id': 'barak',
+            'date': 'July 1 2023',
+            'time': '10:00:00',
+            'endtime': '12:00:00',
+            'address': 'gordon 5 beersheva',
+            'comments': 'sakldjaslkdjlaskdjsla',
+            'payment': 'cash'
+        }
+        dog = Dog.objects.create(
+                owner=self.user1,
+                name='barak',
+                age='14',
+                gender='male',
+                race='pizzi',
+                size=' small',
+                hobby='love to bark',
+                med='headach pills'
+            )
+        dog.save()
+        response1 = self.client.post(reverse('addtrip', kwargs={'usr': self.user1.username}), data=form, follow=True)
+        self.assertEqual(response1.context['ok?'], 'post!')
+        trip = Trip.objects.get(trip_id=1)
+        response2 = self.client.post(reverse('taketrip', kwargs={'tr_id': str(trip.trip_id)}), follow=True)
+        self.assertEqual(response2.context['ok?'], 'post')
+
+class TakenDone(TestCase):
+    @tag('Integration-test')
+    def test_takeNdone(self):
+        self.credentials = {
+            'username': 'owner',
+            'password': 'ownerpass',
+            'first_name': 'owner',
+            'last_name': 'dog',
+        }
+        self.user1 = User.objects.create_user(**self.credentials)
+        self.acc1 = Accounts.objects.create(
+            user=self.user1,
+            email='Bo@gmail.com',
+            phone_number='1234567890',
+            city='Dimona',
+            neighborhood='Bobo street',
+            street='Bobo street',
+            aprt='Bobo street',
+            is_doggiesitter=False
+        )
+        self.user1.save()
+        self.acc1.save()
+        form = {
+            'item_id': 'barak',
+            'date': 'July 1 2023',
+            'time': '10:00:00',
+            'endtime': '12:00:00',
+            'address': 'gordon 5 beersheva',
+            'comments': 'sakldjaslkdjlaskdjsla',
+            'payment': 'cash'
+        }
+        dog = Dog.objects.create(
+                owner=self.user1,
+                name='barak',
+                age='14',
+                gender='male',
+                race='pizzi',
+                size=' small',
+                hobby='love to bark',
+                med='headach pills'
+            )
+        dog.save()
+        response1 = self.client.post(reverse('addtrip', kwargs={'usr': self.user1.username}), data=form, follow=True)
+        self.assertEqual(response1.context['ok?'], 'post!')
+        trip = Trip.objects.get(trip_id=1)
+        trip.is_done= True
+        response2 = self.client.post(reverse('taketrip', kwargs={'tr_id': str(trip.trip_id)}), follow=True)
+        self.assertEqual(response2.context['ok?'], 'post')
+        trip.duration = Decimal128(trip.duration)
+        self.assertTrue(trip.is_done)

@@ -82,7 +82,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 /* Change the color of links on hover */
 .topnav a:hover {
@@ -117,7 +117,6 @@
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
 
@@ -145,9 +144,8 @@
         <a href="{% url 'change_password' user.username %}">change password</a>
         <a href="{% url 'Feedback' %}">Add Feedback</a>
         <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
-        <a href="{% url 'dogs' %}">Show dogs</a>
         <a href="{% url 'about' %}">About & Contact</a>
-        <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+        <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
         <a href="{% url 'logout' %}">Log Out</a>
       </div>
     {% endif %}
@@ -170,7 +168,6 @@
         Comments: {{ trip.comments }} <br>
         Duration: {{ trip.duration }} <br>
         Price: {{ trip.price }} <br>
-
         <center><button style="color:blue" type="submit">View this trip</button></center>
       </span>
     {% endif %}

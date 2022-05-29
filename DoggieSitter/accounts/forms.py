@@ -68,7 +68,8 @@ class AccountsProfileForm(forms.ModelForm):
         return email
     def clean_city(self):
         city = self.cleaned_data['city']
-        if not city.isalpha():
+        city1 = city.replace(" ", "")
+        if not city1.isalpha():
             raise forms.ValidationError("City must contain letters only")
         if len(city) < 2:
             raise forms.ValidationError("City must be at least 2 letters long.")
@@ -132,7 +133,7 @@ class TermsForm(forms.ModelForm):
 class TripForm(forms.ModelForm):
     class Meta():
         model = Trip
-        fields = ('dog_owner', 'date', 'time', 'endtime', 'address', 'comments')
+        fields = ('date', 'time', 'endtime', 'address', 'comments', 'payment')
         widgets = {
             'date': SelectDateWidget(years=range(date.today().year, date.today().year + 1)),
             'time': forms.TimeInput(attrs={'type': 'time'}),
@@ -152,8 +153,10 @@ class TripForm(forms.ModelForm):
         time1 = datetime.combine(date1, time)
         timenow = datetime.combine(date1, datetime.now().time())
         duration = time1 - timenow
-
-        date2 = self.cleaned_data['date']
+        try:
+            date2 = self.cleaned_data['date']
+        except:
+            raise forms.ValidationError("Please check the date")
         today = date.today()
         if (date2.month == today.month and date2.day == today.day):
             if (duration.days < 0):
@@ -183,3 +186,7 @@ class TripForm(forms.ModelForm):
         if (duration.days < 0):
             raise forms.ValidationError("The end time must be after the starting time.")
         return endtime
+
+    def clean_payment(self):
+        payment = self.cleaned_data['payment']
+        return payment

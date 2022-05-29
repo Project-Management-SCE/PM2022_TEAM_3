@@ -59,7 +59,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 /* Change the color of links on hover */
@@ -80,7 +80,9 @@
         {% if user.is_superuser %}          <!--  admin - logged in -->
             <div class="topnav">
               <a href="{% url 'home' %}">Home</a>
-              <a href="#news">Map</a>
+              <a href="{% url 'addtrip' user.username %}">Add trip</a>
+              <a href="{% url 'alltrips' %}">Available trips</a>
+              <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
               <a href="{% url 'gallery' %}">Gallery</a>
               <a href="{% url 'change_password' user.username %}">change password</a>
               <a href="{% url 'Add' %}">Add user</a>
@@ -88,15 +90,13 @@
               <a href="{% url 'user_info' %}">User Info</a>
               <a href="{% url 'about' %}">About & Contact</a>
               <a href="{% url 'admin_actions' %}">Admin Actions</a>
-              <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
               <a href="{% url 'logout' %}">Log Out</a>
             </div>
         {% endif %}
     {% endif %}
     <form action="Terms" method="POST">
         {% csrf_token %}
-        <div class="rectangle "></div>
-        <div class="rectangle1"></div>
+
         <center>
             <br>
             <div class="te">
@@ -118,8 +118,6 @@
     </form>
 
     <br><br><br>
-    <div class="rectangle1"></div>
-    <div class="rectangle "></div>
 </body>
 </html>
 

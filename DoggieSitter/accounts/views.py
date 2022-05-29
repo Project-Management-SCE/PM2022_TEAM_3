@@ -26,8 +26,10 @@ class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('password_success')
 
+
 def password_success(request):
     return render(request, 'password_success.html', {})
+
 
 def SignUpView(request):
     pt = PostTerms.objects.all()
@@ -46,24 +48,35 @@ def SignUpView(request):
             return redirect("home")
         else:
             return render(request, 'registration/signup.html',
-                              {'form': form, 'profile_form': profile_form, 'pt': pt, 'error': "Bad Data Please Try Again"})
+                          {'form': form, 'profile_form': profile_form, 'pt': pt, 'error': "Bad Data Please Try Again"})
     else:
         form = ExtendedUserCreationForm()
         profile_form = AccountsProfileForm()
     context = {'form': form, 'profile_form': profile_form, 'error': "Bad Data Please Try Again", 'pt': pt}
     return render(request, 'registration/signup.html', context)
 
+
 def GetAccounts(request):
     acc = Accounts.objects.all()
     usr = User.objects.all()
     return render(request, 'user_info.html', {'acc': acc, 'usr': usr})
 
+
 def SearchUserByID(request):
     if request.method == 'POST':
         us = Accounts.objects.filter(id=request.POST.get("search_id"))
-        if(len(us) == 0):
+        if (len(us) == 0):
             return render(request, 'search_result.html', {'us': 'empty'})
-        return render(request, 'search_result.html', {'us': us})
+        if request.POST.get('adminac') == 'info':
+            return render(request, 'search_result.html', {'us': us})
+        else:
+            usr = us[0].user.username
+            if us[0].is_doggiesitter:
+                taken = Trip.objects.filter(doggiesitter=usr)
+                return render(request, 'UserActivity.html', {'trips': taken, 'doggiok': 'ok'})
+            else:
+                posted = Trip.objects.filter(dog_owner=usr)
+                return render(request, 'UserActivity.html', {'trips': posted, 'ownerok': 'ok'})
     return render(request, 'admin_actions.html')
 
 
@@ -71,9 +84,12 @@ class changeAccount(View):
 
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        account = Accounts.objects.get(user=user)
-        form = AccountChangeForm(instance=account)
-        return render(request, 'change.html', {'form_user': form, 'ok?': 'yes!'})
+        if not user.is_superuser:
+            account = Accounts.objects.get(user=user)
+            form = AccountChangeForm(instance=account)
+            return render(request, 'change.html', {'form_user': form, 'ok?': 'yes!'})
+        else:
+            return render(request, 'home.html', {'ok?': 'yes!'})
 
     def post(self, request, user_id):
         form = AccountChangeForm(request.POST)
@@ -91,10 +107,13 @@ class changeAccount(View):
 def GetUsername(request, un):
     user = User.objects.get(username=un)
     return render(request, 'change_password.html', {'user': user})
-def go_home(request,temp):
-    return render(request,temp)
-def ChangePassword(request):
 
+
+def go_home(request, temp):
+    return render(request, temp)
+
+
+def ChangePassword(request):
     user = User.objects.get(username=request.POST.get("user_n"))
     if request.POST.get("new_pass1") == request.POST.get("new_pass2"):
         try:
@@ -113,7 +132,9 @@ def Terms(request):
     if request.method == 'POST' and not term_form.is_valid():
         try:
             post = PostTerms.objects.get(title=request.POST.get("title_name"))
-        except:
+            print('-----------------------------------', post)
+        except Exception as e:
+            print("***********************************************", e)
             post = PostTerms()
             post.body = request.POST.get("body_name")
             post.author = request.POST.get("author_name")
@@ -121,10 +142,11 @@ def Terms(request):
             post.save()
             return render(request, 'home.html')
 
+        post.title = request.POST.get("title_name")
         post.body = request.POST.get("body_name")
         post.author = request.POST.get("author_name")
         post.save()
-        return render(request, 'home.html',{'Term': 'Try Worked'})
+        return render(request, 'home.html', {'Term': 'Try Worked'})
     else:
         pt = PostTerms.objects.all()
         return render(request, 'Terms.html', {'pt': pt})
@@ -154,6 +176,8 @@ def Add(request):
 
 
 def Vet_Map(request, un):
+    check = User.objects.get(username= un)
+    check2 = Accounts.objects.get(user = check)
     API_KEY = "AIzaSyA1NSKaMXW4cC5k9RB8dtOqlfZq9v7FNHc"
     map_client = googlemaps.Client(API_KEY)
     app = Nominatim(user_agent="tutorial")
@@ -163,6 +187,7 @@ def Vet_Map(request, un):
 
     for i in Accounts.objects.all():
         if str(i) == str(un):
+
             user = Accounts.objects.get(id=i.id)
             location_name += user.city
             location = app.geocode("Israel, " + str(user.city)).raw
@@ -178,7 +203,6 @@ def Vet_Map(request, un):
 
     # pprint(results)
 
-
     location_data = []
     for i in results:
         location_data.append(i['geometry']['location'])
@@ -192,7 +216,8 @@ def Vet_Map(request, un):
         except:
             pass
 
-    return render(request, 'vet_map.html', {'location_data': location_data, 'city': city,'ok?':'yes!'})
+    return render(request, 'vet_map.html', {'location_data': location_data, 'city': city, 'ok?': 'yes!'})
+
 
 def Feedback(request):
     if request.method == 'POST':
@@ -202,19 +227,20 @@ def Feedback(request):
         post.about = request.POST.get("about_id")
         post.type = request.POST.get("type")
         post.save()
-        return render(request, 'home.html',{'ok?': 'post!'})
+        return render(request, 'home.html', {'ok?': 'post!'})
     else:
         pt = PostFeedback.objects.all()
-        return render(request, 'Feedback.html', {'pt': pt,'ok?': 'get!'})
+        return render(request, 'Feedback.html', {'pt': pt, 'ok?': 'get!'})
+
 
 class ShowFeedback(ListView):
     model = PostFeedback
-    template_name =  'ShowFeedback.html'
+    template_name = 'ShowFeedback.html'
+
 
 class DogPage(View):
     def get(self, request, user_id):
-        user = User.objects.get(pk=user_id)
-        all = Dog.objects.all()
+        user = User.objects.get(id=user_id)
         mydog = Dog.objects.filter(owner=user).order_by('name')
         return render(request, 'DogPage.html', {'dogs': mydog, 'ok?': 'yes!'})
 
@@ -262,7 +288,8 @@ def Parks(request, un):
         except:
             pass
         try:
-            (location_data[location_data.index(i['geometry']['location'])])['formatted_address'] = i['formatted_address']
+            (location_data[location_data.index(i['geometry']['location'])])['formatted_address'] = i[
+                'formatted_address']
         except:
             pass
 
@@ -270,17 +297,20 @@ def Parks(request, un):
 
 
 def AddTrip(request, usr):
+    print('-----------------------in-------------------------')
     if request.method == 'POST':
         trip = TripForm(request.POST)
         trips = Trip()
         if trip.is_valid():
+            trips.trip_id = Trip.objects.count() + 1
             trips.dog_owner = usr
+            trips.dog = request.POST.get('item_id')
             trips.date = trip.cleaned_data['date']
             trips.time = trip.cleaned_data['time']
             trips.endtime = trip.cleaned_data['endtime']
             trips.address = trip.cleaned_data['address']
             trips.comments = trip.cleaned_data['comments']
-
+            trips.payment = trip.cleaned_data['payment']
             date1 = date(1, 1, 1)
             endtime1 = datetime.combine(date1, trips.endtime)
             start1 = datetime.combine(date1, trips.time)
@@ -288,12 +318,19 @@ def AddTrip(request, usr):
             trips.duration = duration.seconds / 3600
             trips.price = trips.duration * 30
             trips.save()
+            if trips.payment == "credit":
+                return render(request, 'checkpayment.html', {'trip': trips, 'ok?': 'post!'})
             return render(request, 'home.html', {'ok?': 'post!'})
         else:
             return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
     else:
+        own = User.objects.get(username=usr)
+        dogs = Dog.objects.filter(owner=own).values()
+        result = [dog['name'] for dog in dogs]
         trip = TripForm()
-        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!'})
+        trip.dog = result
+        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!','result': result })
+
 
 def AllTrips(request):
     trips = Trip.objects.all()
@@ -301,26 +338,67 @@ def AllTrips(request):
 
 
 def dogs(request):
-   all = Dog.objects.all()
-   return render(request, 'dogs.html', {'all': all})
+    all = Dog.objects.all()
+    return render(request, 'dogs.html', {'all': all, 'ok?': 'yes'})
 
 
 def TakeTrip(request, tr_id):
     if request.method == 'POST':
         trip = Trip.objects.get(trip_id=tr_id)
-        return render(request, 'taketrip.html', {'trip': trip})
-    return render(request, 'home.html')
+        return render(request, 'taketrip.html', {'trip': trip, 'ok?': 'post'})
+    return render(request, 'home.html', {'ok?': 'get'})
+
 
 def DepositComplete(request):
     body = json.loads(request.body)
     trip = Trip.objects.get(trip_id=body['tripid'])
     trip.is_taken = True
     trip.doggiesitter = body['doggiesitter']
+    trip.duration = trip.duration.to_decimal()
+    trip.price = trip.price.to_decimal()
     trip.save()
-    print('BODY:', body)
     return render(request, 'taketrip.html', {'trip': trip})
-    # return JsonResponse('Deposit payment completed!', safe=False)
+
 
 def UpcomingTrips(request, usr):
-    trips = Trip.objects.filter(doggiesitter=usr)
+    trips = Trip.objects.filter(doggiesitter=usr, is_done__in=[False])
     return render(request, 'upcoming_trips.html', {'trips': trips})
+
+
+def RateDoggie(request, usr):
+    list = []
+    all = Trip.objects.filter(dog_owner=usr, is_done__in=[True])
+    print(all)
+    for i in all.iterator():
+        u = User.objects.get(username=i.doggiesitter)
+        a = Accounts.objects.get(user=u)
+        list.append(a)
+    print(list, 'here')
+    return render(request, 'RateDoggie.html', {'acc': set(list), 'ok': 'ok'})
+
+
+def CheckPayment(request):
+    print(json.loads(request.body))
+    body = json.loads(request.body)
+    trip = Trip.objects.get(trip_id=body['tripid'])
+    trip.is_paid = True
+    trip.save()
+    return render(request, 'home.html')
+
+
+def TakenTrips(request, usr):
+    trips = Trip.objects.filter(dog_owner=usr)
+    if(request.method == 'POST'):
+        if 'done' in request.POST:
+            print("checked")
+            print(request.POST.get('done'))
+            trip = Trip.objects.get(trip_id =request.POST.get('done') )
+            trip.is_done = True
+            trip.duration = trip.duration.to_decimal()
+            trip.price = trip.price.to_decimal()
+            trip.save()
+            return render(request, 'home.html')
+        else:
+            return render(request , 'TakenTrips.html',{'trips' : trips})
+    else:
+        return render(request , 'TakenTrips.html',{'trips' : trips})
