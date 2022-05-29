@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Dogs Page{% endblock %}
+{% block title %}My Dogs{% endblock %}
 
 {% block content %}
 
@@ -82,7 +82,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 /* Change the color of links on hover */
 .topnav a:hover {
@@ -123,29 +123,21 @@
 
     {% if not user.accounts.approved %}
       {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
-        <div class="topnav">
-          <a class="active" href="{% url 'home' %}">Home</a>
-          <a href="#news">Map</a>
-          <a href="{% url 'gallery' %}">Gallery</a>
-          <a href="{% url 'change_password' user.username %}">change password</a>
-          <a href="#news">Take a dog</a>
-          <a href="{% url 'about' %}">About & Contact</a>
-          <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
-          <a href="{% url 'logout' %}">Log Out</a>
-        </div>
 
       {% else %}                                    <!--  dog owner -->
         {% if not user.is_superuser %}
           <div class="topnav">
-            <a class="active" href="{% url 'home' %}">Home</a>
-            <a href="#news">Map</a>
-            <a href="{% url 'DogPage' user.id %}">Dog Page</a>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'taken' user.username %}">Taken trips</a>
+            <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
+            <a class="active" href="{% url 'DogPage' user.id %}">Dog Page</a>
             <a href="{% url 'gallery' %}">Gallery</a>
             <a href="{% url 'change_password' user.username %}">change password</a>
             <a href="{% url 'Feedback' %}">Add Feedback</a>
             <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
             <a href="{% url 'about' %}">About & Contact</a>
-            <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+            <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
             <a href="{% url 'logout' %}">Log Out</a>
           </div>
         {% endif %}
@@ -153,19 +145,7 @@
 
   {% else %}
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
-    <div class="topnav">
-      <a class="active" href="{% url 'home' %}">Home</a>
-      <a href="#news">Map</a>
-      <a href="{% url 'gallery' %}">Gallery</a>
-      <a href="{% url 'change_password' user.username %}">change password</a>
-      <a href="{% url 'Add' %}">Add user</a>
-      <a href="{% url 'Terms' %}">Terms</a>
-      <a href="{% url 'user_info' %}">User Info</a>
-      <a href="{% url 'about' %}">About & Contact</a>
-      <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
-      <a href="{% url 'logout' %}">Log Out</a>
-    </div>
+
     {% endif %}
   {% endif %}
 {% endif %}

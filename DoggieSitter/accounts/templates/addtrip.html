@@ -59,7 +59,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 /* Change the color of links on hover */
@@ -91,7 +91,6 @@
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
 
@@ -106,13 +105,15 @@
           <div class="topnav">
             <a href="{% url 'home' %}">Home</a>
             <a class="active" href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'taken' user.username %}">Taken trips</a>
+            <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
             <a href="{% url 'DogPage' user.id %}">Dog Page</a>
             <a href="{% url 'gallery' %}">Gallery</a>
             <a href="{% url 'change_password' user.username %}">change password</a>
             <a href="{% url 'Feedback' %}">Add Feedback</a>
             <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
             <a href="{% url 'about' %}">About & Contact</a>
-            <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+            <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
             <a href="{% url 'logout' %}">Log Out</a>
           </div>
         {% endif %}
@@ -131,9 +132,15 @@
         <form method="POST" action="{% url 'addtrip' user.username %}" >
             <div class="te">
                 <h1 class="t"><b>Add Trip</b></h1>
-                    <br>
+
                     {% csrf_token %}
+                     Dog <select name="item_id">
+                        {% for entry in result %}
+                           <option value="{{ entry }}">{{ entry }}</option>
+                        {% endfor %}
+                        </select>
                     {% for field in trip %}
+
                     <p>
                         {% if field.label == 'Payment' %}
                             <br>In order to place the trip you have to choose one of the payment options below.<br><br>

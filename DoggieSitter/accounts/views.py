@@ -104,7 +104,6 @@ class changeAccount(View):
             return render(request, 'home.html', {'ok?': 'form is valid!'})
         return render(request, 'change.html', {'form_user': form, 'ok?': 'form is not valid!'})
 
-
 def GetUsername(request, un):
     user = User.objects.get(username=un)
     return render(request, 'change_password.html', {'user': user})
@@ -133,7 +132,9 @@ def Terms(request):
     if request.method == 'POST' and not term_form.is_valid():
         try:
             post = PostTerms.objects.get(title=request.POST.get("title_name"))
+            print('-----------------------------------', post)
         except Exception as e:
+            print("***********************************************", e)
             post = PostTerms()
             post.body = request.POST.get("body_name")
             post.author = request.POST.get("author_name")
@@ -175,8 +176,8 @@ def Add(request):
 
 
 def Vet_Map(request, un):
-    check = User.objects.get(username=un)
-    check2 = Accounts.objects.get(user=check)
+    check = User.objects.get(username= un)
+    check2 = Accounts.objects.get(user = check)
     API_KEY = "AIzaSyA1NSKaMXW4cC5k9RB8dtOqlfZq9v7FNHc"
     map_client = googlemaps.Client(API_KEY)
     app = Nominatim(user_agent="tutorial")
@@ -186,6 +187,7 @@ def Vet_Map(request, un):
 
     for i in Accounts.objects.all():
         if str(i) == str(un):
+
             user = Accounts.objects.get(id=i.id)
             location_name += user.city
             location = app.geocode("Israel, " + str(user.city)).raw
@@ -327,7 +329,7 @@ def AddTrip(request, usr):
         result = [dog['name'] for dog in dogs]
         trip = TripForm()
         trip.dog = result
-        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!', 'result': result})
+        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!','result': result })
 
 
 def AllTrips(request):
@@ -343,9 +345,7 @@ def dogs(request):
 def TakeTrip(request, tr_id):
     if request.method == 'POST':
         trip = Trip.objects.get(trip_id=tr_id)
-        own = User.objects.get(username=trip.dog_owner)
-        dog = Dog.objects.get(owner=own, name=trip.dog)
-        return render(request, 'taketrip.html', {'trip': trip, 'dog': dog, 'ok?': 'post'})
+        return render(request, 'taketrip.html', {'trip': trip, 'ok?': 'post'})
     return render(request, 'home.html', {'ok?': 'get'})
 
 
@@ -373,6 +373,7 @@ def RateDoggie(request, usr):
         u = User.objects.get(username=i.doggiesitter)
         a = Accounts.objects.get(user=u)
         list.append(a)
+    print(list, 'here')
     return render(request, 'RateDoggie.html', {'acc': set(list), 'ok': 'ok'})
 
 
@@ -387,16 +388,17 @@ def CheckPayment(request):
 
 def TakenTrips(request, usr):
     trips = Trip.objects.filter(dog_owner=usr)
-    if (request.method == 'POST'):
+    if(request.method == 'POST'):
         if 'done' in request.POST:
-            trip = Trip.objects.get(trip_id=request.POST.get('done'))
+            print("checked")
+            print(request.POST.get('done'))
+            trip = Trip.objects.get(trip_id =request.POST.get('done') )
             trip.is_done = True
-            trip.is_paid = True
             trip.duration = trip.duration.to_decimal()
             trip.price = trip.price.to_decimal()
             trip.save()
             return render(request, 'home.html')
         else:
-            return render(request, 'TakenTrips.html', {'trips': trips})
+            return render(request , 'TakenTrips.html',{'trips' : trips})
     else:
-        return render(request, 'TakenTrips.html', {'trips': trips})
+        return render(request , 'TakenTrips.html',{'trips' : trips})

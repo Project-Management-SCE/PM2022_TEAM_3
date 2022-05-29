@@ -90,7 +90,7 @@ html {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 /* Change the color of links on hover */
@@ -113,14 +113,16 @@ html {
   {% if user.is_superuser %}          <!--  admin - logged in -->
     <div class="topnav">
       <a href="{% url 'home' %}">Home</a>
-      <a href="#news">Map</a>
+      <a href="{% url 'addtrip' user.username %}">Add trip</a>
+      <a href="{% url 'alltrips' %}">Available trips</a>
+      <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="{% url 'Add' %}">Add user</a>
+      <a href="{% url 'Terms' %}">Terms</a>
       <a href="{% url 'user_info' %}">User Info</a>
-      <a class="active" href="{% url 'about' %}">About us & Contact</a>
+      <a class="active" href="{% url 'about' %}">About & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
 
@@ -130,12 +132,10 @@ html {
       {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
         <div class="topnav">
           <a href="{% url 'home' %}">Home</a>
-          <a href="#news">Map</a>
           <a href="{% url 'gallery' %}">Gallery</a>
           <a href="{% url 'change_password' user.username %}">change password</a>
-          <a href="#news">Take a dog</a>
           <a class="active" href="{% url 'about' %}">About & Contact</a>
-          <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+          <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
           <a href="{% url 'logout' %}">Log Out</a>
         </div>
 
@@ -143,11 +143,16 @@ html {
         {% if not user.is_superuser %}
           <div class="topnav">
             <a href="{% url 'home' %}">Home</a>
-            <a href="#news">Map</a>
+            <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'taken' user.username %}">Taken trips</a>
+            <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
+            <a href="{% url 'DogPage' user.id %}">Dog Page</a>
             <a href="{% url 'gallery' %}">Gallery</a>
             <a href="{% url 'change_password' user.username %}">change password</a>
+            <a href="{% url 'Feedback' %}">Add Feedback</a>
+            <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
             <a class="active" href="{% url 'about' %}">About & Contact</a>
-            <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+            <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
             <a href="{% url 'logout' %}">Log Out</a>
           </div>
         {% endif %}
@@ -157,12 +162,16 @@ html {
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
       <div class="topnav">
         <a href="{% url 'home' %}">Home</a>
-        <a href="#news">Map</a>
+        <a href="{% url 'alltrips' %}">Available trips</a>
+        <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
+        <a href="{% url 'vet_map' user.username %}">Vet' map</a>
+        <a href="{% url 'parks' user.username %}">Parks</a>
         <a href="{% url 'gallery' %}">Gallery</a>
         <a href="{% url 'change_password' user.username %}">change password</a>
-        <a href="#news">Take a dog</a>
+        <a href="{% url 'Feedback' %}">Add Feedback</a>
+        <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
         <a class="active" href="{% url 'about' %}">About & Contact</a>
-        <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
+        <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
         <a href="{% url 'logout' %}">Log Out</a>
       </div>
     {% endif %}

@@ -1,4 +1,5 @@
 import django.db.models
+from bson import Decimal128
 from django.test import TestCase, tag, Client
 import json
 from django.contrib.auth.models import User
@@ -779,7 +780,7 @@ class DogAccountTest(TestCase):
 
 class AddnTakeTripTest(TestCase):
     @tag('Integration-test')
-    def test_AddnTake(self):
+    def test_AddnTake_POST(self):
         self.credentials = {
             'username': 'owner',
             'password': 'ownerpass',
@@ -808,8 +809,7 @@ class AddnTakeTripTest(TestCase):
             'comments': 'sakldjaslkdjlaskdjsla',
             'payment': 'cash'
         }
-        dog = Dog.objects.create \
-                (
+        dog = Dog.objects.create(
                 owner=self.user1,
                 name='barak',
                 age='14',
@@ -825,6 +825,54 @@ class AddnTakeTripTest(TestCase):
         trip = Trip.objects.get(trip_id=1)
         response2 = self.client.post(reverse('taketrip', kwargs={'tr_id': str(trip.trip_id)}), follow=True)
         self.assertEqual(response2.context['ok?'], 'post')
+
 class TakenDone(TestCase):
-    def test_chekc(self):
-        pass
+    @tag('Integration-test')
+    def test_takeNdone(self):
+        self.credentials = {
+            'username': 'owner',
+            'password': 'ownerpass',
+            'first_name': 'owner',
+            'last_name': 'dog',
+        }
+        self.user1 = User.objects.create_user(**self.credentials)
+        self.acc1 = Accounts.objects.create(
+            user=self.user1,
+            email='Bo@gmail.com',
+            phone_number='1234567890',
+            city='Dimona',
+            neighborhood='Bobo street',
+            street='Bobo street',
+            aprt='Bobo street',
+            is_doggiesitter=False
+        )
+        self.user1.save()
+        self.acc1.save()
+        form = {
+            'item_id': 'barak',
+            'date': 'July 1 2023',
+            'time': '10:00:00',
+            'endtime': '12:00:00',
+            'address': 'gordon 5 beersheva',
+            'comments': 'sakldjaslkdjlaskdjsla',
+            'payment': 'cash'
+        }
+        dog = Dog.objects.create(
+                owner=self.user1,
+                name='barak',
+                age='14',
+                gender='male',
+                race='pizzi',
+                size=' small',
+                hobby='love to bark',
+                med='headach pills'
+            )
+        dog.save()
+        response1 = self.client.post(reverse('addtrip', kwargs={'usr': self.user1.username}), data=form, follow=True)
+        self.assertEqual(response1.context['ok?'], 'post!')
+        trip = Trip.objects.get(trip_id=1)
+        trip.is_done= True
+        response2 = self.client.post(reverse('taketrip', kwargs={'tr_id': str(trip.trip_id)}), follow=True)
+        self.assertEqual(response2.context['ok?'], 'post')
+        trip.duration = Decimal128(trip.duration)
+        self.assertTrue(trip.is_done)
