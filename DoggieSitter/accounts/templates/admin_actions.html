@@ -18,7 +18,17 @@
   margin-right: 60%;
   padding-left:15px;
 }
+.main {
+  background: lightblue;
+  border-radius: 25px;
+  width: 24%;
+  height: 235px;
+  padding: 10px 15px;
+  margin-top: 50px;
 
+  opacity: .8;
+  text-align: center;
+}
 .clearfix{
     clear:both
 }
@@ -70,7 +80,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 /* Change the color of links on hover */
 .topnav a:hover {
@@ -91,14 +101,16 @@
   {% if user.is_superuser %}          <!--  admin - logged in -->
     <div class="topnav">
       <a href="{% url 'home' %}">Home</a>
-      <a href="#news">Map</a>
+      <a href="{% url 'addtrip' user.username %}">Add trip</a>
+      <a href="{% url 'alltrips' %}">Available trips</a>
+      <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="{% url 'Add' %}">Add user</a>
+      <a href="{% url 'Terms' %}">Terms</a>
       <a href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a class="active" href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
     {% endif %}
@@ -107,12 +119,20 @@
 
 <h1><span style="background-color:white;">Admin Actions</span></h1><br>
 
-<form action="{% url 'admin_actions' %}" method="POST">
+<div class="main">
+    <form action="{% url 'admin_actions' %}" method="POST">
     {% csrf_token %}
+     <p>Choose Action for admin action and Activity for user Acitvity</p>
+     <input type="radio" id="html" name="adminac" value="info" checked="checked">
+     <label for="html">Action</label>
+     <input type="radio" id="css" name="adminac" value="activity">
+     <label for="css">Activity</label><br>
+
     <label style="background:lightgray" for="id_search">Enter an id to search for a user:</label>
     <input type="text" id="id_search" name="search_id"><br><br>
-    <button style="color:blue" type="submit">Submit</button>
+    <button class="w3-button w3-green w3-round-xlarge " type="submit">Submit</button>
 </form>
+</div>
 
 </center>
 </body>
