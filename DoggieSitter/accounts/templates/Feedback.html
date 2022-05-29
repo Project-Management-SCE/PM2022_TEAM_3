@@ -1,5 +1,10 @@
+{% extends "base.html" %}
 {% load static %}
+
+{% block title %}Write Feedback{% endblock %}
+
 {% block content %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,18 +15,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
-    .rectangle {
-        width: 1520px;
-        height: 50px;
-        background: #EAAD16;
-    }
-
-    .rectangle1 {
-        width: 1520px;
-        height: 30px;
-        background: #CD853F;
-    }
-
     .t{
         font-size: 30px;
         color: #000000
@@ -59,7 +52,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 
 /* Change the color of links on hover */
@@ -76,10 +69,46 @@
 
 </style>
 <body class="b">
+
+    {% if user.is_authenticated %}
+      {% if user.accounts.is_doggiesitter and user.accounts.approved %}          <!--  approved doggiesitter -->
+        <div class="topnav">
+          <a href="{% url 'home' %}">Home</a>
+          <a href="{% url 'alltrips' user.username %}">Available trips</a>
+          <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
+          <a href="{% url 'vet_map' user.username %}">Vet' map</a>
+          <a href="{% url 'parks' user.username %}">Parks</a>
+          <a href="{% url 'gallery' %}">Gallery</a>
+          <a href="{% url 'change_password' user.username %}">change password</a>
+          <a class="active" href="{% url 'Feedback' %}">Add Feedback</a>
+          <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
+          <a href="{% url 'about' %}">About & Contact</a>
+          <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
+          <a href="{% url 'logout' %}">Log Out</a>
+      </div>
+      {% endif %}
+
+      {% if not user.accounts.is_doggiesitter  %}                   <!--  dog owner -->
+        <div class="topnav">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'alltrips' user.username %}">My trips</a>
+            <a href="{% url 'taken' user.username %}">Taken trips</a>
+            <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
+            <a href="{% url 'DogPage' user.id %}">Dog Page</a>
+            <a href="{% url 'gallery' %}">Gallery</a>
+            <a href="{% url 'change_password' user.username %}">change password</a>
+            <a class="active" href="{% url 'Feedback' %}">Add Feedback</a>
+            <a href="{% url 'ShowFeedback' %}">Show Feedback</a>
+            <a href="{% url 'about' %}">About & Contact</a>
+            <a href="{% url 'changeinfo' user.id %}">Change My Info.</a>
+            <a href="{% url 'logout' %}">Log Out</a>
+          </div>
+      {% endif %}
+  {% endif %}
+
     <form action="Feedback" method="POST">
         {% csrf_token %}
-        <div class="rectangle "></div>
-        <div class="rectangle1"></div>
         <center>
             <br>
             <div class="te">
@@ -109,8 +138,6 @@
     </form>
 
     <br><br><br>
-    <div class="rectangle1"></div>
-    <div class="rectangle "></div>
 </body>
 </html>
 

@@ -17,6 +17,7 @@ class AddDog(View):
         if form.is_valid():
             user = User.objects.get(pk=user_id)
             tempdog1 = Dog.objects.create(
+                # dog_id = Dog.objects.count() + 1,
                 owner=user,
                 name=form.cleaned_data['name'],
                 age=form.cleaned_data['age'],
@@ -26,7 +27,10 @@ class AddDog(View):
                 hobby=form.cleaned_data['hobby'],
                 med=form.cleaned_data['med']
             )
-            tempdog1.save()
+            try:
+                tempdog1.save()
+            except:
+                pass
             return render(request, 'home.html', {'ok?': 'form is valid!'})
         return render(request, 'AddDog.html', {'form_user': form, 'ok?': 'form is not valid!'})
 

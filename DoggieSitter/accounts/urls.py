@@ -2,9 +2,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 from . import views, admin
-from .views import PasswordsChangeView
-from .views import Terms, Add, Feedback, ShowFeedback
-from dog.views import AddDog
+from .views import ShowFeedback
 
 
 urlpatterns = [
@@ -28,8 +26,17 @@ urlpatterns = [
     path('vet_map/<un>', views.Vet_Map, name="vet_map"),
     path('parks/<un>', views.Parks, name="parks"),
     path('DogPage/<user_id>', views.DogPage.as_view(), name='DogPage'),
-    path("addtrip/<usr>", views.AddTrip, name="addtrip"),
-    path("alltrips/", views.AllTrips, name="alltrips"),
+    path("addtrip/<str:usr>", views.AddTrip, name="addtrip"),
+    path("takentrip/<usr>", views.TakenTrips, name="taken"),
+    path("alltrips/<usr>", views.AllTrips, name="alltrips"),
+    path("taketrip/<tr_id>", views.TakeTrip, name="taketrip"),
     path('dogs', views.dogs, name="dogs"),
+    path("deposit_complete/", views.DepositComplete, name="deposit_complete/"),
+    path("upcoming_trips/<usr>", views.UpcomingTrips, name="upcoming_trips"),
+    path("RateDoggie/<usr>", views.RateDoggie, name="Rate"),
+    path("checkpayment/", views.CheckPayment, name="checkpayment"),
+    path("doggie_request/", views.DoggieRequest, name="doggie_request"),
+    path("deleteDog/<usr> <name>", views.DeleteDog, name="deleteDog"),
+    path("deletetrip/<tr_id> <usr>", views.DeleteTrip, name="deletetrip"),
 
 ]

@@ -70,7 +70,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 /* Change the color of links on hover */
 .topnav a:hover {
@@ -91,7 +91,11 @@
   {% if user.is_superuser %}          <!--  admin - logged in -->
     <div class="topnav">
       <a href="{% url 'home' %}">Home</a>
-      <a href="#news">Map</a>
+      <a href="{% url 'DogPage' user.id %}">Dog Page</a>
+      <a href="{% url 'addtrip' user.username %}">Add trip</a>
+      <a href="{% url 'alltrips' user.username %}">My Trips</a>
+      <a href="{% url 'taken' user.username %}">Taken trips</a>
+      <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="{% url 'Add' %}">Add user</a>
@@ -99,7 +103,6 @@
       <a class="active" href="{% url 'user_info' %}">User Info</a>
       <a href="{% url 'about' %}">About & Contact</a>
       <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
     {% endif %}
@@ -115,6 +118,7 @@
         <th>Last Name</th>
         <th>Mail</th>
         <th>Phone Number</th>
+        <th>Address</th>
         <th>Date of Birth</th>
         <th>ID</th>
         <th>Approved / Not Approved</th>
@@ -127,6 +131,7 @@
                     <td>{{ us.last_name }}</td>
                     <td>{{ us.email }}</td>
                     <td>{{ us.phone_number }}</td>
+                    <td>{{ us.city }}, {{ us.neighborhood }}</td>
                     <td>{{ us.date_of_birth }}</td>
                     <td>{{ us.id }}</td>
                     <td>{{ us.approved }}</td>
@@ -143,6 +148,7 @@
         <th>Last Name</th>
         <th>Mail</th>
         <th>Phone Number</th>
+        <th>Address</th>
         <th>Date of Birth</th>
         <th>ID</th>
         <th>Admin</th>
@@ -155,6 +161,7 @@
                 <td>{{ us.last_name }}</td>
                 <td>{{ us.email }}</td>
                 <td>{{ us.phone_number }}</td>
+                <td>{{ us.city }}, {{ us.neighborhood }}</td>
                 <td>{{ us.date_of_birth }}</td>
                 <td>{{ us.id }}</td>
                 <td>{{ us.is_admin }}</td>
