@@ -74,7 +74,7 @@
       {% if user.accounts.is_doggiesitter and user.accounts.approved %}          <!--  approved doggiesitter -->
         <div class="topnav">
           <a href="{% url 'home' %}">Home</a>
-          <a href="{% url 'alltrips' %}">Available trips</a>
+          <a href="{% url 'alltrips' user.username %}">Available trips</a>
           <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
           <a href="{% url 'vet_map' user.username %}">Vet' map</a>
           <a href="{% url 'parks' user.username %}">Parks</a>
@@ -92,6 +92,7 @@
         <div class="topnav">
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'alltrips' user.username %}">My trips</a>
             <a href="{% url 'taken' user.username %}">Taken trips</a>
             <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
             <a href="{% url 'DogPage' user.id %}">Dog Page</a>

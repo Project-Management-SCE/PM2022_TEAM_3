@@ -876,3 +876,50 @@ class TakenDone(TestCase):
         self.assertEqual(response2.context['ok?'], 'post')
         trip.duration = Decimal128(trip.duration)
         self.assertTrue(trip.is_done)
+
+
+class Sprint3Tests(TestCase):
+    @tag('x')
+    def test_UpcomingTrips(self):
+        def test_takeNdone(self):
+            self.credentials = {
+                'username': 'owner',
+                'password': 'ownerpass',
+                'first_name': 'owner',
+                'last_name': 'dog',
+            }
+            self.user1 = User.objects.create_user(**self.credentials)
+            self.acc1 = Accounts.objects.create(
+                user=self.user1,
+                email='Bo@gmail.com',
+                phone_number='1234567890',
+                city='Dimona',
+                neighborhood='Bobo street',
+                street='Bobo street',
+                aprt='Bobo street',
+                is_doggiesitter=False
+            )
+            self.user1.save()
+            self.acc1.save()
+            form = {
+                'item_id': 'barak',
+                'date': 'July 1 2023',
+                'time': '10:00:00',
+                'endtime': '12:00:00',
+                'address': 'gordon 5 beersheva',
+                'comments': 'sakldjaslkdjlaskdjsla',
+                'payment': 'cash'
+            }
+            dog = Dog.objects.create(
+                owner=self.user1,
+                name='barak',
+                age='14',
+                gender='male',
+                race='pizzi',
+                size=' small',
+                hobby='love to bark',
+                med='headach pills'
+            )
+            dog.save()
+            response1 = self.client.post(reverse('addtrip', kwargs={'usr': self.user1.username}), data=form,follow=True)
+            response2 = self.client.post(reverse('upcoming_trips', kwargs={'usr': self.user1.username}), data="",follow=True)

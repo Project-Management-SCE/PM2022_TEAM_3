@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
 from datetime import date
 from django.urls import reverse
-from dog.models import Dog
 
 
 
@@ -93,6 +92,7 @@ class Trip(models.Model):
     payment = models.CharField(
                                 max_length=6,
                                 choices=[('cash', 'cash'), ('credit', 'credit')],
+                                default='cash',
                                 blank=False,
                                 )
     is_paid = models.BooleanField(default=False, blank=True, null=True)

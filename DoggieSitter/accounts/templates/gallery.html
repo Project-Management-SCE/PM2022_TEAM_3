@@ -57,11 +57,13 @@ div.desc {
 <body>
 {% if user.is_authenticated %}
   {% if user.is_superuser %}          <!--  admin - logged in -->
-    <div class="topnav">
+<div class="topnav">
       <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'DogPage' user.id %}">Dog Page</a>
       <a href="{% url 'addtrip' user.username %}">Add trip</a>
-      <a href="{% url 'alltrips' %}">Available trips</a>
-      <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
+      <a href="{% url 'alltrips' user.username %}">My Trips</a>
+      <a href="{% url 'taken' user.username %}">Taken trips</a>
+      <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
       <a class="active" href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="{% url 'Add' %}">Add user</a>
@@ -90,6 +92,7 @@ div.desc {
           <div class="topnav">
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'alltrips' user.username %}">My trips</a>
             <a href="{% url 'taken' user.username %}">Taken trips</a>
             <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
             <a href="{% url 'DogPage' user.id %}">Dog Page</a>
@@ -108,7 +111,7 @@ div.desc {
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
       <div class="topnav">
         <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'alltrips' %}">Available trips</a>
+        <a href="{% url 'alltrips' user.username %}">Available trips</a>
         <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
         <a href="{% url 'vet_map' user.username %}">Vet' map</a>
         <a href="{% url 'parks' user.username %}">Parks</a>
