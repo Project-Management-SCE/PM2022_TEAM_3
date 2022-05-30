@@ -24,7 +24,7 @@
   border-radius: 25px;
   float: center;
   width: 25%;
-  height: 385px;
+  height: auto;
   padding: 10px 15px;
   margin-top: 70px;
   margin-left: 25px;
@@ -132,6 +132,7 @@
           <div class="topnav">
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'alltrips' user.username %}">My trips</a>
             <a href="{% url 'taken' user.username %}">Taken trips</a>
             <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
             <a href="{% url 'DogPage' user.id %}">Dog Page</a>
@@ -150,7 +151,7 @@
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
       <div class="topnav">
         <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'alltrips' %}">Available trips</a>
+        <a href="{% url 'alltrips' user.username %}">Available trips</a>
         <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
         <a href="{% url 'vet_map' user.username %}">Vet' map</a>
         <a href="{% url 'parks' user.username %}">Parks</a>
@@ -172,7 +173,16 @@
         <h1><span >Change Information</span></h1><br>
           <form action="" method="post">
               {% csrf_token %}
-              {{form_user.as_p}}
+              {% for field in form_user %}
+                <p>
+                  {{ field.label_tag }}
+                  {{ field }}
+
+                  {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                  {% endfor %}
+                </p>
+              {% endfor %}
               <button class="w3-button w3-green w3-round-xlarge " type="submit">SUBMIT</button>
               <a class="w3-button w3-green w3-round-xlarge " href="{% url 'home' %}">Back to home</a>
           </form>

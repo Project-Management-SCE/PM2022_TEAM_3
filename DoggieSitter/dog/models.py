@@ -6,8 +6,9 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Dog(models.Model):
+
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(validators=[MinLengthValidator(2)], max_length=50, blank=False)
+    name = models.CharField(primary_key=True,validators=[MinLengthValidator(2)], max_length=50, blank=False)
     age = models.CharField(max_length=2,
                            validators=[MinLengthValidator(1)],
                            blank=False,

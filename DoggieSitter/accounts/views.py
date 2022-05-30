@@ -1,6 +1,7 @@
 # accounts/views.py
 import json
 from datetime import date, datetime
+from pprint import pprint
 from time import sleep
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
@@ -104,6 +105,7 @@ class changeAccount(View):
             return render(request, 'home.html', {'ok?': 'form is valid!'})
         return render(request, 'change.html', {'form_user': form, 'ok?': 'form is not valid!'})
 
+
 def GetUsername(request, un):
     user = User.objects.get(username=un)
     return render(request, 'change_password.html', {'user': user})
@@ -132,9 +134,7 @@ def Terms(request):
     if request.method == 'POST' and not term_form.is_valid():
         try:
             post = PostTerms.objects.get(title=request.POST.get("title_name"))
-            print('-----------------------------------', post)
         except Exception as e:
-            print("***********************************************", e)
             post = PostTerms()
             post.body = request.POST.get("body_name")
             post.author = request.POST.get("author_name")
@@ -176,24 +176,23 @@ def Add(request):
 
 
 def Vet_Map(request, un):
-    check = User.objects.get(username= un)
-    check2 = Accounts.objects.get(user = check)
+    check = User.objects.get(username=un)
+    check2 = Accounts.objects.get(user=check)
     API_KEY = "AIzaSyA1NSKaMXW4cC5k9RB8dtOqlfZq9v7FNHc"
     map_client = googlemaps.Client(API_KEY)
     app = Nominatim(user_agent="tutorial")
 
-    location_name = "Veterinary Clinic, "
+    location_name = "מרפאה וטרינרית, "
     location = ""
 
     for i in Accounts.objects.all():
         if str(i) == str(un):
-
             user = Accounts.objects.get(id=i.id)
             location_name += user.city
             location = app.geocode("Israel, " + str(user.city)).raw
 
     city = {'lat': location['lat'], 'lng': location['lon']}
-
+    print(location_name)
     try:
         response = map_client.places(query=location_name)
         results = response.get('results')
@@ -297,7 +296,6 @@ def Parks(request, un):
 
 
 def AddTrip(request, usr):
-    print('-----------------------in-------------------------')
     if request.method == 'POST':
         trip = TripForm(request.POST)
         trips = Trip()
@@ -329,12 +327,14 @@ def AddTrip(request, usr):
         result = [dog['name'] for dog in dogs]
         trip = TripForm()
         trip.dog = result
-        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!','result': result })
+        return render(request, 'addtrip.html', {'trip': trip, 'ok?': 'get!', 'result': result})
 
 
-def AllTrips(request):
+def AllTrips(request, usr):
     trips = Trip.objects.all()
-    return render(request, 'alltrips.html', {'trips': trips})
+    my_trips = Trip.objects.filter(dog_owner=usr)
+
+    return render(request, 'alltrips.html', {'trips': trips, 'my_trips': my_trips})
 
 
 def dogs(request):
@@ -345,7 +345,9 @@ def dogs(request):
 def TakeTrip(request, tr_id):
     if request.method == 'POST':
         trip = Trip.objects.get(trip_id=tr_id)
-        return render(request, 'taketrip.html', {'trip': trip, 'ok?': 'post'})
+        own = User.objects.get(username=trip.dog_owner)
+        dog = Dog.objects.get(owner=own, name=trip.dog)
+        return render(request, 'taketrip.html', {'trip': trip, 'dog': dog, 'ok?': 'post'})
     return render(request, 'home.html', {'ok?': 'get'})
 
 
@@ -367,38 +369,63 @@ def UpcomingTrips(request, usr):
 
 def RateDoggie(request, usr):
     list = []
-    all = Trip.objects.filter(dog_owner=usr, is_done__in=[True])
-    print(all)
-    for i in all.iterator():
+    notall = Trip.objects.filter(dog_owner=usr, is_done__in=[True])
+    all = Accounts.objects.filter(is_doggiesitter__in=[True], approved__in=[True])
+    for i in notall.iterator():
         u = User.objects.get(username=i.doggiesitter)
         a = Accounts.objects.get(user=u)
         list.append(a)
-    print(list, 'here')
-    return render(request, 'RateDoggie.html', {'acc': set(list), 'ok': 'ok'})
+    return render(request, 'RateDoggie.html', {'acc': set(list), 'ok': 'ok', 'all': all})
 
 
 def CheckPayment(request):
-    print(json.loads(request.body))
     body = json.loads(request.body)
     trip = Trip.objects.get(trip_id=body['tripid'])
     trip.is_paid = True
+    trip.duration = trip.duration.to_decimal()
+    trip.price = trip.price.to_decimal()
     trip.save()
-    return render(request, 'home.html')
+    return render(request, 'taketrip.html', {'trip': trip})
 
 
 def TakenTrips(request, usr):
     trips = Trip.objects.filter(dog_owner=usr)
-    if(request.method == 'POST'):
+    if (request.method == 'POST'):
         if 'done' in request.POST:
-            print("checked")
-            print(request.POST.get('done'))
-            trip = Trip.objects.get(trip_id =request.POST.get('done') )
+            trip = Trip.objects.get(trip_id=request.POST.get('done'))
             trip.is_done = True
+            trip.is_paid = True
             trip.duration = trip.duration.to_decimal()
             trip.price = trip.price.to_decimal()
             trip.save()
             return render(request, 'home.html')
         else:
-            return render(request , 'TakenTrips.html',{'trips' : trips})
+            return render(request, 'TakenTrips.html', {'trips': trips})
     else:
-        return render(request , 'TakenTrips.html',{'trips' : trips})
+        return render(request, 'TakenTrips.html', {'trips': trips})
+
+def DoggieRequest(request):
+    usr = Accounts.objects.filter(is_doggiesitter__in=[True], approved__in=[False])
+    if request.method == "POST":
+        return render(request, 'doggie_request.html', {'usr': usr, 'num': len(usr)})
+    return render(request, 'home.html')
+
+
+def DeleteDog(request, usr, name):
+    if request.method == 'POST':
+        own = User.objects.get(username=usr)
+        dog = Dog.objects.get(name=name,owner=own)
+        dog.delete()
+        dogs = Dog.objects.filter(owner = own)
+        return render(request,'DogPage.html',{'dogs': dogs})
+    else:
+        return render(request, 'DogPage.html')
+
+def DeleteTrip(request, tr_id, usr):
+    trip = Trip.objects.filter(trip_id=tr_id)
+    trip.delete()
+
+    trips = Trip.objects.all()
+    my_trips = Trip.objects.filter(dog_owner=usr)
+
+    return render(request, 'alltrips.html', {'trips': trips, 'my_trips': my_trips})

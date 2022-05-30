@@ -183,7 +183,7 @@ class TripForm(forms.ModelForm):
         endtime1 = datetime.combine(date1, endtime)
         start1 = datetime.combine(date1, start)
         duration = endtime1 - start1
-        if (duration.days < 0):
+        if (duration.days <= 0):
             raise forms.ValidationError("The end time must be after the starting time.")
         return endtime
 

@@ -84,7 +84,7 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 15px;
 }
 /* Change the color of links on hover */
 .topnav a:hover {
@@ -107,6 +107,23 @@
 
 {% if user.is_authenticated %}
   {% if user.is_superuser %}          <!--  admin - logged in -->
+    <div class="topnav">
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'DogPage' user.id %}">Dog Page</a>
+      <a href="{% url 'addtrip' user.username %}">Add trip</a>
+      <a href="{% url 'alltrips' user.username %}">My Trips</a>
+      <a href="{% url 'taken' user.username %}">Taken trips</a>
+      <a class="active" href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
+      <a href="{% url 'gallery' %}">Gallery</a>
+      <a href="{% url 'change_password' user.username %}">change password</a>
+      <a href="{% url 'Add' %}">Add user</a>
+      <a href="{% url 'Terms' %}">Terms</a>
+      <a href="{% url 'user_info' %}">User Info</a>
+      <a href="{% url 'about' %}">About & Contact</a>
+      <a href="{% url 'admin_actions' %}">Admin Actions</a>
+      <a href="{% url 'logout' %}">Log Out</a>
+    </div>
+
 
   {% else %}                        <!--  account - logged in -->
 
@@ -118,6 +135,7 @@
           <div class="topnav">
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'alltrips' user.username %}">My trips</a>
             <a href="{% url 'taken' user.username %}">Taken trips</a>
             <a class="active" href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
             <a href="{% url 'DogPage' user.id %}">Dog Page</a>
@@ -134,16 +152,7 @@
 
   {% else %}
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
-      <div class="topnav">
-        <a href="{% url 'home' %}">Home</a>
-        <a href="#news">Map</a>
-        <a href="{% url 'gallery' %}">Gallery</a>
-<!--        <a  href="{% url 'change_password' user.username %}">change password</a>-->
-        <a href="#news">Take a dog</a>
-        <a href="{% url 'about' %}">About & Contact</a>
-        <a class="active" href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
-        <a href="{% url 'logout' %}">Log Out</a>
-      </div>
+
     {% endif %}
   {% endif %}
 {% endif %}
@@ -151,16 +160,25 @@
 
 <br><br>
 
-<span style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">Rate a Doggie Sitter</span><br><br>
+&nbsp<span style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">Rate a Doggiesitter</span><br><br>
   {% for us in acc %}
-  <span class="tab" style="background-color:white; opacity: .7">
-
-
+  <span onclick="refresh()" id="rate_id" class="tab" style="background-color:white; margin-top:15px;">
       DoggieSitter's  Name: {{ us.first_name }}<br>
       {% ratings us%}
-
   </span>
 {% endfor %}
+
+<br><br><br>
+&nbsp<span style="background-color:white; opacity: .7; border:3px solid #ccc; font:20px/26px Georgia, Garamond, Serif;">All Doggiesitters rating</span><br><br>
+    {% for us in all %}
+      <span aria-disabled="true" class="tab" style="background-color:white; margin-top:15px;">
+
+          DoggieSitter's  Name: {{ us.first_name }}<br>
+          {% ratings us read_only=True %}
+
+      </span>
+    {% endfor %}
+
 <center>
 
     <div class="main">
@@ -170,6 +188,14 @@
       </center>
     </div>
   </center>
+
+<script>
+document.getElementById("rate_id").addEventListener("load", refresh);
+
+function refresh() {
+  document.location.reload(true)
+}
+</script>
 
 </body>
 </html>

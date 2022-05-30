@@ -100,9 +100,11 @@
   {% if user.is_superuser %}          <!--  admin - logged in -->
     <div class="topnav">
       <a class="active" href="{% url 'home' %}">Home</a>
+      <a href="{% url 'DogPage' user.id %}">Dog Page</a>
       <a href="{% url 'addtrip' user.username %}">Add trip</a>
-      <a href="{% url 'alltrips' %}">Available trips</a>
-      <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
+      <a href="{% url 'alltrips' user.username %}">My Trips</a>
+      <a href="{% url 'taken' user.username %}">Taken trips</a>
+      <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
       <a href="{% url 'Add' %}">Add user</a>
@@ -113,8 +115,13 @@
       <a href="{% url 'logout' %}">Log Out</a>
     </div>
     <br>
+    &nbsp&nbsp
     <span style="background-color:lightblue; opacity: .7; border:3px solid #ccc; font:26px/26px Georgia, Garamond, Serif;">
-      Hi admin
+       Hi admin <br><br><br>
+      <form action="{% url 'doggie_request' %}" method="POST">
+        {% csrf_token %}
+        &nbsp&nbsp <label style="background:lightgray" for="approve_id">Check for new doggiesitters requests: </label>&nbsp<button id="approve_id" style="color:blue" type="submit">Search</button>
+      </form>
     </span>
 
   {% else %}                        <!--  account - logged in -->
@@ -142,6 +149,7 @@
           <div class="topnav">
             <a class="active" href="{% url 'home' %}">Home</a>
             <a href="{% url 'addtrip' user.username %}">Add trip</a>
+            <a href="{% url 'alltrips' user.username %}">My trips</a>
             <a href="{% url 'taken' user.username %}">Taken trips</a>
             <a href="{% url 'Rate' user.username %}">Rate Doggiesitter</a>
             <a href="{% url 'DogPage' user.id %}">Dog Page</a>
@@ -160,7 +168,7 @@
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
       <div class="topnav">
         <a class="active" href="{% url 'home' %}">Home</a>
-        <a href="{% url 'alltrips' %}">Available trips</a>
+        <a href="{% url 'alltrips' user.username %}">Available trips</a>
         <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
         <a href="{% url 'vet_map' user.username %}">Vet' map</a>
         <a href="{% url 'parks' user.username %}">Parks</a>
@@ -201,10 +209,6 @@
         <span class="btn w3-button w3-green w3-round-xlarge"><a href="{% url 'signup' %}">Sign Up</a></span>
     </section>
 {% endif %}
-  {% if not user.accounts.is_doggiesitter and user.is_authenticated and not user.is_superuser%}
-  <div>
 
-  </div>
-  {% endif %}
 </body>
 {% endblock %}

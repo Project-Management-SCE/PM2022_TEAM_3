@@ -108,7 +108,7 @@
     <div class="topnav">
       <a href="{% url 'home' %}">Home</a>
       <a href="{% url 'addtrip' user.username %}">Add trip</a>
-      <a class="active" href="{% url 'alltrips' %}">Available trips</a>
+      <a class="active" href="{% url 'alltrips' user.username %}">Available trips</a>
       <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
       <a href="{% url 'gallery' %}">Gallery</a>
       <a href="{% url 'change_password' user.username %}">change password</a>
@@ -136,7 +136,7 @@
     {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
       <div class="topnav">
         <a href="{% url 'home' %}">Home</a>
-        <a class="active" href="{% url 'alltrips' %}">Available trips</a>
+        <a class="active" href="{% url 'alltrips' user.username %}">Available trips</a>
         <a href="{% url 'upcoming_trips' user.username %}">Upcoming trips</a>
         <a href="{% url 'vet_map' user.username %}">Vet' map</a>
         <a href="{% url 'parks' user.username %}">Parks</a>

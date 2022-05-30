@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Change Password{% endblock %}
+{% block title %}Add a Dog{% endblock %}
 
 {% block content %}
 
@@ -24,7 +24,7 @@
   border-radius: 25px;
   float: center;
   width: 25%;
-  height: 550px;
+  height: auto;
   padding: 10px 15px;
   margin-top: 70px;
   margin-left: 25px;
@@ -99,76 +99,22 @@
 </head>
 <body id="bg" style="background-image: url('{% static '/accounts/kim.jpg' %}')">
 
-{% if user.is_authenticated %}
-  {% if user.is_superuser %}          <!--  admin - logged in -->
-    <div class="topnav">
-      <a href="{% url 'home' %}">Home</a>
-      <a href="#news">Map</a>
-      <a href="{% url 'gallery' %}">Gallery</a>
-      <a href="{% url 'change_password' user.username %}">change password</a>
-      <a href="{% url 'Add' %}">Add user</a>
-      <a href="{% url 'about' %}">Contact</a>
-      <a href="{% url 'user_info' %}">User Info</a>
-      <a href="{% url 'about' %}">About</a>
-      <a href="{% url 'admin_actions' %}">Admin Actions</a>
-      <a class="active" href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
-      <a href="{% url 'logout' %}">Log Out</a>
-    </div>
-
-  {% else %}                        <!--  account - logged in -->
-
-    {% if not user.accounts.approved %}
-      {% if user.accounts.is_doggiesitter %}          <!-- doggiesitter not approved yet -->
-        <div class="topnav">
-          <a href="{% url 'home' %}">Home</a>
-          <a href="#news">Map</a>
-          <a href="{% url 'gallery' %}">Gallery</a>
-          <a href="{% url 'change_password' user.username %}">change password</a>
-          <a href="#news">Take a dog</a>
-          <a href="{% url 'about' %}">About & Contact</a>
-          <a class="active" href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
-          <a href="{% url 'logout' %}">Log Out</a>
-        </div>
-
-      {% else %}                                    <!--  dog owner -->
-        {% if not user.is_superuser %}
-          <div class="topnav">
-            <a href="{% url 'home' %}">Home</a>
-            <a href="#news">Map</a>
-            <a class="active" href="{% url 'DogPage' user.id %}">Dog Page</a>
-            <a href="{% url 'gallery' %}">Gallery</a>
-            <a  href="{% url 'change_password' user.username %}">change password</a>
-            <a href="#news">Post new schedule</a>
-            <a href="{% url 'about' %}">About & Contact</a>
-            <a href="{% url 'change_password' user.username %}">Change Personal Info.</a>
-            <a href="{% url 'logout' %}">Log Out</a>
-          </div>
-        {% endif %}
-    {% endif %}
-
-  {% else %}
-    {% if user.accounts.is_doggiesitter %}          <!--  approved doggiesitter -->
-      <div class="topnav">
-        <a href="{% url 'home' %}">Home</a>
-        <a href="#news">Map</a>
-        <a href="{% url 'gallery' %}">Gallery</a>
-<!--        <a  href="{% url 'change_password' user.username %}">change password</a>-->
-        <a href="#news">Take a dog</a>
-        <a href="{% url 'about' %}">About & Contact</a>
-        <a class="active" href="{% url 'changeinfo' user.id %}">Change Personal Info.</a>
-        <a href="{% url 'logout' %}">Log Out</a>
-      </div>
-    {% endif %}
-  {% endif %}
-{% endif %}
-{% endif %}
 <center>
     <div class="main">
       <center>
         <h1><span >Add a Dog</span></h1><br>
           <form action="" method="post">
               {% csrf_token %}
-              {{form_user.as_p}}
+              {% for field in form_user %}
+                <p>
+                  {{ field.label_tag }}
+                  {{ field }}
+
+                  {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                  {% endfor %}
+                </p>
+              {% endfor %}
               <button class="w3-button w3-green w3-round-xlarge " type="submit">SUBMIT</button>
               <a class="w3-button w3-green w3-round-xlarge " href="{% url 'home' %}">Back to home</a>
           </form>
